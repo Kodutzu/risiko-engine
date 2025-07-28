@@ -1,79 +1,83 @@
-from Game_Mechanics.GameObjects.Effect import Effect, EffectsType
-class Electricity():
+from ..Effect.Effect import Effect
+from ..Constant.EffectsType import EffectsType
+from GameEngine.GameObjects.Constant.Bullet import Bullet
+from abc import ABC, abstractmethod
 
+
+class ItemBase(ABC):
+
+    def __init__(self):
+        self.name = self.__class__.__name__
+
+    @abstractmethod
+    def use(self,obj):
+        pass
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) 
+    
+    def __str__(self):
+        return self.name
+
+    def __hash__(self):
+        return hash(self.__class__) 
+
+class Electricity(ItemBase):
 
     def use(self, shooter_obj,charge=1):
-        shooter_obj.charge = charge
 
+        shooter_obj.gainCharge(charge)
         return {"Status": f"{shooter_obj.name} gained a charge"}
 
 
-class Inverse():
+class Inverse(ItemBase):
 # Only Available in Level - 2
     def inverse(self, shotgun_obj):
 
-        self.current_shell = shotgun_obj.shell() 
-        if(self.current_shell == "STUN"):
-            raise Exception("Can't Inverse STUN")
-        
-        else:
-            self.inverse_shell = "Blank" if self.current_shell == "LIVE" else  "LIVE"
+        self.current_shell = shotgun_obj.shell
+    
+        self.inverse_shell = Bullet.BLANK if self.current_shell == Bullet.LIVE else Bullet.LIVE
 
-        shotgun_obj.shell(self.inverse_shell) 
+        shotgun_obj.shell = self.inverse_shell
 
        
     
     def use(self, shotgun_obj):
         self.inverse(shotgun_obj)
 
-        return 1
-class HandCuff():
+        return self.inverse_shell
+class HandCuff(ItemBase):
 
     def cuff(self,target_obj):
-        effect_obj = Effect(EffectsType.CUFFED)
+        effect_obj = Effect(EffectsType.CUFFED, turns=2)
         target_obj.effects.add(effect_obj)
         return f"{target_obj.name} is handcuffed for next turn."
-    
-    def release(self, target_obj):
-
-        target_obj.effects.remove(Effect(EffectsType.CUFFED))
-        return f"{target_obj.name} Is Free."
     
     def use(self,target_obj):
         return self.cuff(target_obj)
 
-class Knife():
+class Knife(ItemBase):
 
     def Sharp(self, shotgun_obj,dmg=2):
         effect_obj = Effect(EffectsType.Knife)
         shotgun_obj.effects.add(effect_obj)
         shotgun_obj.damage = dmg
 
-    def resetDamage(self,shotgun_obj):
-        shotgun_obj.effects.remove(Effect(EffectsType.Knife))
-        shotgun_obj.damage = 1
-
     def use(self, shotgun_obj):
 
         return self.Sharp(shotgun_obj)
 
-class Deflect():
+class Deflect(ItemBase):
     
     def putShield(self, shooter_obj):
 
         effect_obj = Effect(EffectsType.Deflect)
         shooter_obj.effects.add(effect_obj)
 
-    
-    def removeSheild(self, shooter_obj):
-
-        shooter_obj.effects.remove(Effect(EffectsType.Deflect))
-
     def use(self,  shooter_obj):
 
         return self.putShield(shooter_obj=shooter_obj)
 
-class Eject():
+class Eject(ItemBase):
     
     def pull(self,shotgun_obj):
 
@@ -83,7 +87,7 @@ class Eject():
     def use(self, shotgun_obj):
         return self.pull(shotgun_obj=shotgun_obj)
 
-class Magnifier():
+class Magnifier(ItemBase):
     
     def look(self, shotgun_obj):
         return shotgun_obj.shell
