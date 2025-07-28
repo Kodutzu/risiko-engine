@@ -1,26 +1,15 @@
 from GameEngine.GameObjects.Loadout.Inventory import Inventory
 from GameEngine.GameObjects.Effect.Effecthander import EffectHandler
 from GameEngine.GameObjects.Constant.Bullet import Bullet
+from dataclasses import dataclass
 
 class Player:
            
-
     def __init__(self, name, charges=4):
         self._name = name
-        self._charges = charges
+        self.charges = _ChargeMeter(charges)
         self.inventory = Inventory() 
         self.effects = EffectHandler(self)
-
-    @property
-    def charge(self):
-        return self._charges
-    
-    def gainCharge(self, shift):
-        self._charges +=shift
-
-    def loseCharge(self,shift):
-        self._charges -= shift
-
 
     @property
     def name(self):
@@ -29,7 +18,7 @@ class Player:
     def trigger(self, shotgun_obj): 
         bullet = shotgun_obj.fire()
 
-        if bullet == Bullet.LIVE:
+        if bullet == 1:
             return 1 #return more 
         else: 
             return 0
@@ -44,4 +33,14 @@ class Player:
         return self.usage
 
     def __str__(self):
-        return f"Player: {self.name}, Charge: {self.charge}, Inventory: {self.inventory.show()}, Effects: {self.effects.list()}"
+        return f"Player: {self.name}, Charge: {self.showCharges}, Inventory: {self.inventory.show()}, Effects: {self.effects.list()}"
+
+@dataclass
+class _ChargeMeter:
+    value: int = 4
+
+    def gain(self, amt): self.value +=amt
+    def lose(self,amt): self.value -=amt
+    @property
+    def showCharge(self): return self.value
+    def __int__(self): return self.value

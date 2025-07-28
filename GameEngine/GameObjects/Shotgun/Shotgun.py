@@ -1,8 +1,8 @@
 from ..Effect.Effecthander import EffectHandler
 import random
 from ..Constant.Bullet import Bullet
-from ._Magazine import Magazine
-from ._Shell import Shell
+from ._Magazine import _Magazine as Magazine
+from ._Shell import _Shell as Shell
 from dataclasses import dataclass, field, InitVar
 
 @dataclass

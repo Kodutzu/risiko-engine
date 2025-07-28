@@ -2,7 +2,7 @@ from GameEngine.GameObjects.Constant.Bullet import Bullet
 from dataclasses import dataclass,field
 
 @dataclass
-class Magazine:
+class _Magazine:
     lives: int = 4
     blanks: int = 4
     _tube: dict = field(init=False)

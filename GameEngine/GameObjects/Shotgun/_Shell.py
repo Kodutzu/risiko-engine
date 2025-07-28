@@ -4,7 +4,7 @@ import warnings
 
 
 @dataclass
-class Shell:
+class _Shell:
     _shell: int = None
 
     def loadInShell(self, bullet_type):
@@ -28,6 +28,6 @@ class Shell:
             else:
                 raise Exception(f"There's No {bullet_type}")
             
-    
+
     def __str__(self):
         return f"Shell: {self._shell}"

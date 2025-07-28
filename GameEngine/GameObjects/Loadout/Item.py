@@ -4,6 +4,7 @@ from GameEngine.GameObjects.Constant.Bullet import Bullet
 from abc import ABC, abstractmethod
 
 
+#@dataclass - Use it!
 class ItemBase(ABC):
 
     def __init__(self):
