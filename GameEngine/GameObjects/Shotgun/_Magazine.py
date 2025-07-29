@@ -1,14 +1,16 @@
 from GameEngine.GameObjects.Constant.Bullet import Bullet
-from dataclasses import dataclass,field
+from typing import Dict
+from pydantic import BaseModel, Field, model_validator, PrivateAttr
+class _Magazine(BaseModel):
+    lives: int = Field(default=4, ge=1)
+    blanks: int = Field(default=4, ge=1)
+    __base_tube: Dict[Bullet, int] = PrivateAttr(default_factory=dict)
+    _tube: Dict[Bullet, int] = PrivateAttr(default_factory=dict)
+    _increment: Dict[Bullet, int] = PrivateAttr(default_factory=dict)
 
-@dataclass
-class _Magazine:
-    lives: int = 4
-    blanks: int = 4
-    _tube: dict = field(init=False)
-    _increment: dict = field(init=False)
 
-    def __post_init__(self):
+    @model_validator(mode="after")
+    def initiateMagzine(self):
     
         self.__base_tube= {
             Bullet.LIVE: self.lives,
@@ -20,7 +22,9 @@ class _Magazine:
             Bullet.BLANK: self.blanks//3 
         }   
 
-        self._tube = self.__base_tube.copy()  
+        self._tube = self.__base_tube.copy() 
+
+        return self 
 
 
     def reload(self):

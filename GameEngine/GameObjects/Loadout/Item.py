@@ -1,10 +1,11 @@
-from ..Effect.Effect import Effect
+from ..Effect.Effect import _Effect as Effect
 from ..Constant.EffectsType import EffectsType
 from GameEngine.GameObjects.Constant.Bullet import Bullet
+from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
-
-
 #@dataclass - Use it!
+#working on the Object Error Handling
+#Working on Pyandtic Model
 class ItemBase(ABC):
 
     def __init__(self):
@@ -25,8 +26,9 @@ class ItemBase(ABC):
 class Electricity(ItemBase):
 
     def use(self, shooter_obj,charge=1):
+      
 
-        shooter_obj.gainCharge(charge)
+        shooter_obj.charges.gain(1)
         return {"Status": f"{shooter_obj.name} gained a charge"}
 
 

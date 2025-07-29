@@ -1,5 +1,9 @@
 from ..Constant.EffectsType import EffectsType
 
+# Improving it Overall!
+# Object Error Handling!
+# Pydantic Model Implementation!
+
 class EffectHandler: # Require Error Handling - where Effect from Effecttype can be added!
     def __init__(self, effected_entity):
         self.player_effected = effected_entity #Contains all the info related to Player who has the effects
