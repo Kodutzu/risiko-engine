@@ -12,7 +12,7 @@ class _Shell(BaseModel):
         self._shell = bullet_type
         return self._shell
     
-    def isLoaded(self): 
+    def isLoaded(self) -> bool: 
         return self._shell is not None
 
     def unloadShell(self):
@@ -22,20 +22,6 @@ class _Shell(BaseModel):
     def currentShell(self) -> Bullet:
         return self._shell
     
-
-    @currentShell.setter
-    def _alterShell(self, bullet_type):
-        warnings.warn(
-            "The 'alterShell' setter is deprecated and may be removed in future versions. Use `loadShell()` or `unloadShell()` instead.",
-            DeprecationWarning,
-            stacklevel=2
-      )
-
-        if bullet_type in (Bullet.LIVE, Bullet.BLANK, None):
-            self._shell = bullet_type
-        else:
-            raise ValueError(f"Invalid bullet type: {bullet_type}")
-            
 
     def __str__(self):
         return f"Shell: {self._shell}"

@@ -1,9 +1,9 @@
 from ..Loadout.Inventory import Inventory
-from ..Effect.Effecthander import EffectHandler
+from ..Effect.Effecthandler import EffectHandler
 from ..Shotgun.Shotgun import Shotgun
-from ..Loadout.Item import ItemBase
+from ..Loadout._ItemBase import _ItemBase as ItemBase
 from ..Constant.Bullet import Bullet
-from typing import Optional
+from typing import Optional, Union
 from pydantic import BaseModel, Field, PrivateAttr, model_validator, field_validator
 
 
@@ -35,7 +35,7 @@ class Player(BaseModel):
     @model_validator(mode="after")
     def initiatePlayer(self):
         self.inventory = Inventory()
-        self.effects = EffectHandler(self)
+        self.effects = EffectHandler(player_effected=self)
 
         return self
 
@@ -46,28 +46,28 @@ class Player(BaseModel):
     def trigger(self, shotgun_obj): 
         if not isinstance(shotgun_obj, Shotgun):
              raise TypeError(f"Expected a Shotgun instance, got {type(shotgun_obj).__name__}")
-        bullet = shotgun_obj.fire()
+        damage = shotgun_obj._fire()
 
-        if bullet == 1:
-            return 1 #return more 
-        else: 
-            return 0
+        return damage
 
-    def useItem(self, item_obj, entity_obj):
+    def useItem(self, item_obj: ItemBase, user: "Player" , target: Union["Player", Shotgun]):
 
         if not isinstance(item_obj, ItemBase):
             raise TypeError(f"Expected an Item instance, got {type(item_obj).__name__}")
         
-        if not isinstance(entity_obj, Shotgun|Player):
-            raise TypeError(f"Expected an Shotgun/Player instance, got {type(entity_obj).__name__}")
+        if not isinstance(user, Player):
+            raise TypeError(f"Expected an Shotgun/Player instance, got {type(user).__name__}")
+        
+        if not isinstance(target, (Shotgun,Player)):
+            raise TypeError(f"Expected an Shotgun/Player instance, got {type(target).__name__}")
 
         if not self.inventory.has(item_obj):
             raise Exception("This Item Doesn't Exist in the inventory!")
         
-        usage = item_obj.use(entity_obj)
+        usage = item_obj.use(user,target)
         self.inventory.remove(item_obj)
         return usage
 
     def __str__(self):
-        return f"Player: {self.name}, Charge: {self.charges.showCharge}, Inventory: {self.inventory.show}, Effects: {self.effects.list()}"
+        return f"Player: {self.name}, Charge: {self.charges.showCharge}, Inventory: {self.inventory.show}, Effects: {self.effects.show()}"
 

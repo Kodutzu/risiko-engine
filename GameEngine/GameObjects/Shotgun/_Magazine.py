@@ -1,54 +1,49 @@
 from GameEngine.GameObjects.Constant.Bullet import Bullet
 from typing import Dict
 from pydantic import BaseModel, Field, model_validator, PrivateAttr
+from collections import deque, Counter
+import random 
 class _Magazine(BaseModel):
-    lives: int = Field(default=4, ge=1)
-    blanks: int = Field(default=4, ge=1)
-    __base_tube: Dict[Bullet, int] = PrivateAttr(default_factory=dict)
-    _tube: Dict[Bullet, int] = PrivateAttr(default_factory=dict)
-    _increment: Dict[Bullet, int] = PrivateAttr(default_factory=dict)
+    lives: int = Field(default=4, ge=1, frozen=True)
+    blanks: int = Field(default=4, ge=1, frozen=True)
+
+    __base_tube: list[Bullet] = PrivateAttr(default_factory=dict)
+    _tube: deque[Bullet] = PrivateAttr(default_factory=dict)
+
 
 
     @model_validator(mode="after")
     def initiateMagzine(self):
-    
-        self.__base_tube= {
-            Bullet.LIVE: self.lives,
-            Bullet.BLANK: self.blanks
-        }
-
-        self._increment = {
-            Bullet.LIVE: self.lives//2 ,
-            Bullet.BLANK: self.blanks//3 
-        }   
-
-        self._tube = self.__base_tube.copy() 
+        
+        self.__base_tube = [Bullet.BLANK]*self.blanks + [Bullet.LIVE]*self.lives
+        random.shuffle(self.__base_tube)
+        self._tube= deque(self.__base_tube)
 
         return self 
-
-
+    
     def reload(self):
-        
-        for bullet in self.__base_tube.keys():
-            self.__base_tube[bullet] += self._increment[bullet]
-
-        self._tube = self.__base_tube.copy()
+   
+        random.shuffle(self.__base_tube)
+        self._tube.clear() #Empties the tubee
+        self._tube.extend(self.__base_tube) # Using the base tube to reload!
         
     @property
     def getMagazine(self):
-        return self._tube
+        return Counter(self._tube)
 
-    def getAvailablebullet(self):
-        return [bullet for bullet, count in self._tube.items() if count >0]
+    def isBulletMissing(self):
+        for count in self.getMagazine.values():
+            if count <=0:
+                return True
+        return False
         
-    def takeBullet(self, bullet_type):
-
-        if self._tube.get(bullet_type,0) <=0:
-            raise Exception(f"Failed to {bullet_type} within the Magazine ")
+    def loadNextBullet(self):
         
-        self._tube[bullet_type] -=1
+        if self.isBulletMissing():
+            raise Exception("Lack of Live and Blank Bullet")
+        bullet = self._tube[0]
+        self._tube.popleft()
 
-        return bullet_type
-    
-    
+
+        return bullet  #return info - took out live bullet! 
     

@@ -1,8 +1,8 @@
-from ..Effect.Effecthander import EffectHandler
-import random
+from ..Effect.Effecthandler import EffectHandler
+import random 
 from ..Constant.Bullet import Bullet
-from ._Magazine import _Magazine as Magazine
-from ._Shell import _Shell as Shell
+from ..Shotgun._Magazine import _Magazine as Magazine
+from ..Shotgun._Shell import _Shell as Shell
 from pydantic import BaseModel, Field, PrivateAttr, model_validator
 from typing import Optional
 
@@ -22,49 +22,33 @@ class Shotgun(BaseModel):
     def initiateShotgun(self)-> "Shotgun":
 
         self.magazine = Magazine(lives=self.lives, blanks=self.blanks)
-        self.effects = EffectHandler(self)
+        self.effects = EffectHandler() # Add "self" passable
 
         return self
     
-    
-    def __randomBullet(self):
-        available_bullets = self.magazine.getAvailablebullet()
-
-        if not {Bullet.BLANK, Bullet.LIVE}.issubset(set(available_bullets)):
-
-            raise Exception("There isn't Enough Bullet to Choose `Randomly` ")
-        
-        random_bullet = random.choice(available_bullets)
-        
-        return random_bullet
 
     def loadChamber(self):
-
-
-        bullet = self.__randomBullet()
-        self.magazine.takeBullet(bullet)
+        bullet = self.magazine.loadNextBullet()
         self.shell.loadShell(bullet)
        
-
         return "loaded" #return useful data in dict()
     
         
     @property
     def liveDamage(self):
-        return self._dmg if self.shell.currentShell == Bullet.LIVE else 0
+        return self._dmg 
             
-    @liveDamage.setter
-    def liveDamage(self,new_dmg):
+    
+    def setliveDamage(self,new_dmg):
 
         if(new_dmg <=0):
             raise Exception("Damage Can't be Zero or less")
         
         self._dmg = new_dmg
 
-        return self._dmg
 
 
-    def fire(self):
+    def _fire(self):
         
         if self.shell.currentShell is None:
             raise Exception("Shell is empty")

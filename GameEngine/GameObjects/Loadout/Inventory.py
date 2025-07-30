@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import BaseModel,  model_validator, PrivateAttr,Field,  validate_call
-from ..Loadout.Item import ItemBase
+from ._ItemBase import _ItemBase as ItemBase
 from pydantic.config import ConfigDict 
 
 class Inventory(BaseModel):
@@ -38,7 +38,7 @@ class Inventory(BaseModel):
     
     @property
     def show(self) -> List[str]:
-        return [item.name for item in self._items]
+        return [str(item) for item in self._items]
 
     @property
     def count(self) -> int:

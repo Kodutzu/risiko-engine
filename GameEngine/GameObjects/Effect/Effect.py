@@ -1,11 +1,13 @@
-from pydantic import BaseModel
+
 from ..Constant.EffectsType import EffectsType
 from pydantic import Field
+from pydantic.dataclasses import dataclass
 
-class _Effect(BaseModel):
+@dataclass(frozen=True)
+class _Effect:
 
-    effect_type: EffectsType = Field(frozen=True)
-    turns: int = Field(default=1, gt=0, frozen=True)
+    effect_type: EffectsType 
+    turns: int = Field(default=1, gt=0)
 
     @property
     def showType(self): 
@@ -13,17 +15,17 @@ class _Effect(BaseModel):
 
     @property
     def showTurn(self) -> None:
-        return self._turns
+        return self.turns
     
 
     def reduceTurn(self,red) -> None:
-        if(self._turns < red):
+        if(self.turns < red):
             raise Exception(f"You can't make turns/duration in Negative")
         self._turns -= red
 
     def __repr__(self):
-        return f"<Effect {self.effect_type.name}: {self._turns} turns>"
+        return f"<Effect {self.effect_type.name}: {self.turns} turns>"
+    
 
-  
 
 
