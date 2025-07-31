@@ -6,6 +6,7 @@ from ..Constant.Bullet import Bullet
 from typing import Union
 from pydantic import BaseModel, Field,  model_validator, field_validator
 from pydantic.dataclasses import dataclass
+from ..ResponseModels.shotgun_response import ShotgunFireResponse, ShotgunErrorResponse
 
 @dataclass
 class _ChargeMeter():
@@ -93,9 +94,22 @@ class Player(BaseModel):
     def trigger(self, shotgun_obj:Shotgun): 
         if not isinstance(shotgun_obj, Shotgun):
              raise TypeError(f"Expected a Shotgun instance, got {type(shotgun_obj).__name__}")
-        data = shotgun_obj._fire()
+        
+        try:
+            bullet, dmg = shotgun_obj._fire()
 
-        return data.model_dump()
+            return ShotgunFireResponse(
+                success=True,
+                fired=True,
+                msg="Bullet is Fired",
+                bullet_type=bullet,
+                damage=dmg,
+    
+                )
+        except Exception as e:
+            return ShotgunErrorResponse(
+                error=str(e)
+            )
 
     def useItem(self, item_obj: ItemBase, user: "Player" , target: Union["Player", Shotgun]):
 

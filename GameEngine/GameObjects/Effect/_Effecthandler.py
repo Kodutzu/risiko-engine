@@ -30,6 +30,7 @@ class _EffectHandler(BaseModel): # Require Error Handling - where Effect from Ef
         self._effects.append(effect_obj)
 
     def show(self, only_active=True):
+        
         return [
             {effect.showType: effect.showTurn}
             for effect in self._effects

@@ -5,7 +5,7 @@ from ..Shotgun._magazine import _Magazine as Magazine
 from ..Shotgun._shell import _Shell as Shell
 from pydantic import BaseModel, Field, PrivateAttr, model_validator
 from GameEngine.GameObjects.Exception.shotgunException import ShotgunException
-from ..ResponseModels.shotgun_response import ShotgunFireResponse,ShotgunLoad,ShotgunReloadResponse,ShotgunShellResponse, shotgunDamageResponse
+from ..ResponseModels.shotgun_response import ShotgunEffectModel,ShotgunLoadResponse, ShotgunErrorResponse, ShotgunDamageUpdate, ShotgunFireResponse
 
 class Shotgun(BaseModel):
 
@@ -70,18 +70,18 @@ class Shotgun(BaseModel):
             bullet = self.magazine.loadNextBullet()
             self.shell.loadShell(bullet)
 
-            return ShotgunLoad(
+            return ShotgunLoadResponse(
                 success=True,
-                load_in_chamber=True,
-                load_in_shell=True,
+                bullet_in_shell=True,
+                shell_in_chamber=True,
                 msg="Shell Has been Loaded into Chamber",
                 bullet_type=bullet,
-                damage=self.liveDamage
             )
         
         except Exception as e: 
-            return e
-       
+            return ShotgunErrorResponse(
+                error=e
+            )       
         
     @property
     def liveDamage(self):
@@ -95,7 +95,7 @@ class Shotgun(BaseModel):
         old_dmg = self._dmg
         self._dmg = new_dmg
 
-        return shotgunDamageResponse(
+        return ShotgunDamageUpdate(
             old_damage=old_dmg,
             new_damage=self._dmg
         )
@@ -105,17 +105,13 @@ class Shotgun(BaseModel):
         
         if self.shell.currentShell is None:
             raise ShotgunException("Shell is empty")
+        
        
         bullet = self.shell.currentShell
-        self.shell.unloadShell()
-        return ShotgunFireResponse(
-            success=True,
-            fired=True,
-            msg ="Bullet is Fired",
-            bullet_type=bullet,
-            damage=self.liveDamage,
-            effects_triggered=self.effects.show(),
-        )
+        self.shell.unloadShell() 
+
+        return bullet, self.liveDamage
+
     
     def __str__(self):
         return f"Magazine: {self.magazine.getMagazine}, Damage: {self._dmg}"

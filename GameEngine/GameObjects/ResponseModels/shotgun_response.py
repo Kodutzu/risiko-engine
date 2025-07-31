@@ -1,34 +1,47 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import List, Optional, Literal, Union
 from ..Constant.Bullet import Bullet
-from typing import List, Optional
-from ..Effect._Effect import _Effect as Effect
+
 
 class ShotgunBaseResponse(BaseModel):
-    success: bool
-    msg: Optional[str] = None
-    bullet_type: Optional[Bullet] = None
-    damage: int
+    success: bool = Field(..., description="Was the operation successful?")
+    msg: Optional[str] = Field(None, description="Human-readable result message")
 
-class shotgunDamageResponse(BaseModel):
-    old_damage: int
-    new_damage: int
-class ShotgunLoad(ShotgunBaseResponse):
-    load_in_shell: Optional[bool]
-    load_in_chamber: Optional[bool]
-    
+#
+class ShotgunEffectModel(BaseModel):
+    """Replaces raw dict-based effects with structured data"""
+    effect_type: str
+    duration: int
+
+
+class ShotgunLoadResponse(ShotgunBaseResponse):
+    bullet_type: Optional[Bullet]
+    bullet_in_shell: Optional[bool]
+    shell_in_chamber: Optional[bool]
+
+
 class ShotgunFireResponse(ShotgunBaseResponse):
-    fired: bool
-    effects_triggered: List[dict] = []
+    bullet_type: Optional[Bullet]
+    damage: Optional[int]
+    fired: bool = False
+    # effects_triggered: List[ShotgunEffectModel] = []
 
 
-class ShotgunReloadResponse(ShotgunBaseResponse): 
+class ShotgunReloadResponse(ShotgunBaseResponse):
     total_lives: int
     total_blanks: int
-    bullet_lineup: List[Bullet] = []
-    chamber_loaded: bool
+    bullet_lineup: List
+
 
 class ShotgunShellResponse(ShotgunBaseResponse):
-   pass
+    bullet_type: Optional[Bullet]
 
-class ShotgunError(BaseModel):
-    pass
+
+class ShotgunDamageUpdate(BaseModel):
+    old_damage: int
+    new_damage: int
+class ShotgunErrorResponse(ShotgunBaseResponse):
+    success: Literal[False] = False
+    error: str = Field(None, description="Error message, if any")
+
+
