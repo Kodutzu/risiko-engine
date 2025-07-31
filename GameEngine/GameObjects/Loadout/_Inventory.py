@@ -1,9 +1,11 @@
 from typing import List
-from pydantic import BaseModel,  model_validator, PrivateAttr,Field,  validate_call
+from pydantic import BaseModel, PrivateAttr,Field
 from ._ItemBase import _ItemBase as ItemBase
 from pydantic.config import ConfigDict 
+from ..Exception.inventoryException import InventoryException
+from ..Exception.ItemException import ItemException
 
-class Inventory(BaseModel):
+class _Inventory(BaseModel):
     _items: List[ItemBase] = PrivateAttr(default_factory=list)
     capacity: int = Field(default=4, ge=4)
     model_config = ConfigDict(arbitrary_types_allowed=True)
@@ -15,7 +17,7 @@ class Inventory(BaseModel):
             item_objs = [item_objs]
 
         if len(self._items) + len(item_objs) > self.capacity:
-            raise Exception("Reached Capacity")
+            raise InventoryException("Player's Inventory has Reached it's Capacity")
         
         self._items.extend(item_objs)
 
@@ -27,7 +29,7 @@ class Inventory(BaseModel):
             if item_obj in self._items:
                 self._items.remove(item_obj)
             else:
-                 raise Exception(f"Item {item_obj} not found in inventory.")
+                 raise ItemException(f"Item {item_obj} not found in inventory.")
 
     def has(self, item_obj: ItemBase) -> bool:
         return item_obj in self._items

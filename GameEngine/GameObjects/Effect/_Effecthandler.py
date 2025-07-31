@@ -1,20 +1,19 @@
 from ..Constant.EffectsType import EffectsType
-from .Effect import _Effect as Effect
+from ._Effect import _Effect as Effect
 from pydantic import PrivateAttr, BaseModel
 from pydantic.dataclasses import dataclass
 from typing import TYPE_CHECKING, List
+from ..Exception.effectException import EffectException
 
 if TYPE_CHECKING:
     from ..Player.Player import Player
-    from ..Shotgun.Shotgun import Shotgun
+    from ..Shotgun.shotgun import Shotgun
 
 # Improving it Overall!
 # Object Error Handling!
 # Pydantic Model Implementation!
 
-
-
-class EffectHandler(BaseModel): # Require Error Handling - where Effect from Effecttype can be added!
+class _EffectHandler(BaseModel): # Require Error Handling - where Effect from Effecttype can be added!
 
     # player_effected: "Player" 
     _effects: List[Effect] = PrivateAttr(default_factory=list) 
@@ -22,11 +21,11 @@ class EffectHandler(BaseModel): # Require Error Handling - where Effect from Eff
     def add(self, effect_obj:Effect):
 
         if not isinstance(effect_obj, Effect):
-            raise Exception("It should be an Effect")
+            raise EffectException("It should be an Effect")
 
         for effect in self._effects:
             if effect == effect_obj:
-                raise Exception(f"Effect: {effect_obj} is Already Applied")
+                raise EffectException(f"Effect: {effect_obj} is Already Applied")
       
         self._effects.append(effect_obj)
 

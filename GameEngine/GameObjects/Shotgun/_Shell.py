@@ -1,14 +1,14 @@
 from pydantic import BaseModel, PrivateAttr
 from ..Constant.Bullet import Bullet
-import warnings
-
+from ..Exception.shotgunException import ShellException
 
 class _Shell(BaseModel):
+    
     _shell: Bullet| None = PrivateAttr(default=None)
 
     def loadShell(self, bullet_type):
         if self._shell is not None:
-            raise Exception(f"Shell already loaded with {self._shell}")
+            raise ShellException(f"Shell already loaded with {self._shell}")
         self._shell = bullet_type
         return self._shell
     

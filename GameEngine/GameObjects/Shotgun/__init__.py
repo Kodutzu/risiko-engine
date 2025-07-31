@@ -1,2 +1,2 @@
-from .Shotgun import Shotgun
+from .shotgun import Shotgun
 __all__ = ["Shotgun"]

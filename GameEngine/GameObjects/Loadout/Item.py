@@ -1,9 +1,12 @@
-from ..Effect.Effect import _Effect as Effect
-from ..Effect.Effecthandler import EffectHandler
+from ..Effect._Effect import _Effect as Effect
+from ..Effect._Effecthandler import _EffectHandler as Effecthandler
 from ..Constant.EffectsType import EffectsType
 from GameEngine.GameObjects.Constant.Bullet import Bullet
 from ._ItemBase import _ItemBase as ItemBase
-from ..Shotgun.Shotgun import Shotgun
+from..Exception.playerException import PlayerException
+
+#for typing hintes
+from ..Shotgun.shotgun import Shotgun
 from ..Player.Player import Player
 
 class Electricity(ItemBase):
@@ -15,7 +18,7 @@ class Electricity(ItemBase):
         self.validate(target, Player)
 
         if user is not target:
-            raise Exception("It has to be you")
+            raise PlayerException(f"You Can't Apply This Item on {target.__class__.__name__}")
 
         user.charges.gain(1)
         return {"Status": f"{user.name} gained a charge"}
@@ -50,8 +53,8 @@ class HandCuff(ItemBase):
     def use(self,user: Player, target: Player):
         self.validate(target,Player)
 
-        if user is target:
-            raise Exception("It can't be you!")
+        if user is  target:
+            raise PlayerException(f"You Can't Apply This Item on {user.__class__.__name__} - who is using it")
         return self.cuff(target)
 
 class Knife(ItemBase):
@@ -64,20 +67,6 @@ class Knife(ItemBase):
     def use(self, user: Player, target: Shotgun):
         self.validate(target, Shotgun)
         return self.Sharp(target)
-
-class Deflect(ItemBase): #An Level 3 Item!
-    
-    def putShield(self, user: Player):
-
-        effect_obj = Effect(EffectsType.Deflect)
-        user.effects.add(effect_obj)
-
-    def use(self,  user:Player, target:Player):
-        self.validate(target,Player)
-        if user is not target:
-            raise Exception("it has to be you!")
-        
-        return self.putShield(target)
 
 class Eject(ItemBase):
     
@@ -99,4 +88,28 @@ class Magnifier(ItemBase):
     def use(self,user: Player, target: Shotgun):
         self.validate(target,Shotgun)
         return self.look(target)
+    
 
+class Vision(ItemBase):
+
+    def vision(self, gun:Shotgun):
+        self.future_bullet = gun.magazine.getMagazine(ListOrder=True)[1]
+        return self.future_bullet
+    
+    def use(self,user:Player, target:Shotgun ):
+        self.validate(target, Shotgun)
+        return self.vision(target)
+
+#class Deflect(ItemBase): An Level 3 Item!
+    
+#     def putShield(self, user: Player):
+
+#         effect_obj = Effect(EffectsType.Deflect)
+#         user.effects.add(effect_obj)
+
+#     def use(self,  user:Player, target:Player):
+#         self.validate(target,Player)
+#         if user is not target:
+#             raise Exception("it has to be you!")
+        
+#         return self.putShield(target)

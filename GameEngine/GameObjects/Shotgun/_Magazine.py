@@ -1,5 +1,4 @@
 from GameEngine.GameObjects.Constant.Bullet import Bullet
-from typing import Dict
 from pydantic import BaseModel, Field, model_validator, PrivateAttr
 from collections import deque, Counter
 import random 
@@ -10,10 +9,8 @@ class _Magazine(BaseModel):
     __base_tube: list[Bullet] = PrivateAttr(default_factory=dict)
     _tube: deque[Bullet] = PrivateAttr(default_factory=dict)
 
-
-
     @model_validator(mode="after")
-    def initiateMagzine(self):
+    def _initiateMagzine(self):
         
         self.__base_tube = [Bullet.BLANK]*self.blanks + [Bullet.LIVE]*self.lives
         random.shuffle(self.__base_tube)
@@ -27,13 +24,16 @@ class _Magazine(BaseModel):
         self._tube.clear() #Empties the tubee
         self._tube.extend(self.__base_tube) # Using the base tube to reload!
         
-    @property
-    def getMagazine(self):
-        return Counter(self._tube)
+
+    def getMagazine(self, ListOrder=True):
+
+        if ListOrder :
+            return [bullet.value for bullet in self.__base_tube ]
+        else:
+            return Counter(self._tube)
 
     def isBulletMissing(self):
-        for count in self.getMagazine.values():
-            if count <=0:
+        if len(self.getMagazine(ListOrder=False)) <=1:
                 return True
         return False
         

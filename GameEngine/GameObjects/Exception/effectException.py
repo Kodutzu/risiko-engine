@@ -1,0 +1,2 @@
+
+class EffectException(Exception): pass

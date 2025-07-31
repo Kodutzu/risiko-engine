@@ -2,6 +2,7 @@
 from ..Constant.EffectsType import EffectsType
 from pydantic import Field
 from pydantic.dataclasses import dataclass
+from ..Exception.effectException import EffectException
 
 @dataclass(frozen=True)
 class _Effect:
@@ -20,7 +21,7 @@ class _Effect:
 
     def reduceTurn(self,red) -> None:
         if(self.turns < red):
-            raise Exception(f"You can't make turns/duration in Negative")
+            raise EffectException(f"You can't make turns/duration in Negative")
         self._turns -= red
 
     def __repr__(self):
