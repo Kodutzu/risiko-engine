@@ -4,7 +4,6 @@ from GameEngine.GameObjects.Constant.EffectsType import EffectsType
 from GameEngine.GameObjects.Effect._Effect import _Effect as Effect
 from GameEngine.GameObjects.Player.Player import Player
 from GameEngine.GameObjects.Loadout.Item import *
-import json
 
 raj = Player(name="raj", charges=4)
 dealer = Player(name="dealer", charges=4)
@@ -14,10 +13,9 @@ print(gun.loadChamber())
 raj.inventory.add(Knife())
 raj.useItem(Knife(), raj, gun)
 
-print(raj.effects.show())
+print(gun.effects.show())
 print(raj.trigger(gun))
-print(gun.loadChamber())
-print(gun.magazine.reload())
+
 
 
 item_list = [Electricity, Inverse, HandCuff, Knife, Eject]

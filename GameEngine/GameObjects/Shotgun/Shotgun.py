@@ -5,7 +5,7 @@ from ..Shotgun._magazine import _Magazine as Magazine
 from ..Shotgun._shell import _Shell as Shell
 from pydantic import BaseModel, Field, PrivateAttr, model_validator
 from GameEngine.GameObjects.Exception.shotgunException import ShotgunException
-from ..ResponseModels.shotgun_response import ShotgunEffectModel,ShotgunLoadResponse, ShotgunErrorResponse, ShotgunDamageUpdate, ShotgunFireResponse
+from ..ResponseClasses.shotgun_response import ShotgunLoadResponse, ShotgunFireResponse, ShotgunErrorResponse
 
 class Shotgun(BaseModel):
 
@@ -72,16 +72,15 @@ class Shotgun(BaseModel):
 
             return ShotgunLoadResponse(
                 success=True,
-                bullet_in_shell=True,
-                shell_in_chamber=True,
-                msg="Shell Has been Loaded into Chamber",
-                bullet_type=bullet,
+                msg="Loaded Shell into the Chamber",
+                bullet_type=bullet
             )
         
         except Exception as e: 
             return ShotgunErrorResponse(
-                error=e
-            )       
+                success=False,
+                msg=str(e)
+            )
         
     @property
     def liveDamage(self):
@@ -92,13 +91,9 @@ class Shotgun(BaseModel):
         if(new_dmg <=0):
             raise ShotgunException("Damage Can't be Zero or less")
         
-        old_dmg = self._dmg
         self._dmg = new_dmg
 
-        return ShotgunDamageUpdate(
-            old_damage=old_dmg,
-            new_damage=self._dmg
-        )
+        return f"Live Damage set to {self._dmg}"
 
 
     def _fire(self):
@@ -110,11 +105,16 @@ class Shotgun(BaseModel):
         bullet = self.shell.currentShell
         self.shell.unloadShell() 
 
-        return bullet, self.liveDamage
+        return ShotgunFireResponse(
+            success=True,
+            msg= "Fired!",
+            bullet_type=bullet,
+            damage=self.liveDamage
+        )
 
     
     def __str__(self):
-        return f"Magazine: {self.magazine.getMagazine}, Damage: {self._dmg}"
+        return f"Magazine: {self.magazine.getMagazine}, Damage: {self._dmg}, effects: {self.effects.show}" #need more working!
     
         
     

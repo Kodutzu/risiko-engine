@@ -1,8 +1,10 @@
 from GameEngine.GameObjects.Constant.Bullet import Bullet
 from pydantic import BaseModel, Field, model_validator, PrivateAttr
-from ..ResponseModels.shotgun_response import  ShotgunReloadResponse
+
 from collections import deque, Counter
+from ..Exception.shotgunException import MagazineException
 import random 
+
 class _Magazine(BaseModel):
     lives: int = Field(default=4, ge=1, frozen=True)
     blanks: int = Field(default=4, ge=1, frozen=True)
@@ -25,14 +27,7 @@ class _Magazine(BaseModel):
         self._tube.clear() #Empties the tubee
         self._tube.extend(self.__base_tube) # Using the base tube to reload!
 
-        return ShotgunReloadResponse(
-            success=True,
-            msg="Bullet Has Been Reloaded",
-            total_lives= self.getMagazine(ListOrder=False).get(Bullet.LIVE),
-            total_blanks=self.getMagazine(ListOrder=False).get(Bullet.BLANK),
-            bullet_lineup=self.getMagazine()
-        )
-        
+
 
     def getMagazine(self, ListOrder=True):
 
@@ -49,7 +44,7 @@ class _Magazine(BaseModel):
     def loadNextBullet(self):
         
         if self.isBulletMissing():
-            raise Exception("Lack of Live and Blank Bullet")
+            raise MagazineException("Lack of Either Live or Blank")
         bullet = self._tube[0]
         self._tube.popleft()
 

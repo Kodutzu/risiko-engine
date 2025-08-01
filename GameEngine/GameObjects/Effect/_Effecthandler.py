@@ -9,13 +9,8 @@ if TYPE_CHECKING:
     from ..Player.Player import Player
     from ..Shotgun.shotgun import Shotgun
 
-# Improving it Overall!
-# Object Error Handling!
-# Pydantic Model Implementation!
 
-class _EffectHandler(BaseModel): # Require Error Handling - where Effect from Effecttype can be added!
-
-    # player_effected: "Player" 
+class _EffectHandler(BaseModel): 
     _effects: List[Effect] = PrivateAttr(default_factory=list) 
 
     def add(self, effect_obj:Effect):
@@ -29,16 +24,17 @@ class _EffectHandler(BaseModel): # Require Error Handling - where Effect from Ef
       
         self._effects.append(effect_obj)
 
+        return "Write Something"
     def show(self, only_active=True):
-        
-        return [
-            {effect.showType: effect.showTurn}
+        return {
+            effect.effect_type: effect.turns
             for effect in self._effects
             if not only_active or effect.showTurn > 0
-        ]
+        }
     
-    # def __contains__(self, effect_type):
-    #     return effect_type in self.effects
+    # Experimenting with Dunder Method "__contains__"
+    def __contains__(self, effect_type):
+        return effect_type in self._effects
     
     def tickAll(self):
         for effect in self._effects:
