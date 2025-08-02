@@ -1,12 +1,12 @@
-from ..Constant.EffectsType import EffectsType
-from ._Effect import _Effect as Effect
+from ...GameConstant.item_type import ItemType
+from ..Effect._effect import _Effect as Effect
 from pydantic import PrivateAttr, BaseModel
 from pydantic.dataclasses import dataclass
 from typing import TYPE_CHECKING, List
-from ..Exception.effectException import EffectException
+from ..Exception.effect_exception import EffectException
 
 if TYPE_CHECKING:
-    from ..Player.Player import Player
+    from ..Player.player import Player
     from ..Shotgun.shotgun import Shotgun
 
 
@@ -24,10 +24,10 @@ class _EffectHandler(BaseModel):
       
         self._effects.append(effect_obj)
 
-        return "Write Something"
-    def show(self, only_active=True):
+     
+    def show(self, only_active=False):
         return {
-            effect.effect_type: effect.turns
+            effect.item_type: effect.turns
             for effect in self._effects
             if not only_active or effect.showTurn > 0
         }
@@ -43,4 +43,6 @@ class _EffectHandler(BaseModel):
     def removeExpired(self):
         expired_effects = [effect for effect in self._effects if effect.showTurn <= 0]
         self._effects = [effect for effect in self._effects if effect.showTurn > 0]
+
+        return expired_effects
        

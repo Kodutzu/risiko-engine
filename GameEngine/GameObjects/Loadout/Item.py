@@ -1,13 +1,14 @@
-from ..Effect._Effect import _Effect as Effect
-from ..Effect._Effecthandler import _EffectHandler as Effecthandler
-from ..Constant.EffectsType import EffectsType
-from GameEngine.GameObjects.Constant.Bullet import Bullet
-from ._ItemBase import _ItemBase as ItemBase
-from..Exception.playerException import PlayerException
+from ..Effect._effect import _Effect as Effect
+from ..Effect._effect_handler import _EffectHandler as Effecthandler
+from ...GameConstant.item_type import ItemType
+from ...GameConstant.bullet import Bullet
+from ._item_base import _ItemBase as ItemBase
+from..Exception.player_exception import PlayerException
+from ..ResponseClasses.item_response import ItemAppliedResponse
 
 #for typing hintes
 from ..Shotgun.shotgun import Shotgun
-from ..Player.Player import Player
+from ..Player.player import Player
 
 class Electricity(ItemBase):
 
@@ -19,9 +20,16 @@ class Electricity(ItemBase):
 
         if user is not target:
             raise PlayerException(f"You Can't Apply This Item on {target.__class__.__name__}")
+        charge = 1
+        user.charges.gain(charge)
+        
+        return ItemAppliedResponse(
+            item_name= ItemType.ELECTRICITY,
+            charges_gain=charge,
+            user=user,
+            target=target
 
-        user.charges.gain(1)
-        return {"Status": f"{user.name} gained a charge"}
+        )
 
 
 class Inverse(ItemBase):
@@ -30,55 +38,87 @@ class Inverse(ItemBase):
 
         current_shell = gun.shell.currentShell
 
+        self.inverse_shell = Bullet.BLANK if current_shell == Bullet.LIVE else Bullet.LIVE
+
         gun.shell.unloadShell()  
 
-        self.inverse_shell = Bullet.BLANK if current_shell == Bullet.LIVE else Bullet.LIVE
-        
         gun.shell.loadShell(self.inverse_shell)
         
     
     def use(self, user:Player, target:Shotgun):
         self.validate(target, Shotgun)
         self.inverse(target)
-        return self.inverse_shell
+        return ItemAppliedResponse(
+            item_name=ItemType.INVERSE,
+            current_bullet_type=self.inverse_shell,
+            user=user,
+            target=target
+        )
     
 
 class HandCuff(ItemBase):
 
     def cuff(self,target:Player):
-        effect_obj = Effect(EffectsType.CUFFED, turns=2)
-        target.effects.add(effect_obj)
-        return f"{target.name} is handcuffed for next turn."
+        self.turns = 2
+        self.effect_obj = Effect(ItemType.CUFFED, self.turns) # Cuffed, turns =2
+        target.effects.add(self.effect_obj)
     
     def use(self,user: Player, target: Player):
         self.validate(target,Player)
 
         if user is  target:
             raise PlayerException(f"You Can't Apply This Item on {user.__class__.__name__} - who is using it")
-        return self.cuff(target)
+        
+        self.cuff(target)
+
+        return ItemAppliedResponse(
+            item_name=ItemType.CUFFED,
+            user=user,      
+            target=target,
+            effects_applied={self.effect_obj: self.turns},
+        )
 
 class Knife(ItemBase):
 
     def Sharp(self, gun:Shotgun):
-        effect_obj = Effect(EffectsType.Knife)
-        gun.effects.add(effect_obj)
-        gun.setliveDamage(2)
+        new_dmg = 2
+        self.turns = 1
+        self.effect_obj = Effect(ItemType.KNIFE, turns=self.turns)
+        gun.effects.add(self.effect_obj)
+        gun.setliveDamage(new_dmg)
 
     def use(self, user: Player, target: Shotgun):
         self.validate(target, Shotgun)
-        return self.Sharp(target)
+        self.Sharp(target)
+        return ItemAppliedResponse(
+            item_name=ItemType.KNIFE,
+            user=user,
+            target=target,
+            current_bullet_type= target.shell.currentShell,
+            damage=target.liveDamage,
+            effects_applied={self.effect_obj.item_type:self.turns }
+        )
 
 class Eject(ItemBase):
     
     def pull(self,gun:Shotgun):
 
-        self.ejected_bullet = gun.shell.unloadShell()
-
-        return f"Ejected {self.ejected_bullet} "
+        self.bullet_present = gun.shell.currentShell #bullet which is there before ejecting!
+        self.ejected_bullet = gun.shell.unloadShell() 
 
     def use(self, user:Player, target: Shotgun):
+
         self.validate(target,Shotgun)
-        return self.pull(target)
+        self.pull(gun=target)
+
+        return ItemAppliedResponse(
+            item_name=ItemType.EJECT,
+            user=user,
+            target=target,
+            shell_ejected=self.bullet_present,
+            current_bullet_type= target.shell.currentShell,
+        )
+
 
 class Magnifier(ItemBase):
     
@@ -87,8 +127,15 @@ class Magnifier(ItemBase):
 
     def use(self,user: Player, target: Shotgun):
         self.validate(target,Shotgun)
-        return self.look(target)
-    
+        bullet = self.look(target)
+
+        return ItemAppliedResponse(
+            item_name=ItemType.MAGNIFIER,
+            user=user,
+            target=target,
+            current_bullet_type= bullet,
+
+        )
 
 class Vision(ItemBase):
 
@@ -98,7 +145,18 @@ class Vision(ItemBase):
     
     def use(self,user:Player, target:Shotgun ):
         self.validate(target, Shotgun)
-        return self.vision(target)
+        self.vision(target)
+
+        return ItemAppliedResponse(
+            item_name=ItemType.VISION,
+            user=user,
+            target=target,
+            future_bullet=self.future_bullet
+        )
+
+#class Opponnent's shotgun's bullet vision
+
+#class Bomb
 
 #class Deflect(ItemBase): An Level 3 Item!
     

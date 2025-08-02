@@ -1,18 +1,18 @@
 
-from ..Constant.EffectsType import EffectsType
+from ...GameConstant.item_type import ItemType
 from pydantic import Field
 from pydantic.dataclasses import dataclass
-from ..Exception.effectException import EffectException
+from ..Exception.effect_exception import EffectException
 
-@dataclass(frozen=True)
+@dataclass()
 class _Effect:
 
-    effect_type: EffectsType 
-    turns: int = Field(default=1, gt=0)
+    item_type: ItemType
+    turns: int = Field(default=1, gt=0, frozen=True)
 
     @property
     def showType(self): 
-        return self.effect_type
+        return self.item_type
 
     @property
     def showTurn(self) -> None:
@@ -22,10 +22,10 @@ class _Effect:
     def reduceTurn(self,red) -> None:
         if(self.turns < red):
             raise EffectException(f"You can't make turns/duration in Negative")
-        self._turns -= red
+        self.turns -= red
 
     def __repr__(self):
-        return f"<Effect {self.effect_type.name}: {self.turns} turns>"
+        return f"<Effect {self.item_type.name}: {self.turns} turns>"
     
 
 

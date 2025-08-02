@@ -1,8 +1,8 @@
-from GameEngine.GameObjects.Constant.Bullet import Bullet
+from ...GameConstant.bullet import Bullet
 from pydantic import BaseModel, Field, model_validator, PrivateAttr
 
 from collections import deque, Counter
-from ..Exception.shotgunException import MagazineException
+from ..Exception.shotugn_exception import MagazineException
 import random 
 
 class _Magazine(BaseModel):

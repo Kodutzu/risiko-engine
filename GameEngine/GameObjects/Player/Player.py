@@ -1,12 +1,11 @@
-from ..Loadout._Inventory import _Inventory as Inventory
-from ..Effect._Effecthandler import _EffectHandler as EffectHandler
+from ..Loadout._inventory import _Inventory as Inventory
+from ..Effect._effect_handler import _EffectHandler as EffectHandler
 from ..Shotgun.shotgun import Shotgun
-from ..Loadout._ItemBase import _ItemBase as ItemBase
-from ..Constant.Bullet import Bullet
+from ..Loadout._item_base import _ItemBase as ItemBase
+from ...GameConstant.bullet import Bullet
 from typing import Union, get_args
 from pydantic import BaseModel, Field,  model_validator, field_validator
 from pydantic.dataclasses import dataclass
-from ..ResponseClasses.shotgun_response import  ShotgunErrorResponse
 from ..ResponseClasses.player_response import PlayerShootResponse, ItemUsageResponse
 
 @dataclass
@@ -89,35 +88,22 @@ class Player(BaseModel):
     @property
     def name(self):
         return self.name
-    
-    @staticmethod
-    def _validateObj(obj: object, cls) -> bool:
-        if getattr(cls, '__origin__', None) is Union:
-            return any(isinstance(obj, t) for t in get_args(cls))
-        return isinstance(obj, cls)
+
         
 
     def trigger(self, shotgun_obj:Shotgun): 
-        if not self._validateObj(shotgun_obj, Shotgun):
+
+        if not isinstance(shotgun_obj,Shotgun):
             raise TypeError(f"Expected a Shotgun instance, got {type(shotgun_obj).__name__}")
 
 
-        
-        try:
-            fire_data = shotgun_obj._fire()
+        fire_data = shotgun_obj._fire()
 
-            return PlayerShootResponse(
-                success=True,
-                fired=True,
-                msg=f"Bullet is Fired by {self.name} ",
-                bullet_type= fire_data.bullet_type,
-                damage= fire_data.damage,
-                )
-        except Exception as e:
-            return ShotgunErrorResponse(
-                msg="From Player Class",
-                error=str(e)
-            )
+        return PlayerShootResponse(
+
+            bullet_type= fire_data.bullet_type,
+            damage= fire_data.damage,
+        )
 
     def useItem(self, item_obj: ItemBase, user: "Player" , target: Union["Player", Shotgun]):
         
@@ -127,16 +113,22 @@ class Player(BaseModel):
             (target, Union[Player, Shotgun])
         ]
 
+        def _validateObj(obj: object, cls) -> bool:
+            if getattr(cls, '__origin__', None) is Union: #check if the "cls" is Union.
+                return any(isinstance(obj, t) for t in get_args(cls))
+            return isinstance(obj, cls)
+        
         for obj, cls in checks:
-            if not self._validateObj(obj, cls):
+            if not _validateObj(obj, cls):
                 raise TypeError(f"Expected {cls}, got {type(obj).__name__}")
             
-
+        
         usage_data = item_obj.use(user,target)
         self.inventory.remove(item_obj) 
+        return ItemUsageResponse(item_applied=usage_data)
 
 
-        return usage_data #ItemUsageResponse( ) # Return Info
+        
 
     def __str__(self):
         return f"Player: {self.name}, Charge: {self.charges.showCharge}, Inventory: {self.inventory.show}, Effects: {self.effects.show()}"

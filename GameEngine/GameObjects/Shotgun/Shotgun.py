@@ -1,11 +1,10 @@
-from ..Effect._Effecthandler import _EffectHandler as EffectHandler
-import random 
-from ..Constant.Bullet import Bullet
+from ..Effect._effect_handler import _EffectHandler as EffectHandler
+from ...GameConstant.bullet import Bullet
 from ..Shotgun._magazine import _Magazine as Magazine
 from ..Shotgun._shell import _Shell as Shell
 from pydantic import BaseModel, Field, PrivateAttr, model_validator
-from GameEngine.GameObjects.Exception.shotgunException import ShotgunException
-from ..ResponseClasses.shotgun_response import ShotgunLoadResponse, ShotgunFireResponse, ShotgunErrorResponse
+from GameEngine.GameObjects.Exception.shotugn_exception import ShotgunException
+from ..ResponseClasses.shotgun_response import ShotgunResponse
 
 class Shotgun(BaseModel):
 
@@ -64,29 +63,19 @@ class Shotgun(BaseModel):
         return self
     
 
-    def loadChamber(self):
+    def loadChamber(self) -> Bullet:
 
-        try:
-            bullet = self.magazine.loadNextBullet()
-            self.shell.loadShell(bullet)
-
-            return ShotgunLoadResponse(
-                success=True,
-                msg="Loaded Shell into the Chamber",
-                bullet_type=bullet
-            )
         
-        except Exception as e: 
-            return ShotgunErrorResponse(
-                success=False,
-                msg=str(e)
-            )
+        bullet = self.magazine.loadNextBullet()
+        self.shell.loadShell(bullet)
+
+        return bullet
         
     @property
     def liveDamage(self):
         return self._dmg 
             
-    def setliveDamage(self,new_dmg):
+    def setliveDamage(self,new_dmg) -> str:
 
         if(new_dmg <=0):
             raise ShotgunException("Damage Can't be Zero or less")
@@ -105,9 +94,7 @@ class Shotgun(BaseModel):
         bullet = self.shell.currentShell
         self.shell.unloadShell() 
 
-        return ShotgunFireResponse(
-            success=True,
-            msg= "Fired!",
+        return ShotgunResponse(
             bullet_type=bullet,
             damage=self.liveDamage
         )
