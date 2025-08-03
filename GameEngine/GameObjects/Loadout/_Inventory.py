@@ -2,8 +2,8 @@ from typing import List
 from pydantic import BaseModel, PrivateAttr,Field
 from ._item_base import _ItemBase as ItemBase
 from pydantic.config import ConfigDict 
-from ..Exception.inventory_exception import InventoryException
-from ..Exception.item_exception import ItemException
+from ...GameException.inventory_exception import InventoryException
+from ...GameException.item_exception import ItemException
 
 class _Inventory(BaseModel):
     _items: List[ItemBase] = PrivateAttr(default_factory=list)
@@ -35,7 +35,7 @@ class _Inventory(BaseModel):
         return item_obj in self._items
     
     @property
-    def freeCapacity(self): #return free Capacity
+    def showFreeCapacity(self): #return free Capacity
         return self.capacity - len(self._items)
     
     @property

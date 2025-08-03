@@ -1,12 +1,7 @@
 from ..Loadout._inventory import _Inventory as Inventory
 from ..Effect._effect_handler import _EffectHandler as EffectHandler
-from ..Shotgun.shotgun import Shotgun
-from ..Loadout._item_base import _ItemBase as ItemBase
-from ...GameConstant.bullet import Bullet
-from typing import Union, get_args
 from pydantic import BaseModel, Field,  model_validator, field_validator
 from pydantic.dataclasses import dataclass
-from ..ResponseClasses.player_response import PlayerShootResponse, ItemUsageResponse
 
 @dataclass
 class _ChargeMeter():
@@ -77,59 +72,6 @@ class Player(BaseModel):
             if field in values:
                 raise TypeError(f"Field '{field}' must not be manually provided.")
         return values
-
     
-    @model_validator(mode="after")
-    def _initiatePlayer(self):
-        self.inventory = Inventory()
-        self.effects = EffectHandler()
-        return self
-
-    @property
-    def name(self):
-        return self.name
-
-        
-
-    def trigger(self, shotgun_obj:Shotgun): 
-
-        if not isinstance(shotgun_obj,Shotgun):
-            raise TypeError(f"Expected a Shotgun instance, got {type(shotgun_obj).__name__}")
-
-
-        fire_data = shotgun_obj._fire()
-
-        return PlayerShootResponse(
-
-            bullet_type= fire_data.bullet_type,
-            damage= fire_data.damage,
-        )
-
-    def useItem(self, item_obj: ItemBase, user: "Player" , target: Union["Player", Shotgun]):
-        
-        checks = [
-            (item_obj, ItemBase),
-            (user, Player),
-            (target, Union[Player, Shotgun])
-        ]
-
-        def _validateObj(obj: object, cls) -> bool:
-            if getattr(cls, '__origin__', None) is Union: #check if the "cls" is Union.
-                return any(isinstance(obj, t) for t in get_args(cls))
-            return isinstance(obj, cls)
-        
-        for obj, cls in checks:
-            if not _validateObj(obj, cls):
-                raise TypeError(f"Expected {cls}, got {type(obj).__name__}")
-            
-        
-        usage_data = item_obj.use(user,target)
-        self.inventory.remove(item_obj) 
-        return ItemUsageResponse(item_applied=usage_data)
-
-
-        
-
     def __str__(self):
         return f"Player: {self.name}, Charge: {self.charges.showCharge}, Inventory: {self.inventory.show}, Effects: {self.effects.show()}"
-

@@ -2,7 +2,7 @@
 from ...GameConstant.item_type import ItemType
 from pydantic import Field
 from pydantic.dataclasses import dataclass
-from ..Exception.effect_exception import EffectException
+from ...GameException.effect_exception import EffectException
 
 @dataclass()
 class _Effect:

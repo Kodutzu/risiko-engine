@@ -9,21 +9,22 @@ raj = Player(name="raj", charges=4)
 dealer = Player(name="dealer", charges=4)
 gun = Shotgun(lives=4, blanks=4)
 
-print(gun.loadChamber())
-raj.inventory.add(Knife())
-data = raj.useItem(Knife(), raj, gun)
+print(raj.name)
 
-print(data.item_applied.damage)
+# gun.loadChamber()
+# raj.inventory.add([Electricity(), Magnifier(), Vision(), HandCuff()])
+# raj.useItem(Magnifier(), raj, gun)
+# raj.useItem(Electricity(), raj, raj)
+# data = raj.useItem(HandCuff(), raj,dealer)
 
-print(gun.effects.show())
-print(raj.trigger(gun))
-gun.effects.tickAll()
-gun.effects.removeExpired()
-print(gun.effects.show(only_active=False))
+# print(data.item_applied.effects_applied)
+
+# print(raj.charges.showCharge)
+# print(gun.magazine.getMagazine())
 
 
 
-item_list = [Electricity, Inverse, HandCuff, Knife, Eject]
+# item_list = [Electricity, Inverse, HandCuff, Knife, Eject]
 
 
 

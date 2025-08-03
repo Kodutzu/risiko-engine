@@ -2,15 +2,15 @@ from ...GameConstant.bullet import Bullet
 from pydantic import BaseModel, Field, model_validator, PrivateAttr
 
 from collections import deque, Counter
-from ..Exception.shotugn_exception import MagazineException
+from ...GameException.shotugn_exception import MagazineException
 import random 
 
 class _Magazine(BaseModel):
-    lives: int = Field(default=4, ge=1, frozen=True)
-    blanks: int = Field(default=4, ge=1, frozen=True)
+    lives: int = Field(ge=1, frozen=True)
+    blanks: int = Field(ge=1, frozen=True)
 
-    __base_tube: list[Bullet] = PrivateAttr(default_factory=dict)
-    _tube: deque[Bullet] = PrivateAttr(default_factory=dict)
+    __base_tube: list[Bullet] = PrivateAttr(default_factory=list)
+    _tube: deque[Bullet] = PrivateAttr(default_factory=deque)
 
     @model_validator(mode="after")
     def _initiateMagzine(self):

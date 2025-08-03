@@ -3,7 +3,7 @@ from ..Effect._effect import _Effect as Effect
 from pydantic import PrivateAttr, BaseModel
 from pydantic.dataclasses import dataclass
 from typing import TYPE_CHECKING, List
-from ..Exception.effect_exception import EffectException
+from ...GameException.effect_exception import EffectException
 
 if TYPE_CHECKING:
     from ..Player.player import Player

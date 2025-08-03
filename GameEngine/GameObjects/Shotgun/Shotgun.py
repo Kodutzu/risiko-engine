@@ -3,8 +3,8 @@ from ...GameConstant.bullet import Bullet
 from ..Shotgun._magazine import _Magazine as Magazine
 from ..Shotgun._shell import _Shell as Shell
 from pydantic import BaseModel, Field, PrivateAttr, model_validator
-from GameEngine.GameObjects.Exception.shotugn_exception import ShotgunException
-from ..ResponseClasses.shotgun_response import ShotgunResponse
+from ...GameException.shotugn_exception import ShotgunException
+from typing import Optional
 
 class Shotgun(BaseModel):
 
@@ -35,7 +35,7 @@ class Shotgun(BaseModel):
 
     lives: int = Field(default = 4, frozen=True)
     blanks: int = Field(default= 4, frozen=True)
-    magazine: Magazine = Field(default_factory=Magazine)
+    magazine: Optional[Magazine] = None #Separately Set the values - don't only rely on Constructor
     shell: Shell = Field(default_factory=Shell)
     effects: EffectHandler = Field(default_factory=EffectHandler)
     _dmg: int = PrivateAttr(default=1)
@@ -53,18 +53,14 @@ class Shotgun(BaseModel):
                 raise TypeError(f"Field '{field}' must not be manually provided.")
         return values
     
-
     @model_validator(mode="after")
-    def _initiateShotgun(self)-> "Shotgun":
+    def _initiateMagazine(self) -> "Shotgun":
 
         self.magazine = Magazine(lives=self.lives, blanks=self.blanks)
-        self.effects = EffectHandler() # Add "self" passable
-        
         return self
     
 
     def loadChamber(self) -> Bullet:
-
         
         bullet = self.magazine.loadNextBullet()
         self.shell.loadShell(bullet)
@@ -82,31 +78,7 @@ class Shotgun(BaseModel):
         
         self._dmg = new_dmg
 
-        return f"Live Damage set to {self._dmg}"
-
-
-    def _fire(self):
-        
-        if self.shell.currentShell is None:
-            raise ShotgunException("Shell is empty")
-        
-       
-        bullet = self.shell.currentShell
-        self.shell.unloadShell() 
-
-        return ShotgunResponse(
-            bullet_type=bullet,
-            damage=self.liveDamage
-        )
-
     
     def __str__(self):
         return f"Magazine: {self.magazine.getMagazine}, Damage: {self._dmg}, effects: {self.effects.show}" #need more working!
     
-        
-    
-
-        
-
-
-        
