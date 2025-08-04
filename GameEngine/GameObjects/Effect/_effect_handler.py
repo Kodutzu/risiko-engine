@@ -2,13 +2,8 @@ from ...GameConstant.item_type import ItemType
 from ..Effect._effect import _Effect as Effect
 from pydantic import PrivateAttr, BaseModel
 from pydantic.dataclasses import dataclass
-from typing import TYPE_CHECKING, List
+from typing import List
 from ...GameException.effect_exception import EffectException
-
-if TYPE_CHECKING:
-    from ..Player.player import Player
-    from ..Shotgun.shotgun import Shotgun
-
 
 class _EffectHandler(BaseModel): 
     _effects: List[Effect] = PrivateAttr(default_factory=list) 
@@ -16,10 +11,12 @@ class _EffectHandler(BaseModel):
     def add(self, effect_obj:Effect):
 
         if not isinstance(effect_obj, Effect):
-            raise EffectException("It should be an Effect")
+            raise EffectException(f"It should be effect, got {effect_obj} as Args")
 
         for effect in self._effects:
+
             if effect == effect_obj:
+
                 raise EffectException(f"Effect: {effect_obj} is Already Applied")
       
         self._effects.append(effect_obj)
@@ -35,6 +32,26 @@ class _EffectHandler(BaseModel):
     # Experimenting with Dunder Method "__contains__"
     def __contains__(self, effect_type):
         return effect_type in self._effects
+    
+    def has(self, effect_obj: Effect) -> bool:
+        for effect in self._effects:
+            if effect == effect_obj:
+                return True
+        return False
+    
+    def remove(self, effect_obj: Effect):
+
+        if not isinstance(effect_obj, Effect):
+            raise EffectException(f"It should be effect, got {effect_obj} as Args")
+
+        for effect in self._effects:
+
+            if effect != effect_obj:
+
+                raise EffectException(f"Effect: {effect_obj} is not Applied")
+      
+        self._effects.remove(effect_obj)
+
     
     def tickAll(self):
         for effect in self._effects:

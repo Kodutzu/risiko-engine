@@ -1,7 +1,7 @@
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import dataclass
-from ...GameException.item_exception import ItemException
+
 @dataclass
 class _ItemBase(ABC):
     """

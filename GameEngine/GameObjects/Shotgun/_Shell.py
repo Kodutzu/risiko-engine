@@ -4,19 +4,27 @@ from ...GameException.shotugn_exception import ShellException
 
 class _Shell(BaseModel):
     
-    _shell: Bullet| None = PrivateAttr(default=None)
+    _shell: Bullet | None = PrivateAttr(default=None)
 
-    def loadShell(self, bullet_type):
+    def load(self, bullet_type:Bullet) -> Bullet:
+
         if self._shell is not None:
+
             raise ShellException(f"Shell already loaded with {self._shell}")
+        
         self._shell = bullet_type
+
         return self._shell
     
+    def unload(self) -> None:
+
+        self._shell = None
+
+    
     def isLoaded(self) -> bool: 
+
         return self._shell is not None
 
-    def unloadShell(self):
-        self._shell = None
 
     @property
     def currentShell(self) -> Bullet:

@@ -4,7 +4,7 @@ from pydantic import Field
 from pydantic.dataclasses import dataclass
 from ...GameException.effect_exception import EffectException
 
-@dataclass()
+@dataclass
 class _Effect:
 
     item_type: ItemType
@@ -21,7 +21,7 @@ class _Effect:
 
     def reduceTurn(self,red) -> None:
         if(self.turns < red):
-            raise EffectException(f"You can't make turns/duration in Negative")
+            raise EffectException(f"Invalid Args, It should be Positive - Got {red}")
         self.turns -= red
 
     def __repr__(self):

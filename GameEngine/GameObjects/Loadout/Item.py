@@ -1,11 +1,11 @@
 from ._item_base import _ItemBase as ItemBase
 
-class Electricity(ItemBase): # Only Available in Level - 2
+# Only Available in Level - 2
+class Electricity(ItemBase): 
     pass
 
 
-class Inverse(ItemBase): # Only Available in Level - 2
-
+class Inverse(ItemBase):
     pass
         
 #Available in Both Level 2 and 3

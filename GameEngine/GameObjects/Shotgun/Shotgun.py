@@ -58,27 +58,25 @@ class Shotgun(BaseModel):
 
         self.magazine = Magazine(lives=self.lives, blanks=self.blanks)
         return self
-    
 
     def loadChamber(self) -> Bullet:
         
-        bullet = self.magazine.loadNextBullet()
-        self.shell.loadShell(bullet)
+        bullet = self.magazine.takeOutBullet()
+        self.shell.load(bullet)
 
         return bullet
         
     @property
-    def liveDamage(self):
+    def liveDamage(self) -> int:
         return self._dmg 
             
-    def setliveDamage(self,new_dmg) -> str:
+    def setliveDamage(self,new_dmg) -> None:
 
         if(new_dmg <=0):
-            raise ShotgunException("Damage Can't be Zero or less")
+            raise ShotgunException(f"Damage Should be Positive | It Can not be {new_dmg}")
         
         self._dmg = new_dmg
 
-    
     def __str__(self):
         return f"Magazine: {self.magazine.getMagazine}, Damage: {self._dmg}, effects: {self.effects.show}" #need more working!
     
