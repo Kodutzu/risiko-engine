@@ -11,12 +11,12 @@ class _Inventory(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     
-    def add(self, item_objs:List[ItemBase] | ItemBase):
+    def add(self, item_objs:List[ItemBase] | ItemBase, force=False):
 
         if isinstance(item_objs, ItemBase):
             item_objs = [item_objs]
 
-        if len(self._items) + len(item_objs) > self.capacity:
+        if (not force) and len(self._items) + len(item_objs) > self.capacity:
             raise InventoryException("Player's Inventory has Reached it's Capacity")
         
         self._items.extend(item_objs)

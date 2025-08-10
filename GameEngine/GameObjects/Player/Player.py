@@ -1,13 +1,13 @@
 from ..Loadout._inventory import _Inventory as Inventory
 from ..Effect._effect_handler import _EffectHandler as EffectHandler
-from pydantic import BaseModel, Field,  model_validator, field_validator
+from pydantic import BaseModel, Field, field_validator, PrivateAttr
 from pydantic.dataclasses import dataclass
 
 @dataclass
 class _ChargeMeter():
     value: int = Field(default=4, ge=3)
 
-    def gain(self, amt): self.value +=amt
+    def gain(self, amt): self.value += amt
     def lose(self,amt): self.value -=amt 
 
     @property
@@ -16,45 +16,10 @@ class _ChargeMeter():
 
 class Player(BaseModel):
 
-    """
-    Represents a player in the game, with charge meter, item inventory, and active effects.
-
-    This class is responsible for:
-    - Holding player-specific state such as name, charge meter, items, and effects.
-    - Triggering a shotgun.
-    - Validating field assignments safely via Pydantic.
-    - Using items against other players or the shotgun.
-    
-    Fields:
-    --------
-    name : str
-        The immutable name of the player.
-    
-    charges : _ChargeMeter
-        Player's charge meter that can increase or decrease based on game logic.
-    
-    inventory : Inventory
-        A player's item inventory, automatically initialized.
-    
-    effects : EffectHandler
-        Manager for all status effects currently applied to the player.
-    
-    Methods:
-    --------
-    trigger(shotgun_obj: Shotgun) -> Bullet
-        Fires the shotgun and returns the bullet result.
-
-    useItem(item_obj: ItemBase, user: Player, target: Union[Player, Shotgun]) -> Any
-        Applies an item's effect from the user onto the target and removes it from inventory.
-
-    """
-    name: str = Field(frozen=True)
+    id: int = Field(frozen=True)
     charges: _ChargeMeter = Field(default_factory=_ChargeMeter)
-    inventory: Inventory = Field(default_factory=Inventory)
-    effects: EffectHandler = Field(default_factory=EffectHandler)   
-    model_config = {
-        "arbitrary_types_allowed": True
-    }
+    _inventory: Inventory = PrivateAttr(default_factory=Inventory)
+    _effects: EffectHandler = PrivateAttr(default_factory=EffectHandler)   
 
     @field_validator("charges", mode="before")
     @classmethod
@@ -64,14 +29,18 @@ class Player(BaseModel):
             return _ChargeMeter(value=v)
         return v
     
-    @model_validator(mode="before")
-    @classmethod
-    def _forbiddenInjection(cls, values):
-        forbidden_fields = ["inventory", "effects"]
-        for field in forbidden_fields:
-            if field in values:
-                raise TypeError(f"Field '{field}' must not be manually provided.")
-        return values
+    @property
+    def charges(self): return self.charges
+    @property
+    def inventory(self): return self._inventory
+
+    @property
+    def effects(self): return self._effects
+
+
     
     def __str__(self):
-        return f"Player: {self.name}, Charge: {self.charges.showCharge}, Inventory: {self.inventory.show}, Effects: {self.effects.show()}"
+        return (
+        f"Player(id={self.id}, charges={self.charges.showCharge}, "
+        f"inventory={self.inventory.show}, effects={self.effects.show()}"
+        )
