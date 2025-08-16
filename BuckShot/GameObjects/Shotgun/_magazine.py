@@ -2,7 +2,7 @@ from ...GameConstant.bullet import Bullet
 from pydantic import BaseModel, Field, model_validator, PrivateAttr
 from typing import List, Union
 from collections import deque, Counter
-from ...GameException.shotugn_exception import MagazineException
+from ...GameException.ObjectException.shotugn_exception import MagazineException
 import random 
 
 
@@ -27,10 +27,10 @@ class _Magazine(BaseModel):
         random.shuffle(self.__base_tube)
         self._tube = deque(self.__base_tube)
 
-    def getMagazine(self, as_list=True) -> Union[List, Counter]:
+    def getMagazine(self, as_list=True) -> Union[List, Counter[Bullet, int]]:
 
         if as_list :
-            return [bullet.value for bullet in self._tube ]
+            return [bullet.name for bullet in self._tube ]
         else:
             return Counter(self._tube)
 

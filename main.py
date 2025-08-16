@@ -1,15 +1,18 @@
-from GameEngine.GameObjects.Player.player import Player
-from GameEngine.GameObjects.Shotgun.shotgun import Shotgun
-from GameEngine.GameObjects.Loadout.Item import *
-from GameEngine.GameObjects.Effect._effect import _Effect as Effect
-from GameEngine.GameConstant.item_type import ItemType
+from BuckShot.GameObjects.Player.player import Player
+from BuckShot.GameObjects.Shotgun.shotgun import Shotgun
+from BuckShot.GameConstant.bullet import Bullet
+from BuckShot.GameObjects.Loadout.item import Item
+from BuckShot.GameConstant.usable_entity import UsableEntity
 
 
-gun = Shotgun()
-player = Player(id=1101, charges=4, _inventory=gun, effects=gun.effects)
+gun = Shotgun(lives=4, blanks=4)
 
-player.inventory.add(Electricity())
-player.effects.add(Effect(ItemType.ELECTRICITY))
-print(player)
+print(gun.magazine.getMagazine())
 
-print(gun.magazine.getMagazine(as_list=True))
+gun.loadChamber()
+print(type(gun.shell.currentShell.name))
+player = Player(id=1, charges=4)
+player.inventory.add(Item(type_of=UsableEntity.CUFFED))
+# print(player.inventory.show(readable=True))
+
+

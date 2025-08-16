@@ -3,8 +3,7 @@ from ...GameConstant.bullet import Bullet
 from ..Shotgun._magazine import _Magazine as Magazine
 from ..Shotgun._shell import _Shell as Shell
 from pydantic import BaseModel, Field, PrivateAttr, model_validator, PrivateAttr
-from ...GameException.shotugn_exception import ShotgunException
-from typing import Optional
+from ...GameException.ObjectException.shotugn_exception import ShotgunException
 
 class Shotgun(BaseModel):
 
@@ -49,9 +48,7 @@ class Shotgun(BaseModel):
         
         self._live_dmg = new_dmg
 
-    def __str__(self):
-        return (
-        f"Shotgun: Magazine={self.magazine.getMagazine()}, "
-        f"Damage={self._live_dmg}, Effects={self._effects.show}"
-        )   
+    def __repr__(self) -> str:
+        return f"<Shotgun {self.lives} Live /{self.blanks} Blanks dmg={self._live_dmg}>"
+
     

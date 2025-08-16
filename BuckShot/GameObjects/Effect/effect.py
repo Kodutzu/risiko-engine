@@ -1,17 +1,17 @@
 
-from ...GameConstant.item_type import ItemType
+from ...GameConstant.usable_entity import UsableEntity
 from pydantic import Field
 from pydantic.dataclasses import dataclass
-from ...GameException.effect_exception import EffectException
+from ...GameException.ObjectException.effect_exception import EffectException
 
 @dataclass
-class _Effect:
+class Effect:
 
-    item_type: ItemType
-    turns: int = Field(default=1, gt=0, frozen=True)
+    item_type: UsableEntity
+    turns: int = Field(default=1, gt=0)
 
     @property
-    def showType(self): 
+    def showType(self) -> UsableEntity: 
         return self.item_type
 
     @property
@@ -19,12 +19,14 @@ class _Effect:
         return self.turns
     
 
-    def reduceTurn(self,red) -> None:
+    def reduceTurn(self,red=1) -> int:
         if(self.turns < red):
             raise EffectException(f"Invalid Args, It should be Positive - Got {red}")
         self.turns -= red
 
-    def __repr__(self):
+        return self.turns
+
+    def __repr__(self) -> str:
         return f"<Effect {self.item_type.name}: {self.turns} turns>"
     
 

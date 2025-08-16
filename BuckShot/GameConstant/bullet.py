@@ -1,6 +1,6 @@
 from enum import Enum
 
 class Bullet(Enum):
-    LIVE = "LIVE"
-    BLANK = "BLANK"
+    LIVE = "live"
+    BLANK = "blank"
     #STUN = "STUN"

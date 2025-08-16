@@ -1,6 +1,6 @@
 from enum import Enum
 
-class ItemType(Enum):
+class UsableEntity(Enum):
     ELECTRICITY= "electricity"
     INVERSE = "inverse" 
     CUFFED = "cuffed"

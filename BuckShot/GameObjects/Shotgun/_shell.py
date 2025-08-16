@@ -1,6 +1,6 @@
 from pydantic import BaseModel, PrivateAttr
 from ...GameConstant.bullet import Bullet
-from ...GameException.shotugn_exception import ShellException
+from ...GameException.ObjectException.shotugn_exception import ShellException
 
 class _Shell(BaseModel):
     

@@ -30,13 +30,10 @@ class Player(BaseModel):
         return v
     
     @property
-    def charges(self): return self.charges
-    @property
     def inventory(self): return self._inventory
 
     @property
     def effects(self): return self._effects
-
 
     
     def __str__(self):
