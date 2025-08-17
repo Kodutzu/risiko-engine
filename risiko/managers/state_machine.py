@@ -1,4 +1,4 @@
-from ..constant.game_state import GameState
+from ..constants.game_state import GameState
 from typing import Dict, List
 from dataclasses import dataclass, field
 
@@ -27,11 +27,11 @@ class StateMachine:
 
             }
         
-    def _can_transition(self, to_state:GameState):
+    def _can_transition(self, to_state:GameState) -> bool:
  
         return (self.state != to_state) and (to_state in self.transitions.get(self.state, []))
     
-    def transition(self, to_state:GameState):
+    def transition(self, to_state:GameState) -> None:
         if self._can_transition(to_state):
             self.state = to_state
         else:

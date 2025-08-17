@@ -1,8 +1,8 @@
 from typing import List
 from pydantic import BaseModel, PrivateAttr,Field
 from .item import Item 
-from ..exception.inventory_exception import InventoryException
-from ..exception.item_exception import ItemException
+from ..exceptions.inventory_exception import InventoryException
+from ..exceptions.item_exception import ItemException
 
 class Inventory(BaseModel):
     _items: List[Item] = PrivateAttr(default_factory=list)

@@ -1,7 +1,7 @@
 from .effect import Effect
 from pydantic import PrivateAttr, BaseModel
 from typing import List, Dict
-from ..exception.effect_exception import EffectException
+from ..exceptions.effect_exception import EffectException
 
 class EffectHandler(BaseModel): 
 

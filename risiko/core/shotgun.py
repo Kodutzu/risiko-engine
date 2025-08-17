@@ -1,8 +1,8 @@
 from .effect_handler import EffectHandler
-from ..constant.bullet import Bullet
+from ..constants.bullet import Bullet
 from .magazine import Magazine
 from .shell import Shell
-from pydantic import BaseModel, Field, model_validator, PrivateAttr
+from pydantic import BaseModel, Field, PrivateAttr
 
 class Shotgun(BaseModel):
 

@@ -1,6 +1,5 @@
 from risiko import Player, Shotgun, Magazine
-from risiko.core import EffectHandler, Inventory, Shell
-
+from risiko.objects import custom_player
 
 
 rajesh = Player(id=1, charges=4)

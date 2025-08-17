@@ -7,12 +7,11 @@ from pydantic.dataclasses import dataclass
 class _ChargeMeter():
     value: int = Field(default=4, ge=3)
 
-    def gain(self, amt): self.value += amt
-    def lose(self,amt): self.value -=amt 
+    def gain(self, amt: int) -> None: self.value += amt
+    def lose(self,amt: int)-> None: self.value -=amt 
 
     @property
-    def showCharge(self): return self.value
-    def __int__(self): return self.value
+    def showCharge(self) -> int : return self.value
 
 class Player(BaseModel):
 
@@ -26,14 +25,14 @@ class Player(BaseModel):
         
     @field_validator("charges", mode="before")
     @classmethod
-    def chargeCoercion(cls, v):  # Allow `charges=int` to be auto-converted
+    def chargeCoercion(cls, v) -> int:  # Allow `charges=int` to be auto-converted
        
         if isinstance(v, int):
             return _ChargeMeter(value=v)
             
         return v
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
         f"Player(id={self.id}, charges={self.charges.showCharge}, "
         f"inventory={self.inventory.show()}, effects={self.effects.show()}"
