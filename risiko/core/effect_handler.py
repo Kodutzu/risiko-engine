@@ -1,9 +1,10 @@
 from .effect import Effect
 from pydantic import PrivateAttr, BaseModel
 from typing import List, Dict
-from ...GameException.ObjectException.effect_exception import EffectException
+from ..exception.effect_exception import EffectException
 
-class _EffectHandler(BaseModel): 
+class EffectHandler(BaseModel): 
+
     _effects: List[Effect] = PrivateAttr(default_factory=list) 
 
     def add(self, effect_obj:Effect) -> None:
@@ -18,20 +19,13 @@ class _EffectHandler(BaseModel):
                 raise EffectException(f"Effect: {effect_obj} is Already Applied")
       
         self._effects.append(effect_obj)
-
-     
+ 
     def show(self, only_active: bool =False) -> Dict[Effect, int]:
-        return {
-                effect.item_type.name: effect.turns
+        return [
+                (effect.item_type.name, effect.turns)
                 for effect in self._effects
                 if not only_active or effect.showTurn > 0
-            }
-        
-    
-    # Experimenting with Dunder Method "__contains__"
-    def __contains__(self, effect_type) -> bool:
-
-        return effect_type in self._effects
+        ]
     
     def has(self, effect_obj: Effect) -> bool:
 
@@ -50,7 +44,6 @@ class _EffectHandler(BaseModel):
             raise EffectException(f"Effect: {effect_obj} is not Applied")
       
         self._effects.remove(effect_obj)
-
     
     def tickAll(self) -> None:
         """
@@ -79,3 +72,7 @@ class _EffectHandler(BaseModel):
 
         return expired_effects
        
+    # Experimenting with Dunder Method "__contains__"
+    def __contains__(self, effect_type) -> bool:
+
+        return effect_type in self._effects

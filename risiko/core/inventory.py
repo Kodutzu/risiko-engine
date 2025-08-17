@@ -1,10 +1,10 @@
 from typing import List
 from pydantic import BaseModel, PrivateAttr,Field
 from .item import Item 
-from ...GameException.ObjectException.inventory_exception import InventoryException
-from ...GameException.ObjectException.item_exception import ItemException
+from ..exception.inventory_exception import InventoryException
+from ..exception.item_exception import ItemException
 
-class _Inventory(BaseModel):
+class Inventory(BaseModel):
     _items: List[Item] = PrivateAttr(default_factory=list)
     capacity: int = Field(default=4, ge=4)
 
@@ -35,10 +35,9 @@ class _Inventory(BaseModel):
     def has(self, item_obj: Item) -> bool:
         return item_obj in self._items
     
-    def showFreeCapacity(self) -> int: #return free Capacity
+    def space(self) -> int: #return total free Capacity
         return self.capacity - len(self._items)
     
-
     def count(self) -> int:
         return len(self._items)
 
@@ -46,4 +45,4 @@ class _Inventory(BaseModel):
         self._items.clear()
 
     def __repr__(self) -> str:
-        return f"Inventory(capacity={self.capacity}, items={self.show(readable=True)})"
+        return f"Inventory(capacity={self.capacity}, items={self.show()})"

@@ -8,8 +8,8 @@ class GameState(Enum):
     
     # Player Turn Phase
     PLAYER_TURN = auto()         
-    AWAITING_ACTION = auto() 
-    ACTION_VALIDATION = auto() 
+    AWAITING_ACTION = auto() #
+
     
     # Action Execution Phase  
     ITEM_USE = auto()           

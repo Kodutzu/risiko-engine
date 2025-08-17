@@ -1,8 +1,8 @@
 
-from ...GameConstant.usable_entity import UsableEntity
+from ..constant.usable_entity import UsableEntity
 from pydantic import Field
 from pydantic.dataclasses import dataclass
-from ...GameException.ObjectException.effect_exception import EffectException
+from ..exception.effect_exception import EffectException
 
 @dataclass
 class Effect:

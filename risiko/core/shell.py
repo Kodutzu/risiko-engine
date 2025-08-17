@@ -1,8 +1,8 @@
 from pydantic import BaseModel, PrivateAttr
-from ...GameConstant.bullet import Bullet
-from ...GameException.ObjectException.shotugn_exception import ShellException
+from ..constant.bullet import Bullet
+from ..exception.shotugn_exception import ShellException
 
-class _Shell(BaseModel):
+class Shell(BaseModel):
     
     _shell: Bullet | None = PrivateAttr(default=None)
 

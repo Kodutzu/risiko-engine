@@ -1,4 +1,4 @@
-from ...GameConstant.game_state import GameState
+from ..constant.game_state import GameState
 from typing import Dict, List
 from dataclasses import dataclass, field
 
@@ -15,9 +15,8 @@ class StateMachine:
                 GameState.ROUND_START: [GameState.ITEM_DISTRIBUTION, GameState.PLAYER_TURN],
                 GameState.ITEM_DISTRIBUTION: [GameState.PLAYER_TURN],
                 GameState.PLAYER_TURN: [GameState.AWAITING_ACTION, GameState.ROUND_END],
-                GameState.AWAITING_ACTION: [GameState.ACTION_VALIDATION],
-                GameState.ACTION_VALIDATION: [GameState.ITEM_USE, GameState.SHOOT],
-                GameState.ITEM_USE: [GameState.RESOLVE_ACTION],
+                GameState.AWAITING_ACTION: [GameState.ITEM_USE, GameState.SHOOT],
+                GameState.ITEM_USE: [GameState.AWAITING_ACTION],
                 GameState.SHOOT: [GameState.RESOLVE_ACTION],
                 GameState.RESOLVE_ACTION: [GameState.EFFECT_TICK],
                 GameState.EFFECT_TICK: [GameState.TURN_TRANSITION],
