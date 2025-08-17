@@ -22,9 +22,9 @@ class EffectHandler(BaseModel):
  
     def show(self, only_active: bool =False) -> Dict[Effect, int]:
         return [
-                (effect.item_type.name, effect.turns)
+                (effect.entity.name, effect.turn)
                 for effect in self._effects
-                if not only_active or effect.showTurn > 0
+                if not only_active or effect.turns > 0
         ]
     
     def has(self, effect_obj: Effect) -> bool:
@@ -67,8 +67,8 @@ class EffectHandler(BaseModel):
         Returns:
             List[Effect]: A list of expired effects.
         """
-        expired_effects = [effect for effect in self._effects if effect.showTurn <= 0]
-        self._effects = [effect for effect in self._effects if effect.showTurn > 0]
+        expired_effects = [effect for effect in self._effects if effect.turn <= 0]
+        self._effects = [effect for effect in self._effects if effect.turn > 0]
 
         return expired_effects
        

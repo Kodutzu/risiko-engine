@@ -7,27 +7,24 @@ from ..exceptions.effect_exception import EffectException
 @dataclass
 class Effect:
 
-    item_type: UsableEntity
+    entity: UsableEntity
     turns: int = Field(default=1, gt=0)
 
     @property
-    def showType(self) -> UsableEntity: 
-        return self.item_type
+    def effect(self) -> UsableEntity: 
+        return self.entity.name
 
     @property
-    def showTurn(self) -> None:
+    def turn(self) -> None:
         return self.turns
-    
 
-    def reduceTurn(self,red=1) -> int:
+    def reduceTurn(self,red=1) -> None:
         if(self.turns < red):
             raise EffectException(f"Invalid Args, It should be Positive - Got {red}")
         self.turns -= red
 
-        return self.turns
-
     def __repr__(self) -> str:
-        return f"<Effect {self.item_type.name}: {self.turns} turns>"
+        return f"Effect(entity={self.entity.name}, turns={self.turns})"
     
 
 

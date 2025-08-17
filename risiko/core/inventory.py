@@ -30,7 +30,7 @@ class Inventory(BaseModel):
                  raise ItemException(f"Item {item_obj} not found in inventory.")
 
     def show(self) -> List[str]:
-        return [item.type_of.name for item in self._items]
+        return [item.entity.name for item in self._items]
 
     def has(self, item_obj: Item) -> bool:
         return item_obj in self._items

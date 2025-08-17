@@ -7,8 +7,8 @@ import random
 
 
 class Magazine(BaseModel):
-    lives: int = Field(ge=1, frozen=True)
-    blanks: int = Field(ge=1, frozen=True)
+    lives: int = Field(default=4,ge=1, frozen=True)
+    blanks: int = Field(default=4,ge=1, frozen=True)
     __base_tube: List[Bullet] = PrivateAttr(default_factory=list)
     _tube: deque[Bullet] = PrivateAttr(default_factory=deque)
 
@@ -45,3 +45,6 @@ class Magazine(BaseModel):
         bullet =  self._tube.popleft()
 
         return bullet
+    
+    def __repr__(self) -> str:
+        return f"Magazine(tube={self.getMagazine()},lives={self.lives}, blanks={self.blanks})"

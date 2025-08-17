@@ -37,7 +37,7 @@ class Shell(BaseModel):
 
         return self._shell
     
-    def __str__(self):
+    def __repr__(self):
         
-        return f"Shell: {self._shell}"
+        return f"Shell({self._shell})"
     

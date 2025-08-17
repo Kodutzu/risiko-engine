@@ -32,6 +32,6 @@ class Shotgun(BaseModel):
         self._live_dmg = new_dmg
 
     def __repr__(self) -> str:
-        return f"<Shotgun {self.magazine.lives} Live /{self.magazine.blanks} Blanks dmg={self._live_dmg}>"
+        return f"Shotgun( magazine={repr(self.magazine)}, shell={repr(self.shell)}, dmg={self._live_dmg}, effects={self.effects.show()})"
 
     
