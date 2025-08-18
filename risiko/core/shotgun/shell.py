@@ -1,6 +1,6 @@
 from pydantic import BaseModel, PrivateAttr
-from ..constants.bullet import Bullet
-from ..exceptions.shotugn_exception import ShellException
+from ...constants.bullet import Bullet
+from .exceptions import ShellException
 
 class Shell(BaseModel):
     

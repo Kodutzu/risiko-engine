@@ -1,8 +1,8 @@
-from ..constants.bullet import Bullet
+from ...constants.bullet import Bullet
 from pydantic import BaseModel, Field, model_validator, PrivateAttr
 from typing import List, Union
 from collections import deque, Counter
-from ..exceptions.shotugn_exception import MagazineException
+from .exceptions import MagazineException
 import random 
 
 

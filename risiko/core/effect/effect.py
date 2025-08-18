@@ -1,8 +1,8 @@
 
-from ..constants.usable_entity import UsableEntity
+from ...constants.usable_entity import UsableEntity
 from pydantic import Field
 from pydantic.dataclasses import dataclass
-from ..exceptions.effect_exception import EffectException
+from .exceptions import EffectException
 
 @dataclass
 class Effect:

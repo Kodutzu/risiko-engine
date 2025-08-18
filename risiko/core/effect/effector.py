@@ -1,9 +1,9 @@
 from .effect import Effect
 from pydantic import PrivateAttr, BaseModel
 from typing import List, Dict
-from ..exceptions.effect_exception import EffectException
+from .exceptions import EffectException
 
-class EffectHandler(BaseModel): 
+class Effector(BaseModel): 
 
     _effects: List[Effect] = PrivateAttr(default_factory=list) 
 

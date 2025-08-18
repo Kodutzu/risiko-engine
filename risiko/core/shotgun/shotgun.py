@@ -1,5 +1,5 @@
-from .effect_handler import EffectHandler
-from ..constants.bullet import Bullet
+from ..effect.effector import Effector
+from ...constants.bullet import Bullet
 from .magazine import Magazine
 from .shell import Shell
 from pydantic import BaseModel, Field, PrivateAttr
@@ -8,7 +8,7 @@ class Shotgun(BaseModel):
 
     magazine: Magazine
     shell: Shell = Field(default_factory=Shell)
-    effects: EffectHandler = Field(default_factory=EffectHandler)
+    effects: Effector = Field(default_factory=Effector)
     _live_dmg: int = PrivateAttr(default=1)
 
     class Config:

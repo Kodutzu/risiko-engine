@@ -1,6 +1,6 @@
 from typing import List
-from ..snapshot.game_snapshot import GameSnapshot
-from ..core.player import Player
+from ..core.game.snapshot import GameSnapshot
+from ..core.player.player import Player
 class TurnHandler:
 
     @staticmethod

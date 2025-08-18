@@ -1,16 +1,13 @@
-from .core.engine import RisikioEngine
-from .core.player import Player
-from .core.shotgun import Shotgun
-from .core.magazine import Magazine
-from .core.item import Item
-from .core.effect import Effect
-from .snapshot.game_snapshot import GameSnapshot
+from .engine import RisikioEngine
+from .core.player.player import Player
+from .core.shotgun.shotgun import Shotgun
+from .core.shotgun.magazine import Magazine
+from .core.item.item import Item
+from .core.effect.effect import Effect
+
 __all__ = [
     "RisikioEngine",
     "Player",
     "Shotgun",
     "Magazine",
-    "Item",
-    "Effect",
-    "GameSnapshot"
 ]

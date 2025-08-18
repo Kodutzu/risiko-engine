@@ -1,5 +1,5 @@
-from .inventory import Inventory
-from .effect_handler import EffectHandler
+from ..inventory.inventory import Inventory
+from ..effect.effector import Effector
 from pydantic import BaseModel, Field, field_validator
 from pydantic.dataclasses import dataclass
 
@@ -18,7 +18,7 @@ class Player(BaseModel):
     id: int = Field(frozen=True)
     charges: _ChargeMeter = Field(default_factory=_ChargeMeter, description="The player's charge/health")
     inventory: Inventory = Field(default_factory=Inventory)
-    effects: EffectHandler = Field(default_factory=EffectHandler)   
+    effects: Effector = Field(default_factory=Effector)   
 
     class Config:
         arbitrary_types_allowed = True

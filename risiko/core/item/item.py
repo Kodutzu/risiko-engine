@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from ..constants.usable_entity import UsableEntity
+from ...constants.usable_entity import UsableEntity
 
 class Item(BaseModel):
     entity: UsableEntity
