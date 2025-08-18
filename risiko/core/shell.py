@@ -24,14 +24,14 @@ class Shell(BaseModel):
         self._shell = None
         return old_shell
     
-    def isLoaded(self) -> bool: 
+    def is_loaded(self) -> bool: 
 
         """ Checks if the shell is loaded. """
         
         return self._shell is not None
     
     @property
-    def currentShell(self) -> Bullet:
+    def current_shell(self) -> Bullet:
 
         """ Returns the currently loaded shell. """
 

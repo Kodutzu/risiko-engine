@@ -25,7 +25,7 @@ class Player(BaseModel):
         
     @field_validator("charges", mode="before")
     @classmethod
-    def chargeCoercion(cls, v) -> int:  # Allow `charges=int` to be auto-converted
+    def _charge_coercion(cls, v) -> int:  # Allow `charges=int` to be auto-converted
        
         if isinstance(v, int):
             return _ChargeMeter(value=v)

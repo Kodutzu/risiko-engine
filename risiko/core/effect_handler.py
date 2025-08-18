@@ -21,8 +21,9 @@ class EffectHandler(BaseModel):
         self._effects.append(effect_obj)
  
     def show(self, only_active: bool =False) -> Dict[Effect, int]:
+
         return [
-                (effect.entity.name, effect.turn)
+                (effect.name, effect.turn)
                 for effect in self._effects
                 if not only_active or effect.turns > 0
         ]
@@ -45,7 +46,7 @@ class EffectHandler(BaseModel):
       
         self._effects.remove(effect_obj)
     
-    def tickAll(self) -> None:
+    def tick_all_effect(self) -> None:
         """
         Reduces the turns of all effects in the EffectHandler by 1.
 
@@ -56,9 +57,9 @@ class EffectHandler(BaseModel):
 
         """
         for effect in self._effects:
-            effect.reduceTurn()
+            effect.reduce_turn()
 
-    def removeExpired(self) -> List[Effect]:
+    def remove_expired_effects(self) -> List[Effect]:
         """
         Removes all expired effects from the EffectHandler and returns them as a list.
 

@@ -13,7 +13,7 @@ class Magazine(BaseModel):
     _tube: deque[Bullet] = PrivateAttr(default_factory=deque)
 
     @model_validator(mode="after")
-    def _initiateMagzine(self) -> "Magazine":
+    def _initiate_magzine(self) -> "Magazine":
         
         self.__base_tube = [Bullet.BLANK]*self.blanks + [Bullet.LIVE]*self.lives
         random.shuffle(self.__base_tube)
@@ -26,20 +26,20 @@ class Magazine(BaseModel):
         random.shuffle(self.__base_tube)
         self._tube = deque(self.__base_tube)
 
-    def getMagazine(self, as_list=True) -> Union[List, Counter[Bullet, int]]:
+    def show(self, as_list=True) -> Union[List, Counter[Bullet, int]]:
 
         if as_list :
             return [bullet.name for bullet in self._tube ]
         else:
             return Counter(self._tube)
 
-    def hasMixedBullets(self) -> bool:
+    def has_mixed_bullets(self) -> bool:
 
         return Bullet.LIVE in self._tube and Bullet.BLANK in self._tube
         
-    def takeOutBullet(self) -> Bullet:
+    def take_out_bullet(self) -> Bullet:
         
-        if not self.hasMixedBullets():
+        if not self.has_mixed_bullets():
             raise MagazineException("Cannot proceed: Magazine does not have a mix of live and blank shells.")
         
         bullet =  self._tube.popleft()
@@ -47,4 +47,4 @@ class Magazine(BaseModel):
         return bullet
     
     def __repr__(self) -> str:
-        return f"Magazine(tube={self.getMagazine()},lives={self.lives}, blanks={self.blanks})"
+        return f"Magazine(tube={self.show()},lives={self.lives}, blanks={self.blanks})"

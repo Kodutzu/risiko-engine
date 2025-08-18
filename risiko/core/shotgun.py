@@ -14,18 +14,18 @@ class Shotgun(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    def loadChamber(self) -> Bullet:
+    def load_chamber(self) -> Bullet:
         
-        bullet = self.magazine.takeOutBullet()
+        bullet = self.magazine.take_out_bullet()
         self.shell.load(bullet)
 
         return bullet
         
     @property
-    def liveDamage(self) -> int:
+    def live_damage(self) -> int:
         return self._live_dmg 
             
-    def setliveDamage(self,new_dmg) -> None:
+    def set_live_damage(self,new_dmg) -> None:
 
         if new_dmg < 0: raise ValueError("Damage cannot be negative")
         
@@ -34,4 +34,3 @@ class Shotgun(BaseModel):
     def __repr__(self) -> str:
         return f"Shotgun( magazine={repr(self.magazine)}, shell={repr(self.shell)}, dmg={self._live_dmg}, effects={self.effects.show()})"
 
-    
