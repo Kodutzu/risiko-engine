@@ -33,5 +33,4 @@ class Player(BaseModel):
         return v
 
     def __repr__(self) -> str:
-        return f"Player(id={self.id}, charges={self.charges.showCharge}, inventory={self.inventory.show()}, effects={self.effects.show()})"
-        
+        return f"Player(id={self.id}, charges={self.charges.showCharge})"
