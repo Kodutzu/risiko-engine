@@ -17,7 +17,6 @@ class Magazine(BaseModel):
         
         self.__base_tube = [Bullet.BLANK]*self.blanks + [Bullet.LIVE]*self.lives
         random.shuffle(self.__base_tube)
-        self._tube= deque(self.__base_tube)
 
         return self 
     
@@ -26,10 +25,10 @@ class Magazine(BaseModel):
         random.shuffle(self.__base_tube)
         self._tube = deque(self.__base_tube)
 
-    def show(self, as_list=True) -> Union[List, Counter[Bullet, int]]:
+    def show(self, as_list=True) -> Union[List[Bullet], Counter[Bullet, int]]:
 
         if as_list :
-            return [bullet.name for bullet in self._tube ]
+            return [bullet for bullet in self._tube ]
         else:
             return Counter(self._tube)
 
@@ -40,7 +39,10 @@ class Magazine(BaseModel):
     def take_out_bullet(self) -> Bullet:
         
         if not self.has_mixed_bullets():
-            raise MagazineException("Cannot proceed: Magazine does not have a mix of live and blank shells.")
+            raise MagazineException("Reload: Magazine does not have a mix of live and blank shells.")
+        
+        if not self._tube:
+            raise MagazineException("Reload: Magazine is empty.")
         
         bullet =  self._tube.popleft()
 

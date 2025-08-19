@@ -1,65 +1,80 @@
 from pydantic import BaseModel, Field, PrivateAttr
 from ..core.player.player import Player  
 from ..core.game.snapshot import GameSnapshot
+from .shotgun_handler import ShotgunHandler
 
 class RoundHandler:
     
-
     @staticmethod
     def get_current_round(snapshot: GameSnapshot) -> int:
 
         return snapshot.round_number
 
     @staticmethod
-    def start_round(snapshot: GameSnapshot) -> GameSnapshot:
+    def advance_round(snapshot: GameSnapshot) -> GameSnapshot:
 
-        new_snapshot = snapshot.model_copy(deep=True)
+        snapshot_advance_round = snapshot.model_copy(deep=True)
 
-        new_snapshot.round_number += 1
+        players = snapshot_advance_round.players
+        gun = snapshot_advance_round.shotgun
 
-        return new_snapshot
+        #clearing player's Inventory and Effector
+        for player in players:
+            player.inventory.items.clear()
+            player.effector.effects.clear()
+
+        #clearing shotgun effects
+        gun.effector.effects.clear()
+
+        snapshot_advance_round.round_number += 1
+
+        return snapshot_advance_round
     
     @staticmethod
-    def end_round(snapshot: GameSnapshot) -> GameSnapshot:
+    def is_round(snapshot: GameSnapshot) -> bool:
 
-        pass
+        return not snapshot.shotgun.magazine
+        
 
     @staticmethod
     def reset_round(snapshot: GameSnapshot) -> GameSnapshot:    
 
-        new_snapshot = snapshot.model_copy(deep=True)
+        snapshot_reset_round = snapshot.model_copy(deep=True)
 
-        new_snapshot.round_number = 0
+        snapshot_reset_round.round_number = 0
 
-        return new_snapshot
+        return snapshot_reset_round
     
-    @staticmethod
-    def remove_player(snapshot: GameSnapshot, player: Player) -> GameSnapshot:
-
-        new_snapshot = snapshot.model_copy(deep=True)
-        
-        for p in new_snapshot.players:
-            if p.id == player.id:
-                new_snapshot.players.remove(p)
-
-                return new_snapshot
-            
-        raise ValueError("Player doesn't exist")
-
     @staticmethod
     def add_player(snapshot: GameSnapshot, player: Player) -> GameSnapshot:
 
-        new_snapshot = snapshot.model_copy(deep=True)
+        snapshot_add_player = snapshot.model_copy(deep=True)
+        players = snapshot_add_player.players
 
-        for p in new_snapshot.players:
+        for p in players:
 
             if p.id == player.id:
 
                 raise ValueError("Player already in game")
             
-        new_snapshot.players.append(player)
+        players.append(player)
 
-        return new_snapshot
+        return snapshot_add_player
+    @staticmethod
+    def remove_player(snapshot: GameSnapshot, player: Player) -> GameSnapshot:
+
+        snapshot_remove_player = snapshot.model_copy(deep=True)
+        players = snapshot_remove_player.players
+
+        for p in players:
+            if p.id == player.id:
+                players.remove(p)
+
+                return snapshot_remove_player
+            
+        raise ValueError("Player doesn't exist")
+
+
     
     @staticmethod
     def total_players(snapshot: GameSnapshot) -> int:
