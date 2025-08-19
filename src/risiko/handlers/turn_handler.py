@@ -19,6 +19,7 @@ class TurnHandler:
         snapshot_advance_turn = snapshot.model_copy(deep=True)
 
         current_player_index = snapshot_advance_turn.current_player_index
+        
         direction = snapshot_advance_turn.direction
 
         num_players = len(snapshot_advance_turn.players)
@@ -42,7 +43,7 @@ class TurnHandler:
     def update_order(snapshot: GameSnapshot, new_player_order: List[Player]) -> GameSnapshot:
 
         """Updates the turn order and returns a new snapshot."""
-        
+
         snapshot_update_order = snapshot.model_copy(deep=True)
 
         snapshot_update_order.players = new_player_order

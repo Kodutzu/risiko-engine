@@ -8,7 +8,7 @@ class Shotgun(BaseModel):
 
     magazine: Magazine
     shell: Shell = Field(default_factory=Shell)
-    effects: Effector = Field(default_factory=Effector)
+    effector: Effector = Field(default_factory=Effector)
     _live_dmg: int = PrivateAttr(default=1)
 
     class Config:

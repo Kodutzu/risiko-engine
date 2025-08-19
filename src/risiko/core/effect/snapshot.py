@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Tuple
+from typing import List
 from ...constants.usable_entity import UsableEntity
 
 class EffectSnapshot(BaseModel):

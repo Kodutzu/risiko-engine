@@ -74,8 +74,6 @@ class RoundHandler:
             
         raise ValueError("Player doesn't exist")
 
-
-    
     @staticmethod
     def total_players(snapshot: GameSnapshot) -> int:
 

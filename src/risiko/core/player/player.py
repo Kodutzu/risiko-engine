@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, field_validator
 from pydantic.dataclasses import dataclass
 
 @dataclass
-class _ChargeMeter():
+class _ChargeMeter:
     value: int = Field(default=4, ge=3)
 
     def gain(self, amt: int) -> None: self.value += amt
@@ -18,7 +18,7 @@ class Player(BaseModel):
     id: int = Field(frozen=True)
     charges: _ChargeMeter = Field(default_factory=_ChargeMeter, description="The player's charge/health")
     inventory: Inventory = Field(default_factory=Inventory)
-    effects: Effector = Field(default_factory=Effector)   
+    effector: Effector = Field(default_factory=Effector)   
 
     class Config:
         arbitrary_types_allowed = True

@@ -1,79 +1,63 @@
 from .effect import Effect
 from pydantic import PrivateAttr, BaseModel
-from typing import List, Dict
-from .exceptions import EffectException
+from typing import List, Tuple
+from .exceptions import EffectNotFound, InvalidEffect, DuplicateEffect
 
 class Effector(BaseModel): 
 
-    _effects: List[Effect] = PrivateAttr(default_factory=list) 
+    _effector: List[Effect] = PrivateAttr(default_factory=list) 
 
-    def add(self, effect_obj:Effect) -> None:
+    def add(self, effect: Effect) -> None:
 
-        if not isinstance(effect_obj, Effect):
-            raise EffectException(f"It should be effect, got {effect_obj} as Args")
+        validated_effect = self._validate_items(effect)
 
-        for effect in self._effects:
+        if validated_effect in self._effector:
 
-            if effect == effect_obj:
-
-                raise EffectException(f"Effect: {effect_obj} is Already Applied")
+            raise DuplicateEffect(f"{effect} is Already Applied")
       
-        self._effects.append(effect_obj)
+        self._effector.append(validated_effect)
+
+    def remove(self, effect: Effect) -> None:
+
+        validated_effect = self._validate_items(effect)
+
+        if effect not in self._effector:
+            
+            raise EffectNotFound(f"Effect: {effect} is not Applied")
+      
+        self._effector.remove(validated_effect)
  
-    def show(self, only_active: bool =False) -> Dict[Effect, int]:
+    def show(self, only_active: bool = False) -> List[Tuple[Effect, int]]:
 
         return [
                 (effect.name, effect.turn)
-                for effect in self._effects
+                for effect in self._effector
                 if not only_active or effect.turns > 0
-        ]
+               ]
     
     def has(self, effect_obj: Effect) -> bool:
 
-        for effect in self._effects:
-            if effect == effect_obj:
-                return True
-        return False
+        return effect_obj in self._effector
+
     
-    def remove(self, effect_obj: Effect) -> None:
+    def tick_all(self) -> None:
 
-        if not isinstance(effect_obj, Effect):
-            raise EffectException(f"It should be effect, got {effect_obj} as Args")
-
-        if effect_obj not in self._effects:
-            
-            raise EffectException(f"Effect: {effect_obj} is not Applied")
-      
-        self._effects.remove(effect_obj)
-    
-    def tick_all_effect(self) -> None:
-        """
-        Reduces the turns of all effects in the EffectHandler by 1.
-
-        This function iterates over each effect in the EffectHandler and calls the 
-        reduceTurn method of the effect, which reduces the turn count by 1.
-
-        This function does not return anything.
-
-        """
-        for effect in self._effects:
+        for effect in self._effector:
             effect.reduce_turn()
 
-    def remove_expired_effects(self) -> List[Effect]:
-        """
-        Removes all expired effects from the EffectHandler and returns them as a list.
+    def remove_expired(self) -> None:
 
-        An effect is considered expired if its remaining turns is less than or equal to 0.
+        for effect in self._effector:
+            if effect.turns <= 0:
+                self._effector.remove(effect) 
 
-        Returns:
-            List[Effect]: A list of expired effects.
-        """
-        expired_effects = [effect for effect in self._effects if effect.turn <= 0]
-        self._effects = [effect for effect in self._effects if effect.turn > 0]
+    def clear(self) -> None:
 
-        return expired_effects
-       
-    # Experimenting with Dunder Method "__contains__"
-    def __contains__(self, effect_type) -> bool:
+        self._effector.clear()
+    
+    @staticmethod
+    def _validate_items(effect: Effect) -> Effect:
 
-        return effect_type in self._effects
+        if not isinstance(effect, Effect):
+                raise InvalidEffect(f"Invalid Effect: {type(effect)}")
+        return effect

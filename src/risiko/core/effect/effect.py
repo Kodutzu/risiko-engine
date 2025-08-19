@@ -11,16 +11,16 @@ class Effect:
     turns: int = Field(default=1, gt=0)
 
     @property
-    def name(self) -> UsableEntity: 
+    def name(self) -> str: 
         return self.entity.name
 
     @property
-    def turn(self) -> None:
+    def turn(self) -> int:
         return self.turns
 
     def reduce_turn(self,red=1) -> None:
         if(self.turns < red):
-            raise EffectException(f"Invalid Args, It should be Positive - Got {red}")
+            raise ValueError(f"Invalid Args, It should be Positive - Got {red}")
         self.turns -= red
 
     def __repr__(self) -> str:

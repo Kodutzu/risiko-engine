@@ -17,7 +17,7 @@ class Magazine(BaseModel):
         
         self.__base_tube = [Bullet.BLANK]*self.blanks + [Bullet.LIVE]*self.lives
         random.shuffle(self.__base_tube)
-
+        
         return self 
     
     def reload(self) -> None:
@@ -49,4 +49,4 @@ class Magazine(BaseModel):
         return bullet
     
     def __repr__(self) -> str:
-        return f"Magazine(tube={self.show()},lives={self.lives}, blanks={self.blanks})"
+        return f"Magazine(tube={self._tube},lives={self.lives}, blanks={self.blanks})"

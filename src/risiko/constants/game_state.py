@@ -1,6 +1,7 @@
 from enum import Enum, auto
 
 class GameState(Enum):
+    
     # Game Setup Phase
     INITIALIZE = auto()
     ROUND_START = auto()         
