@@ -19,9 +19,6 @@ class Player(BaseModel):
     charges: _ChargeMeter = Field(default_factory=_ChargeMeter, description="The player's charge/health")
     inventory: Inventory = Field(default_factory=Inventory)
     effector: Effector = Field(default_factory=Effector)   
-
-    class Config:
-        arbitrary_types_allowed = True
         
     @field_validator("charges", mode="before")
     @classmethod

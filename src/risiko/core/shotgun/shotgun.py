@@ -11,9 +11,6 @@ class Shotgun(BaseModel):
     effector: Effector = Field(default_factory=Effector)
     _live_dmg: int = PrivateAttr(default=1)
 
-    class Config:
-        arbitrary_types_allowed = True
-
     def load_chamber(self) -> Bullet:
         
         bullet = self.magazine.take_out_bullet()
