@@ -1,5 +1,5 @@
 from enum import Enum
 
-class Bullet(Enum):
+class Shell(Enum):
     LIVE = "live"
     BLANK = "blank"

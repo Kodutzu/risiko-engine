@@ -1,23 +1,24 @@
-from pydantic import BaseModel, Field
-from typing import List, Union
+from ._base_config import _BaseConfig as BaseConfig
+from pydantic import Field
+from typing import Tuple, Union
 from ..constants.usable_entity import UsableEntity
-from ..constants.bullet import Bullet
+from ..constants.shell import Shell
 
-class ItemConfig(BaseModel):
+class ItemConfig(BaseConfig):
     entity: UsableEntity
 
-class EffectConfig(BaseModel):
+class EffectConfig(BaseConfig):
     entity: UsableEntity
     remaining_turns: int
 
-class InventoryConfig(BaseModel):
-    starting_items: List[ItemConfig] = Field(default_factory=list)
+class InventoryConfig(BaseConfig):
+    starting_items: Tuple[ItemConfig] = Field(default_factory=tuple)
     capacity: int = 4
 
-class EffectorConfig(BaseModel):
-    effects: List[EffectConfig] = Field(default_factory=list)
+class EffectorConfig(BaseConfig):
+    effects: Tuple[EffectConfig] = Field(default_factory=tuple)
 
-class PlayerConfig(BaseModel):
+class PlayerConfig(BaseConfig):
     id: int
     initial_charges: int
     inventory_config: InventoryConfig = Field(default_factory=InventoryConfig)
@@ -25,18 +26,20 @@ class PlayerConfig(BaseModel):
 
 #========================================================================================
 
-class MagazineConfig(BaseModel):
-    lives: int = Field(default=4,ge=1, frozen=True)
-    blanks: int = Field(default=4,ge=1, frozen=True)
-    tube: List[Bullet] = Field(default_factory=list)
+class MagazineConfig(BaseConfig):
+    lives: int = Field(default=4,ge=1)
+    blanks: int = Field(default=4,ge=1)
+    tube: Tuple[Shell] = Field(default_factory=tuple)
 
-class ShotgunConfig(BaseModel):
+
+class ShotgunConfig(BaseConfig):
 
     magazine: MagazineConfig = Field(default_factory=MagazineConfig)
-    shell: Union[Bullet, None] = Field(default=None)
+    shell: Union[Shell, None] = Field(default=None)
     effector: EffectorConfig = Field(default_factory=EffectorConfig)
     live_dmg: int  = Field(default=1)
 
-class SessionConfig(BaseModel):
-    players: List[PlayerConfig]
-    shotgun: ShotgunConfig
+#Using Frozen to ensure that the config is immutable
+class SessionConfig(BaseConfig):
+    players: Tuple[PlayerConfig] 
+    shotgun: ShotgunConfig 

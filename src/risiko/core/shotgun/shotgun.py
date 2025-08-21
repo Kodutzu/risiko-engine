@@ -1,26 +1,30 @@
 from ..effect.effector import Effector
-from ...constants.bullet import Bullet
+from ...constants.shell import Shell
 from .magazine import Magazine
-from .shell import Shell
+from typing import Union
 from pydantic import BaseModel, Field, PrivateAttr
 
 class Shotgun(BaseModel):
 
-    magazine: Magazine
-    shell: Shell = Field(default_factory=Shell)
+    magazine: Magazine = Field(default_factory=Magazine)
     effector: Effector = Field(default_factory=Effector)
+    _chamber: Union[Shell, None] = Field(default=None)
     _live_dmg: int = PrivateAttr(default=1)
-
-    def load_chamber(self) -> Bullet:
         
-        bullet = self.magazine.take_out_bullet()
-        self.shell.load(bullet)
-
-        return bullet
-        
+    @property
+    def chamber(self) -> Union[Shell, None]:
+        return self._chamber
+    
     @property
     def live_damage(self) -> int:
         return self._live_dmg 
+
+    
+    def load_chamber(self) -> Shell:
+        """Loads the next shell type from the magazine into the chamber."""
+        shell_type = self.magazine.take_out_bullet()
+        self.chamber = shell_type
+        return self.chamber
             
     def set_live_damage(self,new_dmg) -> None:
 
