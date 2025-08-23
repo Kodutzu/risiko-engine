@@ -8,3 +8,6 @@ class ItemNotFound(InventoryException):
 
 class CapcityExceeded(InventoryException):
     """Raised when the inventory capacity is exceeded."""
+
+class InvalidList(InventoryException):
+    """Raised when the item is not in the list of valid items."""

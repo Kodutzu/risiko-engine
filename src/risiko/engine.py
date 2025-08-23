@@ -1,4 +1,4 @@
-from .handlers.game_handler import GameHandler
+from .services.game_service import GameHandler
 from .config.engine_config import EngineConfig
 from pydantic import BaseModel, Field, PrivateAttr
 

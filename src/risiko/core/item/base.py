@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from .interface import ItemInterface
+from attrs import define
 from ...constants.usable_entity import UsableEntity
 
-class Item(BaseModel):
+@define(frozen=True)
+class ItemBase(ItemInterface):
     entity: UsableEntity
 
     def __repr__(self) -> str:

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel,ConfigDict
 
 class _BaseConfig(BaseModel):
     model_config = ConfigDict(frozen=True)

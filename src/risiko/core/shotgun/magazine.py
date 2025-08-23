@@ -1,30 +1,33 @@
 from ...constants.shell import Shell
-from pydantic import BaseModel, Field, model_validator, PrivateAttr
-from typing import List, Union
+from .interface import MagazineInterface
+from .validator import bullet_number_checker
+from attrs import define, field, setters
+from typing import Deque, Union
 from collections import deque, Counter
 from .exceptions import MagazineException
 import random 
 
+@define
+class MagazineBase(MagazineInterface):
 
-class Magazine(BaseModel):
-    lives: int = Field(default=4,ge=1, frozen=True)
-    blanks: int = Field(default=4,ge=1, frozen=True)
-    tube: deque[Shell] = Field(default_factory=deque)
-    
-    @model_validator(mode="after")
-    def _initiate_tube(self) -> "Magazine":
+    tube: Deque[Shell] = field(default_factory=deque)
+    lives: int = field(default=4,validator=bullet_number_checker, on_setattr=setters.frozen)
+    blanks: int = field(default=4, on_setattr=setters.frozen)
+
+    def __attrs_post_init__(self):
+
         if not self.tube:
             self.tube = deque([Shell.LIVE] * self.lives + [Shell.BLANK] * self.blanks)
             self.reload()
-        return self
+
     def reload(self) -> None:
 
         random.shuffle(self.tube)
 
-    def show(self, as_list=True) -> Union[List[Shell], Counter[Shell, int]]:
+    def show(self, as_deque=True) -> Union[Deque[Shell], Counter[Shell, int]]:
 
-        if as_list :
-            return [shell for shell  in self.tube ]
+        if as_deque :
+            return deque([shell for shell  in self.tube ])
         else:
             return Counter(self.tube)
 

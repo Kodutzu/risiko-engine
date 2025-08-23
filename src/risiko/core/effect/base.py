@@ -1,14 +1,15 @@
 
 from ...constants.usable_entity import UsableEntity
 from pydantic import Field
-from pydantic.dataclasses import dataclass
-from .exceptions import EffectException
+# from pydantic.dataclasses import dataclass
+from attrs import define, field
+from .interface import EffectInterface
 
-@dataclass
-class Effect:
+@define
+class EffectBase(EffectInterface):
 
     entity: UsableEntity
-    turns: int = Field(default=1, gt=0)
+    turns: int = field(default=1)
 
     @property
     def name(self) -> str: 

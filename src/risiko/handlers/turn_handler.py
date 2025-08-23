@@ -1,5 +1,5 @@
 from ..core.game.snapshot import GameSnapshot
-from ..core.player.player import Player
+from ..core.player.base import Player
 class TurnHandler:
 
 
@@ -8,11 +8,11 @@ class TurnHandler:
 
         new_snapshot = snapshot.model_copy(deep=True)
 
-        num_players = len(new_snapshot.players)
+        num_players = len(new_snapshot.turns.player_turn_order)
         
-        new_index = (new_snapshot.current_player_index+ new_snapshot.direction) % num_players
+        new_index = (new_snapshot.turns.current_player_index+ new_snapshot.turns.direction) % num_players
 
-        new_snapshot.current_player_index = new_index
+        new_snapshot.turns.current_player_index = new_index
 
         return new_snapshot
 
@@ -21,7 +21,7 @@ class TurnHandler:
 
         new_snapshot = snapshot.model_copy(deep=True)
 
-        new_snapshot.direction *= -1
+        new_snapshot.turns.direction *= -1
 
         return new_snapshot
     
@@ -32,6 +32,7 @@ class TurnHandler:
         if not snapshot.players: #Returning Null if there are no players
             raise Exception("No players") #Adding Custom Excemtion in Player's Package
         
-        current_player = snapshot.players[snapshot.current_player_index]
+        current_player_id = snapshot.turns.player_turn_order[snapshot.turns.current_player_index]
+        current_player = snapshot.players.get(current_player_id)
 
-        return current_player
+        return {current_player_id: current_player}
