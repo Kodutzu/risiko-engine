@@ -9,7 +9,7 @@ class EffectorMapper(MapperInterface):
     
     @staticmethod
     @override
-    def disasseble(
+    def disassemble(
 
         interface: EffectorInterface,
         snapshot: EffectorSnapshot = EffectorSnapshot
