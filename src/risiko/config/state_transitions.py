@@ -1,6 +1,16 @@
 from ..constants.game_state import GameState
+from ..constants.game_state import GameState
+from typing import Dict, List
+from dataclasses import dataclass, field
+from ..config.state_transitions import STATE_TRANSITIONS
 
-STATE_TRANSITIONS = {
+@dataclass
+class StateMachine:
+
+    state: GameState = field(default=GameState.INITIALIZE)
+    transitions: Dict[GameState, List[GameState]] = field(default_factory=lambda: STATE_TRANSITIONS)
+
+    STATE_TRANSITIONS = {
     GameState.INITIALIZE: [GameState.ROUND_START],
     GameState.ROUND_START: [GameState.ITEM_DISTRIBUTION, GameState.PLAYER_TURN],
     GameState.ITEM_DISTRIBUTION: [GameState.PLAYER_TURN],
@@ -14,4 +24,5 @@ STATE_TRANSITIONS = {
     GameState.ROUND_END: [GameState.RESULT],
     GameState.RESULT: [GameState.GAMEOVER],
     GameState.GAMEOVER: [GameState.INITIALIZE]
-}
+
+    }

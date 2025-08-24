@@ -1,4 +1,8 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 class ItemInterface(ABC):
-    pass
+
+    @property
+    @abstractmethod
+    def entity(self):
+        pass

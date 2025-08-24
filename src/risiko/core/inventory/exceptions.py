@@ -6,7 +6,7 @@ class InventoryException(GameException): pass
 class ItemNotFound(InventoryException):
     """Raised when the item is not found in the inventory."""
 
-class CapcityExceeded(InventoryException):
+class CapacityExceeded(InventoryException):
     """Raised when the inventory capacity is exceeded."""
 
 class InvalidList(InventoryException):

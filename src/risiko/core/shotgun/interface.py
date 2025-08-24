@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
+from typing import List, Union, Deque
 from ...constants.shell import Shell
 
 class MagazineInterface(ABC):
@@ -9,18 +9,18 @@ class MagazineInterface(ABC):
         pass
 
     @abstractmethod
-    def show(self, as_deque: bool =True) -> Union[List[Shell], dict]:
+    def show(self):
         pass
 
-    @abstractmethod
-    def has_mixed_bullets(self) -> bool:
-        pass
-        
     @abstractmethod
     def take_out_bullet(self) -> Shell:
         pass
 
 class ShotgunInterface(ABC):
+
+    @property
+    def magazine(self) -> MagazineInterface:
+        pass
 
     @property
     @abstractmethod
@@ -36,6 +36,3 @@ class ShotgunInterface(ABC):
     def load_chamber(self) -> Shell:
         pass
             
-    @abstractmethod
-    def set_live_damage(self,new_dmg) -> None:
-        pass

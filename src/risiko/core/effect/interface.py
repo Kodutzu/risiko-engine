@@ -1,15 +1,16 @@
 from abc import ABC, abstractmethod
+from ...constants.usable_entity import UsableEntity
 
 class EffectInterface(ABC):
 
     @property
     @abstractmethod
-    def name(self) -> str:
+    def entity(self) -> UsableEntity:
         pass
 
     @property
     @abstractmethod
-    def turn(self) -> int:
+    def turns(self) -> int:
         pass
 
     @property
@@ -18,5 +19,5 @@ class EffectInterface(ABC):
         pass
 
     @abstractmethod
-    def tick(self) -> None:
+    def reduce_turn(self) -> None:
         pass

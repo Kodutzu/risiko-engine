@@ -1,33 +1,27 @@
 from abc import ABC, abstractmethod
 from typing import List
-from ..item.base import Item
+from ..item.base import ItemInterface
 
 class InventoryInterface(ABC):
+
+    @property
     @abstractmethod
-    def add(self, items: List[Item]) -> None:
+    def inventory(self) -> List[ItemInterface]:
+        pass
+
+    @property
+    @abstractmethod
+    def capacity(self) -> int:
         pass
 
     @abstractmethod
-    def remove(self, items: List[Item]) -> None:
+    def add(self, items: List[ItemInterface]) -> None:
         pass
 
     @abstractmethod
-    def show(self) -> List[Item]:
-        pass
-
-    @abstractmethod
-    def has(self, item: Item) -> bool:
-        pass
-
-    @abstractmethod
-    def count(self) -> int:
-        pass
-
-    @abstractmethod
-    def space(self) -> int: 
+    def remove(self, items: List[ItemInterface]) -> None:
         pass
 
     @abstractmethod
     def clear(self) -> None:
         pass
-    

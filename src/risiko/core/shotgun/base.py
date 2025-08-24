@@ -1,6 +1,6 @@
 from ...constants.shell import Shell
 from .magazine import MagazineBase
-from typing import Union
+from typing import Union, override
 from attrs import define, field
 from .interface import ShotgunInterface, MagazineInterface
 from .validator import live_dmg_checker
@@ -8,27 +8,37 @@ from .validator import live_dmg_checker
 @define
 class ShotgunBase(ShotgunInterface):
 
-    magazine: MagazineInterface = field(factory=MagazineBase)
-    _chamber: Union[Shell, None] = field(default=None)
-    _live_dmg: int = field(default=1, validator=live_dmg_checker)
+    _magazine: MagazineInterface = field(factory=MagazineBase, alias="magazine")
+    _chamber: Union[Shell, None] = field(default=None, alias="chamber")
+    _live_damage: int = field(default=1, validator=live_dmg_checker, alias="live_damage")
         
+
     @property
+    @override
+    def magazine(self) -> MagazineInterface:
+        return self._magazine
+    
+    @property
+    @override
     def chamber(self) -> Union[Shell, None]:
         return self._chamber
     
     @property
+    @override
     def live_damage(self) -> int:
-        return self._live_dmg 
-
+        return self._live_damage
     
+    @live_damage.setter
+    def live_damage(self, value) -> None:
+        
+        self._live_damage  = value
+
+    @override
     def load_chamber(self) -> Shell:
+
         """Loads the next shell type from the magazine into the chamber."""
-        shell_type = self.magazine.take_out_bullet()
-        self._chamber = shell_type
+
+        self._chamber = self.magazine.take_out_bullet()
+
         return self._chamber
             
-    def set_live_damage(self,new_dmg) -> None:
-
-        if new_dmg < 0: raise ValueError("Damage cannot be negative")
-        
-        self._live_dmg = new_dmg

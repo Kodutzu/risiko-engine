@@ -1,41 +1,23 @@
-from ..core.shotgun.base import ShotgunBase
-from ..core.shotgun.magazine import MagazineBase
-from ..core.shotgun.snapshot import ShotgunSnapshot, MagazineSnapshot
-from ..core.shotgun.interface import ShotgunInterface, MagazineInterface
-from ..core.game.snapshot import GameSnapshot
-from ..constants.shell import Shell
 from typing import Union
 
-class ShotgunFactory: # Currenlty Hard Coded for BaseClasses
-    @staticmethod
-    def create_shotgun(shotgun_snapshot: ShotgunSnapshot) -> Union[ShotgunInterface, ShotgunBase]:
-        return ShotgunBase(
-            magazine=ShotgunFactory.create_magazine(shotgun_snapshot.magazine),
-            _chamber=shotgun_snapshot.chambered_shell,
-            _live_dmg=shotgun_snapshot.live_dmg,
-            )
-    
+from ..factory.shotgun_factory import ShotgunFactory, MagazineFactory
+from ..core.game.snapshot import GameSnapshot
+from ..constants.shell import Shell
+from .handler_base  import HandlerBase
 
-    @staticmethod
-    def create_magazine(magazine_snapshot: MagazineSnapshot) -> Union[MagazineInterface, MagazineBase]:
-        return MagazineBase(
-            lives=magazine_snapshot.lives,
-            blanks=magazine_snapshot.blanks,
-            tube=magazine_snapshot.tube
-        )
 
-class ShotgunHandler:
+class ShotgunHandler(HandlerBase):
     
     @staticmethod
     def reload_magazine(snapshot: GameSnapshot) -> GameSnapshot:
         new_snapshot = snapshot.model_copy(deep=True)
         
         magazine_snapshot = new_snapshot.shotgun.magazine
-        live_magazine_obj = ShotgunFactory.create_magazine(magazine_snapshot)
+        live_magazine_obj = MagazineFactory.assemble(magazine_snapshot)
         
         live_magazine_obj.reload()
         
-        new_snapshot.shotgun.magazine.tube = live_magazine_obj.show(as_deque=True) # Assuming show returns deque
+        new_snapshot.shotgun.magazine.tube = live_magazine_obj.show()
         
         return new_snapshot
     
@@ -44,7 +26,7 @@ class ShotgunHandler:
         new_snapshot = snapshot.model_copy(deep=True)
         
         shotgun_snapshot = new_snapshot.shotgun
-        live_shotgun_obj = ShotgunFactory.create_shotgun(shotgun_snapshot)
+        live_shotgun_obj = ShotgunFactory.assemble(shotgun_snapshot)
         
         new_snapshot.shotgun.chambered_shell = live_shotgun_obj.load_chamber()
         
@@ -64,11 +46,11 @@ class ShotgunHandler:
         new_snapshot = snapshot.model_copy(deep=True)
         
         shotgun_snapshot = new_snapshot.shotgun
-        live_shotgun_obj = ShotgunFactory.create_shotgun(shotgun_snapshot)
+        live_shotgun_obj = ShotgunFactory.assemble(shotgun_snapshot)
         
-        live_shotgun_obj.set_live_damage(new_dmg)
+        live_shotgun_obj.live_damage = new_dmg
         
-        new_snapshot.shotgun.live_dmg = live_shotgun_obj.live_damage
+        new_snapshot.shotgun.live_damage = live_shotgun_obj.live_damage
         
         return new_snapshot
 
@@ -82,4 +64,4 @@ class ShotgunHandler:
     
     @staticmethod
     def get_live_damage(snapshot: GameSnapshot) -> int:
-        return snapshot.shotgun.live_dmg
+        return snapshot.shotgun.live_damage

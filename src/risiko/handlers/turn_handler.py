@@ -1,6 +1,11 @@
+from typing import Dict
+
 from ..core.game.snapshot import GameSnapshot
-from ..core.player.base import Player
-class TurnHandler:
+from ..core.player.snapshot import PlayerSnapshot
+from ..core.player.exceptions import PlayerNotFoundException
+from .handler_base import HandlerBase
+
+class TurnHandler(HandlerBase):
 
 
     @staticmethod
@@ -27,10 +32,10 @@ class TurnHandler:
     
     
     @staticmethod
-    def get_current_player(snapshot: GameSnapshot) -> Player:
+    def get_current_player(snapshot: GameSnapshot) -> Dict[int, PlayerSnapshot]:
 
-        if not snapshot.players: #Returning Null if there are no players
-            raise Exception("No players") #Adding Custom Excemtion in Player's Package
+        if not snapshot.players: 
+            raise PlayerNotFoundException("No players found in the game.") 
         
         current_player_id = snapshot.turns.player_turn_order[snapshot.turns.current_player_index]
         current_player = snapshot.players.get(current_player_id)

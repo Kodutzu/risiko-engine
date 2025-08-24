@@ -2,15 +2,24 @@ from abc import ABC, abstractmethod
 
 
 class PlayerInterface(ABC):
+
+    @property
     @abstractmethod
-    def gain_charge(self, amount: int) -> None:
+    def id(self) -> str:
+        pass
+    
+    @property
+    @abstractmethod
+    def charges(self) -> int:
         pass
 
     @abstractmethod
-    def lose_charge(self, amount: int) -> None:
+    def gain_charge(self, amt: int) -> None:
         pass
 
     @abstractmethod
-    def get_charge(self) -> int:
+    def lose_charge(self, amt: int) -> None:
         pass
+
+
 

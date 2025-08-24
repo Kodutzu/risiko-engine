@@ -10,9 +10,10 @@ class TurnSnapshot(BaseModel):
     direction: int = 1
 
 class RoundSnapshot(BaseModel):
-    total: int
+    total: int = 0
+
 class GameSnapshot(BaseModel):
-    game_state: GameState
+    game_state: GameState 
     shotgun: ShotgunSnapshot = Field(default_factory=ShotgunSnapshot)
     players: Dict[str, PlayerSnapshot] = Field(default_factory=dict)
     turns: TurnSnapshot = Field(default_factory=TurnSnapshot)

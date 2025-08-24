@@ -1,65 +1,65 @@
 from .interface import EffectorInterface
 from ..effect.base import EffectBase
 from attrs import define, field
-from typing import List, Tuple
-from .exceptions import EffectNotFound, InvalidEffect, DuplicateEffect
+from typing import List, Tuple, override
+from .exceptions import EffectNotFound,  DuplicateEffect
+from .validator import EffectorValidator
 
 @define
-class Effector(EffectorInterface): 
+class EffectorBase(EffectorInterface): 
 
-    effector: List[EffectBase] = field(factory=list) 
+    _effector: List[EffectBase] = field(factory=list, alias="effector")
 
+    @property
+    @override
+    def effector(self) -> List[Tuple[EffectBase, int]]:
+
+        return [
+                (effect.entity, effect.turns)
+                for effect in self._effector
+               ]  
+
+    @override
     def add(self, effect: EffectBase) -> None:
 
-        validated_effect = self._validate_items(effect)
+        validated_effect = EffectorValidator.validate_items(effect)
 
-        if validated_effect in self.effector:
+        if validated_effect in self._effector:
 
             raise DuplicateEffect(f"{effect} is Already Applied")
       
-        self.effector.append(validated_effect)
+        self._effector.append(validated_effect)
 
+    @override
     def remove(self, effect: EffectBase) -> None:
 
-        validated_effect = self._validate_items(effect)
+        validated_effect = EffectorValidator.validate_items(effect)
 
-        if effect not in self.effector:
+        if effect not in self._effector:
             
             raise EffectNotFound(f"Effect: {effect} is not Applied")
       
-        self.effector.remove(validated_effect)
- 
-    def show(self, only_active: bool = False) -> List[Tuple[EffectBase, int]]:
+        self._effector.remove(validated_effect)
 
-        return [
-                (effect.name, effect.turn)
-                for effect in self.effector
-                if not only_active or effect.turns > 0
-               ] # This line was not part of the selection, but it uses _effector. Should it be changed to self.effector?
     
     def has(self, effect_obj: EffectBase) -> bool:
 
-        return effect_obj in self.effector
+        return effect_obj in self._effector
 
-    
-    def tick_all(self) -> None:
+    @override
+    def reduce_all(self) -> None:
 
-        for effect in self.effector:
+        for effect in self._effector:
             effect.reduce_turn()
 
+    @override
     def remove_expired(self) -> None:
 
-        for effect in self.effector:
-            if effect.turns <= 0:
-                self.effector.remove(effect) 
+        for effect in self._effector:
+            if not effect.is_active:
+                self._effector.remove(effect) 
 
     def clear(self) -> None:
 
-        self.effector.clear()
+        self._effector.clear()
     
-    @staticmethod #Moving it to effector/validator.py
-    def _validate_items(effect: EffectBase) -> EffectBase:
-
-        if not isinstance(effect, EffectBase):
-                raise InvalidEffect(f"Invalid Effect: {type(effect)}")
-        return effect

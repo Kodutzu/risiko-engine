@@ -1,22 +1,33 @@
-from .interface import PlayerInterface
-from attrs import define, field,  setters
-from .validator import is_positive
+from attrs import define, field, setters
+from .validator import charge_checker
 
-@define(frozen=True)
+from typing import override
+
+from .interface import PlayerInterface
+
+
+@define
 class PlayerBase(PlayerInterface):
 
-    id: str = field(on_setattr=setters.frozen)
-    charges: int = field(default=4, validator=is_positive)
+    _id: str = field(on_setattr=setters.frozen, alias="id")
+    _charges: int = field(default=4, validator=charge_checker, alias="charges")
 
     @property
-    def charge(self) -> int : 
-        return self.charges  
+    @override
+    def id(self) -> str:
+        return self._id
     
+    @property
+    @override
+    def charges(self) -> int : 
+        return self._charges  
+    
+    @override
     def gain_charge(self, amt: int) -> None: 
-        self.charges += amt
-    def lose_charge(self,amt: int)-> None: 
-        self.charges -=amt 
 
+        self._charges += amt
 
-    def __repr__(self) -> str:
-        return f"PlayerBase(id={self.id}, charges={self.charges})"
+    @override
+    def lose_charge(self,amt: int)-> None:
+        
+        self._charges -=amt 

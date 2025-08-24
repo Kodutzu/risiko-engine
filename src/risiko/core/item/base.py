@@ -1,12 +1,13 @@
 from .interface import ItemInterface
-from attrs import define
+from attrs import define, field, setters
 from ...constants.usable_entity import UsableEntity
 
-@define(frozen=True)
+@define
 class ItemBase(ItemInterface):
-    entity: UsableEntity
+    _entity: UsableEntity = field(on_setattr=setters.frozen, alias="entity")
 
-    def __repr__(self) -> str:
-        return f"Item(entity={self.entity.name})"
+    @property
+    def entity(self):
+        return self._entity
 
-
+    

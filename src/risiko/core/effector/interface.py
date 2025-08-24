@@ -1,18 +1,25 @@
 from abc import ABC, abstractmethod
 
 class EffectorInterface(ABC):
+
+
+    @property
     @abstractmethod
-    def add(self, target):
+    def effector(self) :
         pass
 
     @abstractmethod
-    def remove(self, target):
+    def add(self, target) -> None:
         pass
 
     @abstractmethod
-    def remove_expired(self) -> bool:
+    def remove(self, target) -> None:
         pass
 
     @abstractmethod
-    def tick_all(self) -> None:
+    def remove_expired(self) :
+        pass
+
+    @abstractmethod
+    def reduce_all(self) -> None:
         pass

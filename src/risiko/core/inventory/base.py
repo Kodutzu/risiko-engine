@@ -1,61 +1,51 @@
 from .interface import InventoryInterface
 from typing import List, override
 from attrs  import define, field
-from ..item.base import ItemBase
-from .exceptions import CapcityExceeded, ItemNotFound
-from .validator import InventoryValidator, capacity_check
+from ..item.interface import ItemInterface
+from .exceptions import CapacityExceeded, ItemNotFound
+from .validator import InventoryValidator
 
 @define
 class InventoryBase(InventoryInterface):
-    capacity: int = field(default=4, validator=capacity_check)
-    inventory: List[ItemBase] = field(factory=list)
-    validator: InventoryValidator = field(factory=InventoryValidator)
+    _inventory: List[ItemInterface] = field(factory=list, alias="inventory")
+    _capacity: int = field(default=4, validator=InventoryValidator.capacity_check, alias="capacity")
         
     def __attrs_post_init__(self):
    
-        if self.count() > self.capacity:
-            raise CapcityExceeded(
-                f"Number of items ({len(self.inventory)}) "
-                f"cannot exceed capacity ({self.capacity})."
+        if len(self._inventory) > self._capacity:
+            raise CapacityExceeded(
+                f"Number of items ({len(self._inventory)}) "
+                f"cannot exceed capacity ({self._capacity})."
             )
+    @property
+    def inventory(self) -> List[ItemInterface]:
+        return self._inventory
+    
+    @property
+    def capacity(self) -> int:
+        return self._capacity
 
     @override
-    def add(self, items: List[ItemBase]) -> None:
+    def add(self, items: List[ItemInterface]) -> None:
         
-        validated_items = self.validator.validate_items()
+        validated_items = InventoryValidator.validate_items(items)
 
-        if len(self.inventory) + len(items) > self.capacity:
-            raise CapcityExceeded("Player's Inventory has Reached it's Capacity")
+        if len(self._inventory) + len(items) > self._capacity:
+            raise CapacityExceeded("Player's Inventory has Reached it's Capacity")
         
         self.inventory.extend(validated_items)
 
     @override
-    def remove(self, items: List[ItemBase]) -> None:
+    def remove(self, items: List[ItemInterface]) -> None:
         
-        validated_items = self.validator.validate_items(items)
+        validated_items = InventoryValidator.validate_items(items)
 
         for vm in validated_items:
-            if vm in self.inventory:
-                self.inventory.remove(vm)
+            if vm in self._inventory:
+                self._inventory.remove(vm)
             else:
                 raise ItemNotFound(f"Item {vm} not found in Inventory")
 
     @override
-    def show(self) -> List[ItemBase]:
-        return self.inventory
-
-    @override
-    def has(self, item: ItemBase) -> bool:
-        return item in self.inventory
-    
-    @override
-    def count(self) -> int:
-        return len(self.inventory)
-    
-    @override
-    def space(self) -> int: #return total free Capacity
-        return self.capacity - self.count()
-
-    @override
     def clear(self) -> None:
-        self.inventory.clear()
+        self._inventory.clear()

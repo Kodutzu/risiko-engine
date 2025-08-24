@@ -1,32 +1,35 @@
+from attrs import define, field, setters
+from typing import override
+
 
 from ...constants.usable_entity import UsableEntity
-from pydantic import Field
-# from pydantic.dataclasses import dataclass
-from attrs import define, field
 from .interface import EffectInterface
+from .validator import is_not_negative
 
 @define
 class EffectBase(EffectInterface):
 
-    entity: UsableEntity
-    turns: int = field(default=1)
+    _entity: UsableEntity = field(on_setattr=setters.frozen, alias="entity")
+    _turns: int = field(default=1, validator=is_not_negative, alias="turns")
+
 
     @property
-    def name(self) -> str: 
-        return self.entity.name
-
-    @property
-    def turn(self) -> int:
-        return self.turns
-
-    def reduce_turn(self,red=1) -> None:
-        if(self.turns < red):
-            raise ValueError(f"Invalid Args, It should be Positive - Got {red}")
-        self.turns -= red
-
-    def __repr__(self) -> str:
-        return f"Effect(entity={self.entity.name}, turns={self.turns})"
+    @override
+    def entity(self) -> UsableEntity:
+        return self._entity
     
-
-
-
+    @property
+    @override
+    def turns(self) -> int:
+        return self._turns
+    
+    @property
+    @override
+    def is_active(self) -> bool:
+        return self._turns > 0
+    
+    @override
+    def reduce_turn(self,red=1) -> None:
+        if red <= 0:
+            raise ValueError(f"can not redcue by {red}")
+        self._turns -= red
