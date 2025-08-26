@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from ..payload.inventory.interface import InventoryInterface    
 
 
 class PlayerInterface(ABC):
@@ -6,6 +7,11 @@ class PlayerInterface(ABC):
     @property
     @abstractmethod
     def id(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def inventory(self) -> InventoryInterface:
         pass
     
     @property
