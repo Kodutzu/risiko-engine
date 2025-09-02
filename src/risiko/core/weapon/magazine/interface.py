@@ -1,12 +1,17 @@
 from abc import ABC, abstractmethod
+from typing import Deque
 from ..shell import Shell
+
 
 class MagazineInterface(ABC):
 
+    
+    @property
     @abstractmethod
-    def reload(self) -> None:
+    def tube(self) ->  Deque[Shell]:
+        
         pass
-
+    
     @abstractmethod
     def show(self):
         pass

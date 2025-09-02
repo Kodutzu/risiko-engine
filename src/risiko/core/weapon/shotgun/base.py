@@ -33,12 +33,4 @@ class ShotgunBase(ShotgunInterface):
         
         self._live_damage  = value
 
-    @override
-    def load_chamber(self) -> Shell:
-
-        """Loads the next shell type from the magazine into the chamber."""
-
-        self._chamber = self.magazine.take_out_bullet()
-
-        return self._chamber
     

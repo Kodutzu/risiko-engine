@@ -1,1 +1,0 @@
-#Dealing with Command and Mememnto Pattern!

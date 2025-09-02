@@ -19,7 +19,9 @@ class ShotgunInterface(ABC):
     def live_damage(self) -> int:
         pass
 
+    @live_damage.setter
     @abstractmethod
-    def load_chamber(self) -> Shell:
+    def live_damage(self, value) -> None:
         pass
+
             
