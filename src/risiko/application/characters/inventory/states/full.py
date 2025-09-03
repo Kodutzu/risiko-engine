@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, NoReturn
 
 
 from .....core.item.interface import ItemInterface
@@ -9,19 +9,18 @@ from ..validator import InventoryValidator
 
 if TYPE_CHECKING:
     from ..behaviour import InventoryBehaviour
-    from .available import AvailableState
-    from .empty import EmptyState
+
 
 
 
 class FullState(InventoryState):
 
-    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]):
+    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> NoReturn:
     
         raise CapacityExceeded(f"Cannot add items: inventory is full")
 
     def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]):
-        from .available import AvailableState
+
 
         validated_items = InventoryValidator.validate_items(items)
         for item in validated_items:
@@ -30,10 +29,13 @@ class FullState(InventoryState):
             except ValueError:
                 raise ItemNotFound(f"Cannot remove: {item.entity.name} not found.")
 
+        from .available import AvailableState
         context.change_state(AvailableState())
 
     def clear(self, context: "InventoryBehaviour") -> None:
-        from .empty import EmptyState
+   
 
         context._data.inventory.clear()
+
+        from .empty import EmptyState
         context.change_state(EmptyState())

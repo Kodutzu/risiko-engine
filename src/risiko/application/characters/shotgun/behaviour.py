@@ -1,5 +1,5 @@
 from attrs import define, field
-
+from attrs.validators import instance_of
 from ....core.weapon.shotgun.interface import ShotgunInterface
 from ....core.weapon.shell import Shell
 from ..magazine.behaviour import MagazineBehaviour
@@ -7,8 +7,8 @@ from ..magazine.behaviour import MagazineBehaviour
 @define
 class ShotgunBehaviour:
 
-    data: ShotgunInterface = field( alias="data")
-    magazine: MagazineBehaviour = field(factory=MagazineBehaviour, alias="magazine")
+    _data: ShotgunInterface = field(validator=instance_of(ShotgunInterface), alias="data")
+    magazine: MagazineBehaviour = field(validator=instance_of(MagazineBehaviour),factory=MagazineBehaviour)
 
 
     def load_chamber(self) -> Shell:

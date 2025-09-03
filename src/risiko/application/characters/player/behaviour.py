@@ -1,6 +1,5 @@
 from attrs import define, field
-
-from ....core.player.base import PlayerBase
+from attrs.validators import instance_of
 from ....core.player.interface import PlayerInterface
 from ..inventory.behaviour import InventoryBehaviour
 
@@ -8,8 +7,8 @@ from ..inventory.behaviour import InventoryBehaviour
 @define
 class PlayerBehaviour:
 
-    data: PlayerInterface = field( alias="data")
-    inventory: InventoryBehaviour = field(alias="inventory")
+    data: PlayerInterface = field(validator=instance_of(PlayerInterface), alias="data")
+    inventory: InventoryBehaviour = field(validator=instance_of(InventoryBehaviour),alias="inventory")
     # _state: PlayerState = field(factory=PlayerState)
 
 

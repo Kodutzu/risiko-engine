@@ -8,16 +8,13 @@ from ..validator import InventoryValidator
 
 if TYPE_CHECKING:
     from ..behaviour import InventoryBehaviour
-    from .full import FullState
-    from .empty import EmptyState
-
 
 
 
 class AvailableState(InventoryState):
 
     def add(self, context: "InventoryBehaviour", items: List[ItemInterface]):
-        from .full import FullState
+
 
         validated_items = InventoryValidator.validate_items(items)
         if len(context._data.inventory) + len(validated_items) > context._data.capacity:
@@ -27,11 +24,13 @@ class AvailableState(InventoryState):
 
         # After adding, check if we need to transition to the Full state.
         if len(context._data.inventory) == context._data.capacity:
+
+            from .full import FullState
             context.change_state(FullState())
             
 
     def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]):
-        from .empty import EmptyState
+ 
         
         validated_items = InventoryValidator.validate_items(items)
 
@@ -45,6 +44,7 @@ class AvailableState(InventoryState):
 
         # After removing, check if we need to transition to the Empty state.
         if not context._data.inventory:
+            from .empty import EmptyState
             context.change_state(EmptyState())
 
 

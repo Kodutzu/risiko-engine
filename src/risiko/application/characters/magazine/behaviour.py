@@ -1,19 +1,19 @@
 from attrs import define, field
+from attrs.validators import instance_of
 from random import shuffle
 from typing import Literal, Optional
 from collections import Counter
 
-from ....core.weapon.magazine.base import MagazineBase
 from ....core.weapon.magazine.interface import MagazineInterface
 from ....core.weapon.shell import Shell
 
 
 @define
-class MagazineBehaviour:
+class MagazineBehaviour: #Planning to have State Pattern
 
-    _data: MagazineInterface = field(alias="magazine")
+    _data: MagazineInterface = field(validator=instance_of(MagazineInterface),alias="magazine")
 
-    def load_new_round(self, lives: int, blanks: int):
+    def load_new_round(self, lives: int , blanks: int):
 
         self._data.tube.clear()
         self._data.tube.extend( ([Shell.LIVE] * lives) + ([Shell.BLANK] * blanks) )
@@ -26,6 +26,9 @@ class MagazineBehaviour:
         
         elif format == "counter":
             return Counter(self._data.tube)
+        
+        else:
+            raise ValueError("Invalid format.")
         
 
     def take_out_bullet(self) -> Shell:

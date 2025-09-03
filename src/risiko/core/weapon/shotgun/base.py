@@ -1,16 +1,18 @@
-from ..shell import Shell
-from ..magazine.base import MagazineBase
 from typing import Union, override, Optional
 from attrs import define, field
+from attrs.validators import instance_of, gt
+
+from ..shell import Shell
+from ..magazine.base import MagazineBase
 from .interface import ShotgunInterface, MagazineInterface
-from .validator import live_dmg_checker
+
 
 @define
 class ShotgunBase(ShotgunInterface):
 
-    _magazine: Optional[MagazineInterface] = field(factory=MagazineBase, alias="magazine")
-    _chamber: Optional[Union[Shell, None]] = field(default=None, alias="chamber")
-    _live_damage: Optional[int] = field(default=1, validator=live_dmg_checker, alias="live_damage")
+    _magazine: Optional[MagazineInterface] = field(factory=MagazineBase,validator=instance_of(MagazineInterface), alias="magazine")
+    _chamber: Optional[Shell] = field(default=None, alias="chamber")
+    _damage: Optional[int] = field(default=1, converter=int, validator=gt(0), alias="live_damage")
         
 
     @property
@@ -26,12 +28,12 @@ class ShotgunBase(ShotgunInterface):
     @property
     @override
     def live_damage(self) -> int:
-        return self._live_damage
+        return self._damage
     
     @live_damage.setter
     @override
     def live_damage(self, value) -> None:
         
-        self._live_damage  = value
+        self._damage  = value
 
     

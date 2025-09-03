@@ -1,5 +1,6 @@
 from typing import List, TYPE_CHECKING
 from attrs import define, field
+from attrs.validators import instance_of
 
 from ....core.inventory.interface import InventoryInterface
 from ....core.item.interface import ItemInterface
@@ -12,12 +13,13 @@ if TYPE_CHECKING:
 @define
 class InventoryBehaviour:
         
-    _data: InventoryInterface = field(alias="data")
+    _data: InventoryInterface = field(validator=instance_of(InventoryInterface),alias="data")
     _state: "InventoryState" = field(init=False)
 
     def __attrs_post_init__(self):
 
         from .states.empty import EmptyState
+
         self._state = EmptyState()
 
     def add(self, items: List[ItemInterface]) -> None:
@@ -29,11 +31,11 @@ class InventoryBehaviour:
         
         self._state.remove(self, items)
 
-    def has_item(self, item_type: ItemType ) -> bool:
+    def has(self, item: ItemInterface ) -> bool:
 
-        return any(item.entity == item_type for item in self._data.inventory)
+        return item in self._data.inventory
     
-    def show(self) -> None:
+    def show(self) -> List[ItemInterface]:
 
         return self._data.inventory
 

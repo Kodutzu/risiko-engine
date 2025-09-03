@@ -1,4 +1,5 @@
 from attrs import define, field
+from attrs.validators import instance_of
 from typing import Deque, Optional, override
 from collections import deque
 
@@ -9,7 +10,7 @@ from .interface import MagazineInterface
 @define
 class MagazineBase(MagazineInterface):
 
-    _tube: Optional[Deque[Shell]] = field(factory=deque, alias="tube")
+    _tube: Optional[Deque[Shell]] = field(factory=deque, alias="tube", validator=instance_of(deque))
     
         
     @property

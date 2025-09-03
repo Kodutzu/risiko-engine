@@ -9,3 +9,4 @@ class ItemType(Enum):
     EJECT = auto()
     MAGNIFIER = auto()
     VISION = auto()
+    SHUFFLE = auto()
