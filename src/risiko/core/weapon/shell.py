@@ -1,5 +1,5 @@
-from enum import Enum
+from enum import Enum, auto
 
 class Shell(Enum):
-    LIVE = "live"
-    BLANK = "blank"
+    LIVE = auto()
+    BLANK = auto()

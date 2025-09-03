@@ -5,17 +5,17 @@ from ..shell import Shell
 
 class MagazineInterface(ABC):
 
-    
     @property
     @abstractmethod
     def tube(self) ->  Deque[Shell]:
-        
-        pass
+        ...
     
+    @property
     @abstractmethod
-    def show(self):
-        pass
+    def is_tube_empty(self) ->  bool:
+        ...
 
+    @property
     @abstractmethod
-    def take_out_bullet(self) -> Shell:
-        pass
+    def has_mixed_bullets(self) ->  bool:
+        ...

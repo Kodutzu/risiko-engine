@@ -1,0 +1,1 @@
+# In here, the Player applies a armour on itself, which stays until the end of the turn

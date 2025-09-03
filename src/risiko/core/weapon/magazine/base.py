@@ -1,38 +1,32 @@
-from attrs import define, field, setters
-from typing import Deque, Union, override, overload, Literal
-from collections import deque, Counter
-import random 
+from attrs import define, field
+from typing import Deque, Optional, override
+from collections import deque
 
 from ..shell import Shell
 from .interface import MagazineInterface
-from .validator import bullet_number_checker
 
 
 @define
 class MagazineBase(MagazineInterface):
 
-    _tube: Deque[Shell] = field(factory=deque)
+    _tube: Optional[Deque[Shell]] = field(factory=deque, alias="tube")
     
+        
+    @property
+    @override
+    def tube(self) -> Deque[Shell]:
+    
+            return self._tube
+
     @property
     @override
     def is_tube_empty(self) -> bool:
 
-        return not self.tube
+        return not self._tube
     
-    @overload
-    def show(self, as_deque: bool = Literal[True]) -> Deque[Shell]: 
-        pass
+    @property
+    @override
+    def has_mixed_bullets(self) -> bool:
 
-    @overload
-    def show(self, as_deque: bool = Literal[False]) -> Counter[Shell, int]:
-        pass
-    
-    def show(self, as_deque: bool=True) -> Union[Deque[Shell], Counter[Shell, int]]:
+        return (Shell.LIVE in self._tube) and (Shell.BLANK in self._tube)
 
-        if as_deque :
-            return self.tube
-        else:
-            return Counter(self.tube)
-
-
-    
