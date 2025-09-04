@@ -14,5 +14,10 @@ class PlayerInterface(ABC):
     def charges(self) -> int:
         pass
 
+    @charges.setter
+    @abstractmethod
+    def charges(self, value: int) -> None:
+        pass
+
 
 

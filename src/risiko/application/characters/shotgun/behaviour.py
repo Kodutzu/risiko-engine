@@ -29,7 +29,7 @@ class ShotgunBehaviour:
 
         self._state.load_chamber(self)
     
-    def fire(self) -> Shell:
+    def fire(self) -> None:
 
         self._state.fire(self)
 

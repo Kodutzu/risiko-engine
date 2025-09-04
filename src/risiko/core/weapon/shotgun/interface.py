@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import Optional
 from ..magazine.interface import MagazineInterface
 from ..shell import Shell
 
@@ -11,9 +11,13 @@ class ShotgunInterface(ABC):
 
     @property
     @abstractmethod
-    def chamber(self) -> Union[Shell, None]:
+    def chamber(self) -> Optional[Shell]:
         ...
     
+    @chamber.setter
+    @abstractmethod
+    def chamber(self, shell: Optional[Shell]) -> None:
+        ...
     @property
     @abstractmethod
     def live_damage(self) -> int:
@@ -21,7 +25,7 @@ class ShotgunInterface(ABC):
 
     @live_damage.setter
     @abstractmethod
-    def live_damage(self, value) -> None:
+    def live_damage(self, value: int) -> None:
         ...
 
             

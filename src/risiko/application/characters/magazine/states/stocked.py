@@ -1,6 +1,6 @@
 from .interface import MagazineState
-from typing import TYPE_CHECKING, NoReturn, Union
-from .....core.weapon.shell import Shell 
+from typing import TYPE_CHECKING, NoReturn, Union, override
+from .....core.weapon.shell import Shell
 
 if TYPE_CHECKING:
     from ..behaviour import MagazineBehaviour
@@ -8,11 +8,13 @@ if TYPE_CHECKING:
 
 class StockedState(MagazineState):
 
+    @override
     def load_round(self, context: "MagazineBehaviour",lives=int, blanks=int) -> NoReturn:
 
         raise Exception("Magazine is already stocked.")
 
 
+    @override
     def ejection(self, context: "MagazineBehaviour") -> Union[Shell, None]:
 
         shell = context._data.tube.popleft()
@@ -25,7 +27,7 @@ class StockedState(MagazineState):
             #remain in Stocked State and Return Shell
             return shell
     
-    
+    @override
     def clear(self, context: "MagazineBehaviour") -> None :
 
         context._data.tube.clear()

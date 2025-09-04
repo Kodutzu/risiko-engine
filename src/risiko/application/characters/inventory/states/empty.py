@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, NoReturn, Union
+from typing import TYPE_CHECKING, List, NoReturn, Union, override
 
 
 from .....core.item.interface import ItemInterface
@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 class EmptyState(InventoryState):
 
+    @override
     def add(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> Union[None, NoReturn]:
         from .available import AvailableState
         from .full import FullState
@@ -27,10 +28,12 @@ class EmptyState(InventoryState):
         else:
             context.change_state(AvailableState())
 
+    @override
     def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> NoReturn:
 
         raise ItemNotFound("Cannot remove items: inventory is empty.")
     
+    @override
     def clear(self, context: "InventoryBehaviour") -> NoReturn:
 
         raise ItemNotFound("Cannot clear items: inventory is already empty.")

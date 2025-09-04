@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class InventoryBehaviour:
         
     _data: InventoryInterface = field(validator=instance_of(InventoryInterface),alias="data")
-    _state: "InventoryState" = field(init=False)
+    _state: "InventoryState" = field(init=False, repr=False)
 
     def __attrs_post_init__(self):
 

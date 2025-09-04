@@ -9,3 +9,4 @@ risiko_engine.egg-info
 pyproject.toml
 tests
 archive
+.VSCodeCounter

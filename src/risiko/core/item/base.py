@@ -1,6 +1,6 @@
 from attrs import define, field, setters
 from attrs.validators import instance_of
-from typing import override
+from typing import override, final
 
 from .interface import ItemInterface
 from .item_type import ItemType
@@ -12,5 +12,6 @@ class ItemBase(ItemInterface):
 
     @property
     @override
+    @final
     def kind(self) -> ItemType:
         return self._kind

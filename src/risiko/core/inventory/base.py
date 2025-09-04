@@ -1,4 +1,4 @@
-from typing import List, override, Optional
+from typing import List, override, final
 from attrs  import define, field,setters
 from attrs.validators import instance_of
 
@@ -10,8 +10,8 @@ from .exceptions import CapacityExceeded
 @define
 class InventoryBase(InventoryInterface):
     
-    _inventory: Optional[List[ItemInterface]] = field(factory=list, validator=instance_of(list), alias="inventory")
-    _capacity: Optional[int]  = field(default=4, on_setattr=setters.frozen, converter=int, alias="capacity")
+    _inventory: List[ItemInterface] = field(factory=list, validator=instance_of(list), alias="inventory")
+    _capacity: int  = field(default=4, on_setattr=setters.frozen, converter=int, alias="capacity")
 
 
     def __attrs_post_init__(self):
@@ -25,11 +25,13 @@ class InventoryBase(InventoryInterface):
                 )
     @property
     @override
+    @final
     def inventory(self) -> List[ItemInterface]:
         return self._inventory
     
 
     @property
     @override
+    @final
     def capacity(self) -> int:
         return self._capacity

@@ -1,5 +1,5 @@
 from .interface import PlayerState
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 if TYPE_CHECKING:
     from ..behaviour import PlayerBehaviour
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 class AliveState(PlayerState):
 
 
-    
+    @override
     def lose_charges(self, context: "PlayerBehaviour", amt: int) -> None:
 
         context._data.charges -= amt
@@ -17,6 +17,7 @@ class AliveState(PlayerState):
             from .dead import DeadState
             context.change_state(DeadState())
 
+    @override
     def gain_charges(self, context: "PlayerBehaviour", amt: int) -> None:
         
         context._data.charges +=amt

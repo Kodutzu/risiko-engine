@@ -8,12 +8,12 @@ if TYPE_CHECKING:
 class PlayerState(ABC):
 
     @abstractmethod
-    def lose_charges(self, context: "PlayerBehaviour"):
+    def lose_charges(self, context: "PlayerBehaviour", amt: int):
 
         pass
 
     @abstractmethod
-    def gain_charges(self, context: "PlayerBehaviour"):
+    def gain_charges(self, context: "PlayerBehaviour", amt: int):
        
         pass
 

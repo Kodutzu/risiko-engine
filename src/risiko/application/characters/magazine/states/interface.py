@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class MagazineState(ABC):
 
     @abstractmethod
-    def load_round(self, context: "MagazineBehaviour",lives=int, blanks=int) -> Optional[None]:
+    def load_round(self, context: "MagazineBehaviour",lives: int , blanks: int) -> Optional[None]:
 
         pass
 
@@ -19,5 +19,5 @@ class MagazineState(ABC):
         pass
 
     @abstractmethod
-    def clear(self, context: "MagazineBehaviour") -> Optional[None]:
+    def clear(self, context: "MagazineBehaviour") -> None:
         pass
