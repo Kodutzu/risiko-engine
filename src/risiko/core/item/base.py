@@ -8,9 +8,9 @@ from .item_type import ItemType
 @define
 class ItemBase(ItemInterface):
 
-    _entity: ItemType = field(validator=instance_of(ItemType),on_setattr=setters.frozen, alias="entity")
+    _kind: ItemType = field(validator=instance_of(ItemType),on_setattr=setters.frozen, alias="kind")
 
     @property
     @override
-    def entity(self) -> ItemType:
-        return self._entity
+    def kind(self) -> ItemType:
+        return self._kind

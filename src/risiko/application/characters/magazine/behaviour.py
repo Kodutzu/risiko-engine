@@ -1,23 +1,40 @@
 from attrs import define, field
 from attrs.validators import instance_of
 from random import shuffle
-from typing import Literal, Optional
+from typing import Literal, Optional, TYPE_CHECKING
 from collections import Counter
 
 from ....core.weapon.magazine.interface import MagazineInterface
 from ....core.weapon.shell import Shell
 
+if TYPE_CHECKING:
+    from .states.interface import MagazineState
+
+
 
 @define
 class MagazineBehaviour: #Planning to have State Pattern
 
-    _data: MagazineInterface = field(validator=instance_of(MagazineInterface),alias="magazine")
+    _data: MagazineInterface = field(validator=instance_of(MagazineInterface),alias="data")
+    _state: "MagazineState" = field(init=False)
 
-    def load_new_round(self, lives: int , blanks: int):
+    def __attrs_post_init__(self) -> None:
 
-        self._data.tube.clear()
-        self._data.tube.extend( ([Shell.LIVE] * lives) + ([Shell.BLANK] * blanks) )
-        shuffle(self._data.tube)
+        from .states.empty import EmptyState
+        self._state = EmptyState()
+
+    def load_new_round(self, lives: int , blanks: int) -> None:
+
+        self._state.load_round(self, lives, blanks)
+
+    
+    def ejection(self) -> Optional[Shell]:
+        
+        self._state.ejection(self)
+
+    def clear(self) -> None:
+
+        self._state.clear(self)
 
     def show(self, format: Optional[Literal["deque","counter"]]= "deque") -> None:
 
@@ -31,13 +48,8 @@ class MagazineBehaviour: #Planning to have State Pattern
             raise ValueError("Invalid format.")
         
 
-    def take_out_bullet(self) -> Shell:
-        
-                
-        if self._data.is_tube_empty:
-            raise Exception("Reload: Magazine is empty.")
-        
-        if not self._data.has_mixed_bullets:
-            raise Exception("Reload: Magazine does not have a mix of live and blank shells.")
+    
+    def change_state(self, new_state: "MagazineState") -> None:
 
-        return self._data.tube.popleft()
+        self._state = new_state
+

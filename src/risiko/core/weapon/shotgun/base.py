@@ -1,4 +1,4 @@
-from typing import Union, override, Optional
+from typing import override, Optional
 from attrs import define, field
 from attrs.validators import instance_of, gt
 
@@ -22,13 +22,18 @@ class ShotgunBase(ShotgunInterface):
     
     @property
     @override
-    def chamber(self) -> Union[Shell, None]:
+    def chamber(self) -> Optional[Shell]:
         return self._chamber
-    
+
     @property
     @override
     def live_damage(self) -> int:
         return self._damage
+    
+    @chamber.setter
+    @override
+    def chamber(self, shell:Shell) -> None:
+        self._chamber = shell
     
     @live_damage.setter
     @override

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 from .....core.item.interface import ItemInterface
 
 if TYPE_CHECKING:
@@ -9,14 +9,14 @@ if TYPE_CHECKING:
 class InventoryState(ABC):
 
     @abstractmethod
-    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]):
+    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> Optional[None] :
 
         pass
 
     @abstractmethod
-    def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]):
+    def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> Optional[None]:
         pass
 
     @abstractmethod
-    def clear(self, state: "InventoryBehaviour"):
+    def clear(self, context: "InventoryBehaviour") -> Optional[None]:
         pass

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Union, NoReturn
 
 
 from .....core.item.interface import ItemInterface
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class AvailableState(InventoryState):
 
-    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]):
+    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> Union[None, NoReturn]:
 
 
         validated_items = InventoryValidator.validate_items(items)
@@ -29,7 +29,7 @@ class AvailableState(InventoryState):
             context.change_state(FullState())
             
 
-    def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]):
+    def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> Union[None, NoReturn]:
  
         
         validated_items = InventoryValidator.validate_items(items)
@@ -40,7 +40,7 @@ class AvailableState(InventoryState):
                 context._data.inventory.remove(item)
 
             except ValueError:
-                raise ItemNotFound(f"Cannot remove: {item.entity.name} not found.")
+                raise ItemNotFound(f"Cannot remove: {item.kind.name} not found.")
 
         # After removing, check if we need to transition to the Empty state.
         if not context._data.inventory:
@@ -48,7 +48,7 @@ class AvailableState(InventoryState):
             context.change_state(EmptyState())
 
 
-    def clear(self, context: "InventoryBehaviour"):
+    def clear(self, context: "InventoryBehaviour") -> None:
         from .empty import EmptyState
 
         context._data.inventory.clear()

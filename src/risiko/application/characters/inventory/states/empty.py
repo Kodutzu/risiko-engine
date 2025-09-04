@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, NoReturn
+from typing import TYPE_CHECKING, List, NoReturn, Union
 
 
 from .....core.item.interface import ItemInterface
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class EmptyState(InventoryState):
 
-    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]):
+    def add(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> Union[None, NoReturn]:
         from .available import AvailableState
         from .full import FullState
  

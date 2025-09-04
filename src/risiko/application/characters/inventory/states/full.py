@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, NoReturn
+from typing import TYPE_CHECKING, List, NoReturn, Union
 
 
 from .....core.item.interface import ItemInterface
@@ -19,7 +19,7 @@ class FullState(InventoryState):
     
         raise CapacityExceeded(f"Cannot add items: inventory is full")
 
-    def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]):
+    def remove(self, context: "InventoryBehaviour", items: List[ItemInterface]) -> Union[None, NoReturn]:
 
 
         validated_items = InventoryValidator.validate_items(items)
@@ -27,7 +27,7 @@ class FullState(InventoryState):
             try:
                 context._data.inventory.remove(item)
             except ValueError:
-                raise ItemNotFound(f"Cannot remove: {item.entity.name} not found.")
+                raise ItemNotFound(f"Cannot remove: {item.kind.name} not found.")
 
         from .available import AvailableState
         context.change_state(AvailableState())

@@ -6,11 +6,6 @@ class PlayerInterface(ABC):
 
     @property
     @abstractmethod
-    def id(self) -> str:
-        pass
-
-    @property
-    @abstractmethod
     def inventory(self) -> InventoryInterface:
         pass
     

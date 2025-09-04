@@ -5,5 +5,5 @@ class ItemInterface(ABC):
 
     @property
     @abstractmethod
-    def entity(self) -> Enum:
+    def kind(self) -> Enum:
         ...

@@ -1,21 +1,46 @@
-from attrs import define, field
+from attrs import define, field, setters
 from attrs.validators import instance_of
+from typing import Optional, TYPE_CHECKING
+
 from ....core.player.interface import PlayerInterface
 from ..inventory.behaviour import InventoryBehaviour
+from ..shotgun.behaviour import ShotgunBehaviour
+
+if TYPE_CHECKING:
+    from .states.interface import PlayerState
+
 
 
 @define
 class PlayerBehaviour:
 
-    data: PlayerInterface = field(validator=instance_of(PlayerInterface), alias="data")
-    inventory: InventoryBehaviour = field(validator=instance_of(InventoryBehaviour),alias="inventory")
-    # _state: PlayerState = field(factory=PlayerState)
+    _id: str = field(converter=str,on_setattr=setters.frozen, alias="player_id", )
+    _data: PlayerInterface = field(validator=instance_of(PlayerInterface), alias="data")
+    _inventory: InventoryBehaviour = field(validator=instance_of(InventoryBehaviour),alias="inventory")
+    _state: "PlayerState" = field(init=False, repr=False)
 
+    def __attrs_post_init__(self):
+        self._inventory = InventoryBehaviour(self._data.inventory)
 
-    def can_perform_action(self) -> bool:
-        ...
+        from .states.alive import AliveState
+        self._state = AliveState()
+    
+    @property
+    def id(self) -> str:
+        return self._id
+    
+    def shoot(self,gun: ShotgunBehaviour) -> Optional[None]:
+        
+        return gun.fire()
 
-    def change_state(self, new_state) -> None:
-        ...
+    def lose_charges(self) -> None:
+        self._state.lose_charges(self)
+
+    def gain_charges(self) -> None:
+        self._state.gain_charges(self)
+
+    def change_state(self, new_state: "PlayerState") -> None:
+
+        self._state = new_state
 
     

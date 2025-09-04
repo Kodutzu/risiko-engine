@@ -1,0 +1,1 @@
+#Having Effect Class which hold the reference of the Player or Shotgun through ID

@@ -1,0 +1,1 @@
+# Managing Effects through Character's ID
