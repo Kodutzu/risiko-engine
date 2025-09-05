@@ -7,7 +7,7 @@ from typing import Dict
 
 from .characters.player.behaviour import PlayerBehaviour
 from .characters.shotgun.behaviour import ShotgunBehaviour
-from .flow_state.interface import GameFlowState
+from .flow.interface import GameFlowState
 
 
 class GameState(BaseModel):
@@ -16,5 +16,3 @@ class GameState(BaseModel):
     players: Dict[int,PlayerBehaviour] = Field(init=False)
     #turns: TurnManager = Field(init=False)
     #rounds: RoundManager = Field(init=False)
-
-    

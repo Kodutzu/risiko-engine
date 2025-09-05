@@ -5,7 +5,7 @@ from typing import override, final
 from .interface import ItemInterface
 from .item_type import ItemType
 
-@define
+@define(slots=True)
 class ItemBase(ItemInterface):
 
     _kind: ItemType = field(validator=instance_of(ItemType),on_setattr=setters.frozen, alias="kind")
