@@ -10,3 +10,4 @@ class ItemType(Enum):
     MAGNIFIER = auto() #See the Current shell in the magazine
     VISION = auto() #See the next shell in the magazine
     SHUFFLE = auto() #Shuffle the magazine
+    BITE_THE_DUST = auto() # rewinds the game

@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 @define
 class ShotgunBehaviour:
 
-    _id: str = field(converter=str, on_setattr=setters.frozen, alias="shotgun_id")
     _data: ShotgunInterface = field(validator=instance_of(ShotgunInterface), alias="data")
     _state: "ShotgunState" = field(init=False, repr=False)
     _magazine: MagazineBehaviour = field(validator=instance_of(MagazineBehaviour), init=False)
@@ -24,6 +23,9 @@ class ShotgunBehaviour:
         
         from .states.unloaded import UnLoadedState
         self._state = UnLoadedState()
+
+    def id(self) -> str:
+        return self._data.id
 
     def load_chamber(self) -> None:
 

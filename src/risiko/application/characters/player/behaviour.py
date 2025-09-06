@@ -14,19 +14,12 @@ if TYPE_CHECKING:
 @define
 class PlayerBehaviour:
 
-    _id: str = field(converter=str,on_setattr=setters.frozen, alias="player_id", )
     _data: PlayerInterface = field(validator=instance_of(PlayerInterface), alias="data")
     _inventory: InventoryBehaviour = field(validator=instance_of(InventoryBehaviour),alias="inventory")
     _state: "PlayerState" = field(init=False, repr=False)
-    
-    _existing_ids: ClassVar[Set[str]] = set()
 
     def __attrs_post_init__(self):
-
-        if self._id in self._existing_ids:
-            raise ValueError(f"Player with ID {self._id} already exists.")
-        self._existing_ids.add(self._id)
-
+        
         self._inventory = InventoryBehaviour(self._data.inventory)
 
         from .states.alive import AliveState
@@ -34,7 +27,7 @@ class PlayerBehaviour:
     
     @property
     def id(self) -> str:
-        return self._id
+        return self._data.id
     
     def shoot(self,gun: ShotgunBehaviour) -> Optional[None]:
         

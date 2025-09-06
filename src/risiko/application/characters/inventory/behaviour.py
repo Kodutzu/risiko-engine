@@ -22,6 +22,7 @@ class InventoryBehaviour:
 
         self._state = EmptyState()
 
+    #New change - Inventory will Depend on ItemEffect
     def add(self, items: List[ItemInterface]) -> None:
 
         self._state.add(self, items)

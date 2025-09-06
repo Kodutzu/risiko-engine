@@ -6,6 +6,11 @@ from ..shell import Shell
 class ShotgunInterface(ABC):
 
     @property
+    @abstractmethod
+    def id(self) -> str:
+        ...
+    @property
+    @abstractmethod
     def magazine(self) -> MagazineInterface:
         ...
 

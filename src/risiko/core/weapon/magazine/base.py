@@ -1,4 +1,4 @@
-from attrs import define, field, Factory
+from attrs import define, field, Factory, setters
 from attrs.validators import instance_of
 from typing import Deque, override, final
 from collections import deque
@@ -18,7 +18,6 @@ class MagazineBase(MagazineInterface):
              if not all(isinstance(shell, Shell) for shell in self._tube):
                  raise ValueError("All elements in 'tube' must be instances of Shell.")
             
-
     @property
     @override
     @final
