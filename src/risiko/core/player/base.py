@@ -11,7 +11,7 @@ class PlayerBase(PlayerInterface):
 
     _id: str = field(converter=str,on_setattr=setters.frozen, alias="player_id", )
     _charges: int = field(converter=int,validator= ge(0), alias="charges")
-    _inventory: InventoryInterface = field(default=Factory(InventoryBase), validator=instance_of(InventoryInterface), alias="inventory")
+    _inventory: InventoryInterface = field(validator=instance_of(InventoryInterface),alias="inventory")
     _existing_ids: ClassVar[Set[str]] = set()
 
     def __attrs_post_init__(self):

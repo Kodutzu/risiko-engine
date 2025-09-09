@@ -1,5 +1,5 @@
 from .interface import MagazineState
-from typing import TYPE_CHECKING, NoReturn, Union, override
+from typing import TYPE_CHECKING, NoReturn, Union, NoReturn,override
 from .....core.weapon.shell import Shell
 
 if TYPE_CHECKING:
@@ -15,13 +15,15 @@ class StockedState(MagazineState):
 
 
     @override
-    def ejection(self, context: "MagazineBehaviour") -> Union[Shell, None]:
+    def ejection(self, context: "MagazineBehaviour") -> Union[Shell,NoReturn]:
 
         shell = context._data.tube.popleft()
 
         if context._data.is_tube_empty:
             from .empty import EmptyState
-            context.change_state(EmptyState())
+            context._change_state(EmptyState())
+
+            raise Exception("Magazine is Empty")
 
         else: 
             #remain in Stocked State and Return Shell
@@ -33,5 +35,5 @@ class StockedState(MagazineState):
         context._data.tube.clear()
 
         from .empty import EmptyState
-        context.change_state(EmptyState())
+        context._change_state(EmptyState())
         

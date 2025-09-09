@@ -16,7 +16,7 @@ class EmptyState(MagazineState):
         shuffle(context._data.tube)
 
         from .stocked import StockedState
-        context.change_state(StockedState())
+        context._change_state(StockedState())
 
     @override
     def ejection(self, context: "MagazineBehaviour") -> NoReturn:

@@ -1,8 +1,9 @@
-from attrs import define, field,setters
+from attrs import define, field,setters, Factory
 from attrs.validators import instance_of
 from typing import TYPE_CHECKING
+
+
 from ....core.weapon.shotgun.interface import ShotgunInterface
-from ....core.weapon.shell import Shell
 from ..magazine.behaviour import MagazineBehaviour
 
 if TYPE_CHECKING:
@@ -14,8 +15,7 @@ class ShotgunBehaviour:
 
     _data: ShotgunInterface = field(validator=instance_of(ShotgunInterface), alias="data")
     _state: "ShotgunState" = field(init=False, repr=False)
-    _magazine: MagazineBehaviour = field(validator=instance_of(MagazineBehaviour), init=False)
-    
+    _magazine: MagazineBehaviour = field(validator=instance_of(MagazineBehaviour), init=False, alias="magazine_behaviour")
 
     def __attrs_post_init__(self):
 
@@ -24,17 +24,26 @@ class ShotgunBehaviour:
         from .states.unloaded import UnLoadedState
         self._state = UnLoadedState()
 
+    @property
+    def magazine_behaviour(self) -> MagazineBehaviour:
+        return self._magazine
+
+    @property
     def id(self) -> str:
         return self._data.id
-
+    
     def load_chamber(self) -> None:
 
         self._state.load_chamber(self)
+
+    def unload_chamber(self) -> None:
+
+        self._state.unload_chamber(self)
     
     def fire(self) -> None:
 
         self._state.fire(self)
 
-    def change_state(self, new_state: "ShotgunState") -> None:
+    def _change_state(self, new_state: "ShotgunState") -> None:
 
         self._state = new_state

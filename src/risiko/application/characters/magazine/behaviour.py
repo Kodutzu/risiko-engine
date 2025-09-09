@@ -28,11 +28,11 @@ class MagazineBehaviour: #Planning to have State Pattern
         self._state.load_round(self, lives, blanks)
 
     
-    def ejection(self) -> Optional[Shell]:
+    def eject_current_shell(self) -> Optional[Shell]:
         
         self._state.ejection(self)
 
-    def clear(self) -> None:
+    def clear_shell(self) -> None:
 
         self._state.clear(self)
 
@@ -48,7 +48,7 @@ class MagazineBehaviour: #Planning to have State Pattern
         
 
     
-    def change_state(self, new_state: "MagazineState") -> None:
+    def _change_state(self, new_state: "MagazineState") -> None:
 
         self._state = new_state
 

@@ -7,3 +7,13 @@ class ItemInterface(ABC):
     @abstractmethod
     def kind(self) -> Enum:
         ...
+    
+    @property
+    @abstractmethod
+    def duration(self) -> int:
+        ...
+
+    @abstractmethod
+    def radiate(self, amt:int) -> None:
+        ...
+

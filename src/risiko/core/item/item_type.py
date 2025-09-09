@@ -11,3 +11,5 @@ class ItemType(Enum):
     VISION = auto() #See the next shell in the magazine
     SHUFFLE = auto() #Shuffle the magazine
     BITE_THE_DUST = auto() # rewinds the game
+    VOID = auto()   # Clears Player Inventory
+    

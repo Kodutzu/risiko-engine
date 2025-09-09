@@ -1,18 +1,13 @@
-from typing import Deque
-from collections import deque
-from attrs import define, field, Factory
-from attrs.validators import instance_of, ge
+from attrs import define, field
+from attrs.validators import  ge, instance_of
 
-from ..characters.shotgun.behaviour import ShotgunBehaviour 
-from ..characters.player.behaviour import PlayerBehaviour
+from ...application.characters.magazine.behaviour import MagazineBehaviour
 
 @define
 class RoundManager:
   
-    _round_number: int = field(default=0, validator=ge(0), init=False)
-    _player_behaviour: PlayerBehaviour = field(validator=instance_of(PlayerBehaviour) )
-    _shotgun_behaviour: ShotgunBehaviour = field(validator=instance_of(ShotgunBehaviour))
-
+    _round_number: int = field(default=0, validator=ge(0), init=False, alias="round_number")
+    _magazine: MagazineBehaviour = field(validator=instance_of(MagazineBehaviour), alias="magazine")
 
     @property
     def round_number(self) -> int:
@@ -22,12 +17,10 @@ class RoundManager:
     def start_round(self):
      
         self._round_number += 1
-        # refill inventory with ITem, and start a new round.
-
-    def end_round(self): ...
-
+       
 
     def is_round_over(self):
-        pass
+        if not self._magazine.show(format="deque"):
+            return True
         # It asks the expert for the information it needs to make a decision.
         

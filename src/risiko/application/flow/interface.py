@@ -2,6 +2,6 @@
 
 from abc import ABC, abstractmethod
 
-class GameFlowState(ABC):
+class FlowInterface(ABC):
 
     ...

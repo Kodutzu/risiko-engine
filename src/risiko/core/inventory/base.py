@@ -10,10 +10,9 @@ from .exceptions import CapacityExceeded
 @define
 class InventoryBase(InventoryInterface):
     
+    _capacity: int  = field(on_setattr=setters.frozen, converter=int, alias="capacity")
     _inventory: List[ItemInterface] = field(factory=list, validator=instance_of(list), alias="inventory")
-    _capacity: int  = field(default=4, on_setattr=setters.frozen, converter=int, alias="capacity")
-
-
+ 
     def __attrs_post_init__(self):
    
         if self._capacity is not None:

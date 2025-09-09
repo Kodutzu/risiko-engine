@@ -1,6 +1,6 @@
-from attrs import define, field, setters
+from attrs import define, field, setters, Factory
 from attrs.validators import instance_of
-from typing import Optional, TYPE_CHECKING, Set, ClassVar
+from typing import Optional, TYPE_CHECKING
 
 from ....core.player.interface import PlayerInterface
 from ..inventory.behaviour import InventoryBehaviour
@@ -16,6 +16,7 @@ class PlayerBehaviour:
 
     _data: PlayerInterface = field(validator=instance_of(PlayerInterface), alias="data")
     _inventory: InventoryBehaviour = field(validator=instance_of(InventoryBehaviour),alias="inventory")
+
     _state: "PlayerState" = field(init=False, repr=False)
 
     def __attrs_post_init__(self):
@@ -28,6 +29,8 @@ class PlayerBehaviour:
     @property
     def id(self) -> str:
         return self._data.id
+    
+
     
     def shoot(self,gun: ShotgunBehaviour) -> Optional[None]:
         

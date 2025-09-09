@@ -25,5 +25,5 @@ class JammedState(MagazineState):
         context._data.tube.clear()
 
         from .empty import EmptyState
-        context.change_state(EmptyState())
+        context._change_state(EmptyState())
         

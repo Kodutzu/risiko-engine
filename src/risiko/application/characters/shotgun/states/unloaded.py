@@ -1,3 +1,4 @@
+from risiko.application.characters.shotgun.behaviour import ShotgunBehaviour
 from .interface import ShotgunState
 from .....core.weapon.shell import Shell
 from typing import TYPE_CHECKING, NoReturn, override
@@ -11,10 +12,15 @@ class UnLoadedState(ShotgunState):
     @override
     def load_chamber(self, context: "ShotgunBehaviour") -> None:
 
-        context._data.chamber = context._magazine.ejection()
+        context._data.chamber = context._magazine.eject_current_shell()
 
         from .loaded import LoadedState
-        context.change_state(LoadedState())
+        context._change_state(LoadedState())
+
+    @override
+    def unload_chamber(self, context: ShotgunBehaviour) -> NoReturn:
+        
+        raise Exception("Shotgun is not loaded")
 
     @override
     def fire(self, context: "ShotgunBehaviour") -> NoReturn: 
