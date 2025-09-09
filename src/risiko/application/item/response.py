@@ -1,1 +1,0 @@
-# Response Class for ItemEffect Class

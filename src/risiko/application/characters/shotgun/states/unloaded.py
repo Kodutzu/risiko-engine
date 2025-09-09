@@ -1,6 +1,5 @@
 from risiko.application.characters.shotgun.behaviour import ShotgunBehaviour
 from .interface import ShotgunState
-from .....core.weapon.shell import Shell
 from typing import TYPE_CHECKING, NoReturn, override
 
 if TYPE_CHECKING:

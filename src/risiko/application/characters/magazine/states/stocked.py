@@ -1,6 +1,6 @@
 from .interface import MagazineState
 from typing import TYPE_CHECKING, NoReturn, Union, NoReturn,override
-from .....core.weapon.shell import Shell
+from .....core.weapon.shell.interface import ShellInterface
 
 if TYPE_CHECKING:
     from ..behaviour import MagazineBehaviour
@@ -15,7 +15,7 @@ class StockedState(MagazineState):
 
 
     @override
-    def ejection(self, context: "MagazineBehaviour") -> Union[Shell,NoReturn]:
+    def ejection(self, context: "MagazineBehaviour") -> Union[ShellInterface,NoReturn]:
 
         shell = context._data.tube.popleft()
 

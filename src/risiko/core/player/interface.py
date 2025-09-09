@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-from ..inventory.interface import InventoryInterface    
-
 
 class PlayerInterface(ABC):
 
@@ -8,11 +6,6 @@ class PlayerInterface(ABC):
     @abstractmethod
     def id(self) -> str: ...
 
-
-    @property
-    @abstractmethod
-    def inventory(self) -> InventoryInterface: ...
-    
     @property
     @abstractmethod
     def charges(self) -> int:...

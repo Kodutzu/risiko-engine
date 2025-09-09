@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Optional
-from .....core.weapon.shell import Shell 
+from .....core.weapon.shell.interface import ShellInterface
 
 if TYPE_CHECKING:
     from ..behaviour import MagazineBehaviour
@@ -14,7 +14,7 @@ class MagazineState(ABC):
         pass
 
     @abstractmethod
-    def ejection(self, context: "MagazineBehaviour") -> Optional[Shell]:
+    def ejection(self, context: "MagazineBehaviour") -> Optional[ShellInterface]:
         # Removal lof Shell from Magazine
         pass
 

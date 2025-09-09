@@ -1,6 +1,8 @@
 from .interface import MagazineState
 from typing import TYPE_CHECKING, NoReturn, override
-from .....core.weapon.shell import Shell 
+from .....core.weapon.shell.interface import ShellInterface
+from .....core.weapon.shell.live import LiveShell
+from .....core.weapon.shell.blank import BlankShell
 from random import shuffle
 
 if TYPE_CHECKING:
@@ -12,8 +14,9 @@ class EmptyState(MagazineState):
     @override
     def load_round(self, context: "MagazineBehaviour" ,lives:int, blanks:int) -> None:
 
-        context._data.tube.extend( ([Shell.LIVE] * lives) + ([Shell.BLANK] * blanks) )
-        shuffle(context._data.tube)
+        shells = [LiveShell() for _ in range(lives)] + [BlankShell() for _ in range(blanks)]
+        shuffle(shells)
+        context._data.tube.extend(shells)
 
         from .stocked import StockedState
         context._change_state(StockedState())

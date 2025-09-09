@@ -5,7 +5,7 @@ from typing import Literal, Optional, TYPE_CHECKING, Counter, Deque, Union
 from collections import Counter
 
 from ....core.weapon.magazine.interface import MagazineInterface
-from ....core.weapon.shell import Shell
+from ....core.weapon.shell.interface import ShellInterface
 
 if TYPE_CHECKING:
     from .states.interface import MagazineState
@@ -28,7 +28,7 @@ class MagazineBehaviour: #Planning to have State Pattern
         self._state.load_round(self, lives, blanks)
 
     
-    def eject_current_shell(self) -> Optional[Shell]:
+    def eject_current_shell(self) -> Optional[ShellInterface]:
         
         self._state.ejection(self)
 
@@ -36,7 +36,7 @@ class MagazineBehaviour: #Planning to have State Pattern
 
         self._state.clear(self)
 
-    def show(self, format: Literal["deque","counter"]= "deque") -> Union[Deque[Shell], Counter[Shell]]:
+    def show(self, format: Literal["deque","counter"]= "deque") -> Union[Deque[ShellInterface], Counter[ShellInterface]]:
         if  format == "deque":
             return self._data.tube
         

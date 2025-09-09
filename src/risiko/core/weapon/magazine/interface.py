@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Deque
-from ..shell import Shell
+from ..shell.interface import ShellInterface
 
 
 class MagazineInterface(ABC):
 
     @property
     @abstractmethod
-    def tube(self) ->  Deque[Shell]:
+    def tube(self) ->  Deque[ShellInterface]:
         ...
     
     @property
