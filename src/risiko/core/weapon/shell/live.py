@@ -1,11 +1,14 @@
-from .interface import ShellInterface
-from attrs import define, field
+from attrs import define, field,setters
+from attrs.validators import ge
+from typing import Final
 
+@define(hash=True)
+class LiveShell:
 
-@define
-class LiveShell(ShellInterface):
     _damage: int = field(default=1)
 
     @property
     def damage(self) -> int:
         return self._damage
+
+ 

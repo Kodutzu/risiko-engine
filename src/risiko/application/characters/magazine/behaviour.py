@@ -1,7 +1,7 @@
 from attrs import define, field
 from attrs.validators import instance_of
 from random import shuffle
-from typing import Literal, Optional, TYPE_CHECKING, Counter, Deque, Union
+from typing import Literal, Optional, TYPE_CHECKING, Counter, Deque, Union, Type
 from collections import Counter
 
 from ....core.weapon.magazine.interface import MagazineInterface
@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 
 @define
-class MagazineBehaviour: #Planning to have State Pattern
+class MagazineBehaviour:
 
-    _data: MagazineInterface = field(validator=instance_of(MagazineInterface),alias="data")
+    _data: MagazineInterface = field(validator=instance_of(MagazineInterface),alias="magazine_base")
     _state: "MagazineState" = field(init=False, repr=False)
 
     def __attrs_post_init__(self) -> None:
@@ -25,16 +25,18 @@ class MagazineBehaviour: #Planning to have State Pattern
 
     def load_new_round(self, lives: int , blanks: int) -> None:
 
-        self._state.load_round(self, lives, blanks)
+        self._state.load_round(context=self,lives=lives,blanks=blanks)
 
     
     def eject_current_shell(self) -> Optional[ShellInterface]:
-        
-        self._state.ejection(self)
+        try:
+            return self._state.ejection(self)
+        except Exception: # Catch the exception from EmptyState
+            return None
 
     def clear_shell(self) -> None:
 
-        self._state.clear(self)
+        self._state.clear(context=self)
 
     def show(self, format: Literal["deque","counter"]= "deque") -> Union[Deque[ShellInterface], Counter[ShellInterface]]:
         if  format == "deque":

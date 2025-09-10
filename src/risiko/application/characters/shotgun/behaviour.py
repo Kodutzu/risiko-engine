@@ -13,20 +13,16 @@ if TYPE_CHECKING:
 @define
 class ShotgunBehaviour:
 
-    _data: ShotgunInterface = field(validator=instance_of(ShotgunInterface), alias="data")
+    magazine_behaviour: MagazineBehaviour = field(validator=instance_of(MagazineBehaviour), init=False)
+    _data: ShotgunInterface = field(validator=instance_of(ShotgunInterface), alias="shotgun_base")
     _state: "ShotgunState" = field(init=False, repr=False)
-    _magazine: MagazineBehaviour = field(validator=instance_of(MagazineBehaviour), init=False, alias="magazine_behaviour")
 
     def __attrs_post_init__(self):
 
-        self._magazine = MagazineBehaviour(data=self._data.magazine)
+        self.magazine_behaviour = MagazineBehaviour(magazine_base=self._data.magazine)
         
         from .states.unloaded import UnLoadedState
         self._state = UnLoadedState()
-
-    @property
-    def magazine_behaviour(self) -> MagazineBehaviour:
-        return self._magazine
 
     @property
     def id(self) -> str:
@@ -34,15 +30,15 @@ class ShotgunBehaviour:
     
     def load_chamber(self) -> None:
 
-        self._state.load_chamber(self)
+        self._state.load_chamber(context=self)
 
     def unload_chamber(self) -> None:
 
-        self._state.unload_chamber(self)
+        self._state.unload_chamber(context=self)
     
     def fire(self) -> None:
 
-        self._state.fire(self)
+        self._state.fire(context=self)
 
     def _change_state(self, new_state: "ShotgunState") -> None:
 

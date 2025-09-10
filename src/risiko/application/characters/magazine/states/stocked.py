@@ -15,7 +15,7 @@ class StockedState(MagazineState):
 
 
     @override
-    def ejection(self, context: "MagazineBehaviour") -> Union[ShellInterface,NoReturn]:
+    def ejection(self, context: "MagazineBehaviour") -> ShellInterface:
 
         shell = context._data.tube.popleft()
 
@@ -23,11 +23,7 @@ class StockedState(MagazineState):
             from .empty import EmptyState
             context._change_state(EmptyState())
 
-            raise Exception("Magazine is Empty")
-
-        else: 
-            #remain in Stocked State and Return Shell
-            return shell
+        return shell
     
     @override
     def clear(self, context: "MagazineBehaviour") -> None :

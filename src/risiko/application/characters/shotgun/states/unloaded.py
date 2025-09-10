@@ -11,7 +11,7 @@ class UnLoadedState(ShotgunState):
     @override
     def load_chamber(self, context: "ShotgunBehaviour") -> None:
 
-        context._data.chamber = context._magazine.eject_current_shell()
+        context._data.chamber = context.magazine_behaviour.eject_current_shell()
 
         from .loaded import LoadedState
         context._change_state(LoadedState())

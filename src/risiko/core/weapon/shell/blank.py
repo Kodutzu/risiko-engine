@@ -1,10 +1,9 @@
-from .interface import ShellInterface
 from attrs import define, field
+from typing import Final
 
-
-@define
-class BlankShell(ShellInterface):
-    _damage: int = field(default=0)
+@define(hash=True)
+class BlankShell:
+    _damage: Final[int] = field(default=0)
 
     @property
     def damage(self) -> int:

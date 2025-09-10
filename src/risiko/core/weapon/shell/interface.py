@@ -1,10 +1,8 @@
-from attrs import define
-from abc import ABC, abstractmethod
+from typing import Protocol, runtime_checkable
 
-@define
-class ShellInterface(ABC):
+@runtime_checkable
+class ShellInterface(Protocol):
 
     @property
-    @abstractmethod
     def damage(self) -> int:
         ...
