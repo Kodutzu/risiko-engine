@@ -4,19 +4,20 @@
 from attrs import define, field
 
 from .managers.turn import TurnManager
-from .managers.round import RoundManager
 from .managers.player import PlayerManager
-from .managers.weapon import WeaponManager
-from .flow.interface import FlowInterface
+from ..core.shotgun.interface import ShotgunInterface
+from ..core.shotgun.base import ShotgunBase
 
-@define
+
+@define(frozen=True)
 class GameState:
 
-    _flow: FlowInterface 
-    player: PlayerManager 
-    turns: TurnManager 
-    rounds: RoundManager 
-    weapons: WeaponManager 
+    player: PlayerManager = field(factory=PlayerManager)
+    turns: TurnManager  = field(factory=TurnManager)
+    shotgun: ShotgunInterface = field(factory=ShotgunBase)
+
+
+  
 
 
 

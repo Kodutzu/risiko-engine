@@ -1,18 +1,22 @@
-from abc import ABC, abstractmethod
+from typing import Protocol, runtime_checkable, TYPE_CHECKING
 
-class PlayerInterface(ABC):
+
+if TYPE_CHECKING:
+    from .base import PlayerBase
+
+@runtime_checkable
+class PlayerInterface(Protocol):
 
     @property
-    @abstractmethod
     def id(self) -> str: ...
 
     @property
-    @abstractmethod
     def charges(self) -> int:...
 
-    @charges.setter
-    @abstractmethod
-    def charges(self, value: int) -> None: ...
+    
+    def lose_charges(self,amt: int) -> PlayerBase:
+        ...
 
-
-
+    def gain_charges(self,  amt: int) -> PlayerBase:
+        ...
+        

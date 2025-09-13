@@ -1,1 +1,0 @@
-#return query - like number of player, number of rounds, etc
