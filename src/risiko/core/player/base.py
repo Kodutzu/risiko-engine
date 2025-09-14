@@ -1,32 +1,40 @@
-from attrs import define, field, setters, evolve
+from attrs import define, field, evolve
 from attrs.validators import ge
 from typing import Final
 
+from .exception import PlayerDeadException
+
 @define(frozen=True)
 class PlayerBase:
+
+    """
+    Represents a player in the game with an ID and a number of charges (lives).
     
-    _id: Final[str] = field(alias="player_id",converter=str, on_setattr=setters.frozen) 
-    _charges: int = field(alias="charges",validator=ge(0), converter=int, )
+    """
+    id: Final[str] 
+    charges: int = field(validator=ge(0))
 
-    @property
-    def id(self) -> str:
-        return self._id
+    def lose_charges(self, amt: int) -> "PlayerBase":
 
-    @property
-    def charges(self) -> int:
-        return self._charges
+        """
+        Reduces the player's charges by the specified amount.
 
-    def lose_charges(self,amt: int) -> "PlayerBase":
+        Args:
+            amt (int): The amount of charges to lose. Must be non-negative.
+
+        Returns:
+            PlayerBase: A new PlayerBase instance with updated charges.
+
+        Raises:
+            PlayerDeadException: If the player already has 0 charges.
+            ValueError: If the amount to lose is negative.
+        """
 
         if self.charges <= 0:
-            raise Exception("Player is already Dead, you can't lose charges")
+             raise PlayerDeadException(id=self.id, info="Player is already at 0 charges")
         
-        new_charge_value = self.charges - amt
-        return evolve(self, _charges=new_charge_value)
-
-
-    def gain_charges(self,  amt: int) -> "PlayerBase":
+        if amt < 0:
+            raise ValueError("Amount to lose must be non-negative.")
         
-        new_charge_value = self.charges + amt
-        return evolve(self, _charges=new_charge_value)
-        
+        new_charge_value = max(0, self.charges - amt)
+        return evolve(self, charges=new_charge_value)

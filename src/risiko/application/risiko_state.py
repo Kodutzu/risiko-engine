@@ -10,11 +10,14 @@ from ..core.shotgun.base import ShotgunBase
 
 
 @define(frozen=True)
-class GameState:
+class RisikoState:
+    """Represents the live snapshot of the game state.
+    This class is immutable; any updates to the game state will result in a new RisikoState instance.
+    """
 
     player: PlayerManager = field(factory=PlayerManager)
     turns: TurnManager  = field(factory=TurnManager)
-    shotgun: ShotgunInterface = field(factory=ShotgunBase)
+    _shotgun: ShotgunInterface = field(factory=ShotgunBase, alias="shotgun")
 
 
   

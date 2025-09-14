@@ -7,33 +7,62 @@ from random import shuffle
 from ..shell.interface import ShellInterface
 from ..shell.live import LiveShell 
 from ..shell.blank import BlankShell
+from .exception import MagazineEmptyException
 
 @define(frozen=True)
 class MagazineBase:
+    """Represents the shotgun's magazine, holding a deque of shells.
+    This class is immutable; all methods that modify the magazine's state
+    return a new MagazineBase instance.
+    """
      
-    tube: Deque[ShellInterface] = field(factory=deque, validator=instance_of(deque), on_setattr=setters.frozen)
+    tube: Deque[ShellInterface] = field(factory=deque, validator=instance_of(deque))
 
     @property
     @final
     def is_empty(self) -> bool:
+        """
+        Checks if the magazine is empty.
 
+        Returns:
+            bool: True if the magazine is empty, False otherwise.
+        """
         return not self.tube
-
-
+    
+    @final
     def load_round(self,lives:int, blanks:int) -> "MagazineBase":
+        """
+        Loads a new round of shells into the magazine, shuffling them randomly.
 
+        Args:
+            lives (int): The number of live shells to add.
+            blanks (int): The number of blank shells to add.
+
+        Returns:
+            MagazineBase: A new MagazineBase instance with the loaded shells.
+        """
         new_tube = self.tube.copy()
-        shells = [LiveShell()]* lives + [BlankShell()]* blanks
+        shells = [LiveShell() for _ in range(lives)] + [BlankShell() for _ in range(blanks)]
         shuffle(shells)
 
         new_tube.extend(shells)
 
         return evolve(self, tube=new_tube)
     
+    @final
     def eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
+        """
+        Ejects the first shell from the magazine.
 
+        Returns:
+            Tuple[ShellInterface, MagazineBase]: A tuple containing the ejected shell and a new MagazineBase instance.
+
+        Raises:
+            MagazineEmptyException: If the magazine is empty.
+        """
         if self.is_empty:
-            raise Exception("Magazine is Empty")
+
+            raise MagazineEmptyException()
 
         new_tube = self.tube.copy()
 
@@ -41,11 +70,20 @@ class MagazineBase:
             
         return (shell, evolve(self, tube=new_tube))
     
+    @final
     def clear(self) -> "MagazineBase":
+        """
+        Clears all shells from the magazine.
 
+        Returns:
+            MagazineBase: A new MagazineBase instance with an empty magazine.
+
+        Raises:
+            MagazineEmptyException: If the magazine is already empty.
+        """
         if self.is_empty:
             
-            raise Exception("Magazine is already Empty")
+            raise MagazineEmptyException("Magazine is already Empty")
 
         new_tube = self.tube.copy()
         new_tube.clear()
