@@ -16,3 +16,6 @@ class PlayerInterface(Protocol):
     
     def lose_charges(self,amt: int) -> "PlayerBase":
         ...
+
+    def gain_charges(self,amt: int) -> "PlayerBase":
+        ...

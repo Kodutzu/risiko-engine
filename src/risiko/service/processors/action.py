@@ -50,6 +50,7 @@ def hit_shell(game_state:RisikoState, target_id: str, fired_shell: ShellInterfac
     
     target_player = game_state.player.get_player(target_id)
 
+
     updated_player = target_player.lose_charges(fired_shell.damage)
 
     new_player_manager = game_state.player._update_player(player=updated_player)

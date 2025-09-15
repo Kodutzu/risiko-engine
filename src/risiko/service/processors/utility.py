@@ -38,3 +38,6 @@ def player_lose_charge(game_state:RisikoState, player_id: str, charges_to_lose:i
     new_player_manager = game_state.player._update_player(player=updated_player)
 
     return evolve(game_state, player=new_player_manager)
+
+
+#Custom Turn Ordering Functions 

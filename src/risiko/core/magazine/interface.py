@@ -1,5 +1,5 @@
 from typing import Deque, Protocol,runtime_checkable, TYPE_CHECKING, Tuple
-from ..shell.interface import ShellInterface
+from ..shell import ShellInterface
 
 if TYPE_CHECKING:
     from .base import MagazineBase

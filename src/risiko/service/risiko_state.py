@@ -2,9 +2,7 @@
 #Will be using Pydantic to build it!
 #It will contains methods such as to_snapshot, change_transition and many more!
 from attrs import define, field
-
-from .managers.turn import TurnManager
-from .managers.player import PlayerManager
+from .managers import PlayerManager, TurnManager
 from ..core.shotgun.interface import ShotgunInterface
 from ..core.shotgun.base import ShotgunBase
 

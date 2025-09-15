@@ -2,10 +2,10 @@ from attrs import evolve
 from ..risiko_state import RisikoState
 
 
-def start_new_round(game_state: RisikoState, lives:int, blanks: int):
+def load_new_round(game_state: RisikoState, lives:int, blanks: int):
 
     """
-    Starts a new round by loading the shotgun magazine with a specified number of live and blank shells.
+    load a new round by loading the shotgun magazine with a specified number of live and blank shells.
 
     Args:
         game_state (RisikoState): The current state of the game.

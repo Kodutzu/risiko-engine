@@ -1,12 +1,10 @@
-from attrs import define, field,setters, evolve
+from attrs import define, field, evolve
 from attrs.validators import instance_of
 from typing import Deque, final, Tuple
 from collections import deque
 from random import shuffle
 
-from ..shell.interface import ShellInterface
-from ..shell.live import LiveShell 
-from ..shell.blank import BlankShell
+from ..shell import ShellInterface, LiveShell, BlankShell
 from .exception import MagazineEmptyException
 
 @define(frozen=True)

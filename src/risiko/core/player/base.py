@@ -1,6 +1,6 @@
 from attrs import define, field, evolve
 from attrs.validators import ge
-from typing import Final
+from typing import Final, final
 
 from .exception import PlayerDeadException
 
@@ -14,6 +14,7 @@ class PlayerBase:
     id: Final[str] 
     charges: int = field(validator=ge(0))
 
+    @final
     def lose_charges(self, amt: int) -> "PlayerBase":
 
         """
@@ -38,3 +39,31 @@ class PlayerBase:
         
         new_charge_value = max(0, self.charges - amt)
         return evolve(self, charges=new_charge_value)
+    
+    @final
+    def gain_charges(self, amt: int) -> "PlayerBase":
+
+        """
+        Increases the player's charges by the specified amount.
+
+        Args:
+            amt (int): The amount of charges to add. Must be non-negative.
+
+        Returns:
+            PlayerBase: A new PlayerBase instance with updated charges.
+
+        Raises:
+            ValueError: If the amount to add is negative.
+        """
+
+        if amt < 0:
+            raise ValueError("Amount to add must be non-negative.")
+        
+        new_charge_value = self.charges + amt
+        return evolve(self, charges=new_charge_value)
+    
+    # @final
+    # def update_charges(self, amt:int) -> "PlayerBase":
+
+    #     new_charges = self.charges + amt
+    #     return evolve(self, charges=self.charges + amt)

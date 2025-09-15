@@ -12,3 +12,9 @@ class ShellInterface(Protocol):
         Returns the damage value of the shell.
         """
         ...
+    @property
+    def shell_type(self) -> str:
+        """
+        Returns the type of the shell.
+        """
+        ...
