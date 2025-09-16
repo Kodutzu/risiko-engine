@@ -24,8 +24,8 @@ class ShotgunInterface(Protocol):
         Returns the shell currently in the chamber, or None if empty.
         """
         ...
-
-    def load_chamber(self) -> "ShotgunBase":
+        
+    def _load_chamber(self) -> "ShotgunBase":
         """
         Loads a shell from the magazine into the chamber.
 
@@ -35,7 +35,7 @@ class ShotgunInterface(Protocol):
         ...
         
     
-    def unload_chamber(self) -> "ShotgunBase":
+    def _unload_chamber(self) -> "ShotgunBase":
         """
         Unloads the shell from the chamber, typically back into the magazine.
 
@@ -45,7 +45,7 @@ class ShotgunInterface(Protocol):
         ...
 
     
-    def fire(self) -> Tuple[ShellInterface, "ShotgunBase"]:
+    def _fire(self) -> Tuple[ShellInterface, "ShotgunBase"]:
         """
         Fires the shell currently in the chamber.
 

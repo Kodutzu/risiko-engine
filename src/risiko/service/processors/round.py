@@ -16,9 +16,9 @@ def load_new_round(game_state: RisikoState, lives:int, blanks: int):
         RisikoState: A new game state with the updated shotgun magazine.
     """
 
-    new_magazine = game_state._shotgun.magazine.load_round(lives=lives,blanks= blanks)
+    new_magazine = game_state.shotgun.magazine._load_round(lives=lives,blanks= blanks)
 
-    return evolve(game_state, shotgun=evolve(game_state._shotgun, magazine=new_magazine))
+    return evolve(game_state, shotgun=evolve(game_state.shotgun, magazine=new_magazine))
 
 def advance_player_turn(game_state:RisikoState, turns: int = 1):
 

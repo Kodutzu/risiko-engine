@@ -14,8 +14,9 @@ class PlayerBase:
     id: Final[str] 
     charges: int = field(validator=ge(0))
 
+
     @final
-    def lose_charges(self, amt: int) -> "PlayerBase":
+    def _lose_charges(self, amt: int) -> "PlayerBase":
 
         """
         Reduces the player's charges by the specified amount.
@@ -41,7 +42,7 @@ class PlayerBase:
         return evolve(self, charges=new_charge_value)
     
     @final
-    def gain_charges(self, amt: int) -> "PlayerBase":
+    def _gain_charges(self, amt: int) -> "PlayerBase":
 
         """
         Increases the player's charges by the specified amount.
@@ -62,8 +63,3 @@ class PlayerBase:
         new_charge_value = self.charges + amt
         return evolve(self, charges=new_charge_value)
     
-    # @final
-    # def update_charges(self, amt:int) -> "PlayerBase":
-
-    #     new_charges = self.charges + amt
-    #     return evolve(self, charges=self.charges + amt)

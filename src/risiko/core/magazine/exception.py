@@ -1,9 +1,10 @@
-class MagazineException(Exception):
+from ..exception import CoreException
+
+class MagazineException(CoreException):
     """
     Base exception for the magazine component
 
     """
-
     ...
 
 class MagazineEmptyException(MagazineException):

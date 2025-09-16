@@ -1,4 +1,6 @@
-class PlayerException(Exception):
+from ..exception import CoreException
+
+class PlayerException(CoreException):
     """
     Base class for player exceptions.
     """

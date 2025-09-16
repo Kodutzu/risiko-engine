@@ -12,7 +12,7 @@ class MagazineInterface(Protocol):
     """
 
     @property
-    def tube(self) ->  Deque[ShellInterface]:
+    def tube(self) ->  Tuple[ShellInterface,...]:
         """
         Returns the deque of shells currently in the magazine tube.
         """
@@ -25,7 +25,7 @@ class MagazineInterface(Protocol):
         """
         ...
 
-    def load_round(self,lives:int, blanks:int) -> "MagazineBase":
+    def _load_round(self,lives:int, blanks:int) -> "MagazineBase":
         """
         Loads a new round of shells into the magazine.
 
@@ -38,7 +38,7 @@ class MagazineInterface(Protocol):
         """
         ...
     
-    def eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
+    def _eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
 
         """
         Ejects the first shell from the magazine.
@@ -48,7 +48,7 @@ class MagazineInterface(Protocol):
         """
         ...
     
-    def clear(self) -> "MagazineBase":
+    def _clear(self) -> "MagazineBase":
 
         """
         Clears all shells from the magazine.

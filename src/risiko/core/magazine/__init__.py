@@ -5,6 +5,6 @@ from .exception import MagazineEmptyException, MagazineException
 __all__ = [
     "MagazineBase",
     "MagazineInterface",
-    "MagazineEmptyException",
     "MagazineException",
+    "MagazineEmptyException"
 ]

@@ -15,7 +15,7 @@ class RisikoState:
 
     player: PlayerManager = field(factory=PlayerManager)
     turns: TurnManager  = field(factory=TurnManager)
-    _shotgun: ShotgunInterface = field(factory=ShotgunBase, alias="shotgun")
+    shotgun: ShotgunInterface = field(factory=ShotgunBase)
 
 
   

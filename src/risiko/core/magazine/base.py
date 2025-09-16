@@ -14,8 +14,13 @@ class MagazineBase:
     return a new MagazineBase instance.
     """
      
-    tube: Deque[ShellInterface] = field(factory=deque, validator=instance_of(deque))
+    _tube: Deque[ShellInterface] = field(factory=deque, validator=instance_of(deque))
 
+    @property
+    @final
+    def tube(self) ->  Tuple[ShellInterface, ...]:
+        return tuple(self._tube)
+    
     @property
     @final
     def is_empty(self) -> bool:
@@ -25,10 +30,11 @@ class MagazineBase:
         Returns:
             bool: True if the magazine is empty, False otherwise.
         """
-        return not self.tube
+        return not self._tube
+    
     
     @final
-    def load_round(self,lives:int, blanks:int) -> "MagazineBase":
+    def _load_round(self,lives:int, blanks:int) -> "MagazineBase":
         """
         Loads a new round of shells into the magazine, shuffling them randomly.
 
@@ -39,7 +45,7 @@ class MagazineBase:
         Returns:
             MagazineBase: A new MagazineBase instance with the loaded shells.
         """
-        new_tube = self.tube.copy()
+        new_tube = self._tube.copy()
         shells = [LiveShell() for _ in range(lives)] + [BlankShell() for _ in range(blanks)]
         shuffle(shells)
 
@@ -48,7 +54,7 @@ class MagazineBase:
         return evolve(self, tube=new_tube)
     
     @final
-    def eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
+    def _eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
         """
         Ejects the first shell from the magazine.
 
@@ -62,14 +68,14 @@ class MagazineBase:
 
             raise MagazineEmptyException()
 
-        new_tube = self.tube.copy()
+        new_tube = self._tube.copy()
 
         shell = new_tube.popleft()
             
         return (shell, evolve(self, tube=new_tube))
     
     @final
-    def clear(self) -> "MagazineBase":
+    def _clear(self) -> "MagazineBase":
         """
         Clears all shells from the magazine.
 
@@ -83,7 +89,7 @@ class MagazineBase:
             
             raise MagazineEmptyException("Magazine is already Empty")
 
-        new_tube = self.tube.copy()
+        new_tube = self._tube.copy()
         new_tube.clear()
 
         return evolve(self, tube=new_tube)

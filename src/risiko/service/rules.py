@@ -55,7 +55,7 @@ def can_player_act(game_state: RisikoState, player_id: str) -> bool:
     Returns:
         bool: True if the player can act, False otherwise.
     """
-    is_shotgun_loaded = game_state._shotgun.chamber is not None
+    is_shotgun_loaded = game_state.shotgun.chamber is not None
     
     return (
         is_player_turn(game_state, player_id) and
@@ -74,8 +74,8 @@ def has_mixed_bullets(game_state: RisikoState) -> bool:
     Returns:
         bool: True if the magazine has mixed bullets, False otherwise.
     """
-    has_live = any(isinstance(shell, LiveShell) for shell in game_state._shotgun.magazine.tube) 
-    has_blank = any(isinstance(shell, BlankShell) for shell in game_state._shotgun.magazine.tube)
+    has_live = any(isinstance(shell, LiveShell) for shell in game_state.shotgun.magazine.tube) 
+    has_blank = any(isinstance(shell, BlankShell) for shell in game_state.shotgun.magazine.tube)
     
     return has_live and has_blank
 
@@ -89,7 +89,7 @@ def can_load_shell(game_state: RisikoState) -> bool:
     Returns:
         bool: True if a shell can be loaded, False otherwise.
     """
-    return game_state._shotgun.chamber is None and len(game_state._shotgun.magazine.tube) > 0
+    return game_state.shotgun.chamber is None and len(game_state.shotgun.magazine.tube) > 0
 
 def can_fire_shotgun(game_state: RisikoState) -> bool:
     """
@@ -101,7 +101,7 @@ def can_fire_shotgun(game_state: RisikoState) -> bool:
     Returns:
         bool: True if the shotgun can be fired, False otherwise.
     """
-    return game_state._shotgun.chamber is not None
+    return game_state.shotgun.chamber is not None
 
 def can_clear_magazine(game_state: RisikoState) -> bool:
     """
@@ -113,7 +113,7 @@ def can_clear_magazine(game_state: RisikoState) -> bool:
     Returns:
         bool: True if the magazine can be cleared, False otherwise.
     """
-    return len(game_state._shotgun.magazine.tube) > 0
+    return len(game_state.shotgun.magazine.tube) > 0
 
 def is_magazine_empty(game_state: RisikoState) -> bool:
     """
@@ -125,7 +125,7 @@ def is_magazine_empty(game_state: RisikoState) -> bool:
     Returns:
         bool: True if the magazine is empty, False otherwise.
     """
-    return game_state._shotgun.magazine.is_empty
+    return game_state.shotgun.magazine.is_empty
 
 def is_magazine_stocked(game_state: RisikoState) -> bool:
     """
@@ -149,7 +149,7 @@ def is_chamber_empty(game_state: RisikoState) -> bool:
     Returns:
         bool: True if the chamber is empty, False otherwise.
     """
-    return game_state._shotgun.chamber is None
+    return game_state.shotgun.chamber is None
 
 def is_valid_target(game_state: RisikoState, target_player_id: str) -> bool:
     """

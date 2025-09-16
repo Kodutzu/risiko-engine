@@ -1,12 +1,20 @@
 from .base import PlayerBase
-from .exception import PlayerDeadException, PlayerIDExistsException, PlayerIDNotFoundException, PlayerInvalidTurnException
 from .interface import PlayerInterface
+from .exception import (
+    PlayerException,
+    PlayerDeadException,
+    PlayerIDNotFoundException,
+    PlayerIDExistsException,
+    PlayerInvalidTurnException
+)
 
 __all__ = [
     "PlayerBase",
-    "PlayerDeadException",
-    "PlayerIDExistsException",
-    "PlayerIDNotFoundException",
-    "PlayerInvalidTurnException",
     "PlayerInterface",
+    "PlayerException",
+    "PlayerDeadException",
+    "PlayerIDNotFoundException",
+    "PlayerIDExistsException",
+    "PlayerInvalidTurnException"
+
 ]

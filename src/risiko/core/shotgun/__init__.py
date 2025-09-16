@@ -1,12 +1,17 @@
 from .interface import ShotgunInterface
 from .base import ShotgunBase
-from .exception import ShotgunNotLoadedException, ShotgunException
+from .exception import (
+    ShotgunException,
+    ShotgunLoadedException,
+    ShotgunUnLoadedException
+)
 
 __all__ = [
 
     "ShotgunInterface", 
     "ShotgunBase",
-    "ShotgunNotLoadedException", 
-    "ShotgunException"
+    "ShotgunException",
+    "ShotgunLoadedException",
+    "ShotgunUnLoadedException"
 
     ]
