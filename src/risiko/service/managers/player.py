@@ -43,7 +43,7 @@ class PlayerManager:
 
         """
         if not self._pool:
-            raise ValueError("Player pool is empty")
+            return MappingProxyType({}) # Return empty dict if pool is empty
         return MappingProxyType(self._pool)
     
     def _add_player(self, player: PlayerInterface) -> 'PlayerManager':

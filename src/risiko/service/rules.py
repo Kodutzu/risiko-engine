@@ -1,7 +1,5 @@
 from .risiko_state import RisikoState
-from ..core.shell.blank import BlankShell
-from ..core.shell.live import LiveShell
-
+from ..core.shell.interface import ShellInterface
 
 def is_game_over(game_state: RisikoState) -> bool:
     """
@@ -64,21 +62,6 @@ def can_player_act(game_state: RisikoState, player_id: str) -> bool:
     )
 
 
-def has_mixed_bullets(game_state: RisikoState) -> bool:
-    """
-    Checks if the shotgun's magazine contains both live and blank shells.
-
-    Args:
-        game_state (RisikoState): The current state of the game.
-
-    Returns:
-        bool: True if the magazine has mixed bullets, False otherwise.
-    """
-    has_live = any(isinstance(shell, LiveShell) for shell in game_state.shotgun.magazine.tube) 
-    has_blank = any(isinstance(shell, BlankShell) for shell in game_state.shotgun.magazine.tube)
-    
-    return has_live and has_blank
-
 def can_load_shell(game_state: RisikoState) -> bool:
     """
     Checks if a shell can be loaded into the shotgun's chamber.
@@ -126,18 +109,6 @@ def is_magazine_empty(game_state: RisikoState) -> bool:
         bool: True if the magazine is empty, False otherwise.
     """
     return game_state.shotgun.magazine.is_empty
-
-def is_magazine_stocked(game_state: RisikoState) -> bool:
-    """
-    Checks if the shotgun's magazine is stocked with mixed bullets.
-
-    Args:
-        game_state (RisikoState): The current state of the game.
-
-    Returns:
-        bool: True if the magazine is stocked with mixed bullets, False otherwise.
-    """
-    return has_mixed_bullets(game_state=game_state)
 
 def is_chamber_empty(game_state: RisikoState) -> bool:
     """

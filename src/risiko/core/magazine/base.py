@@ -1,10 +1,10 @@
 from attrs import define, field, evolve
 from attrs.validators import instance_of
-from typing import Deque, final, Tuple
+from typing import Deque, final, Tuple, Iterable
 from collections import deque
-from random import shuffle
 
-from ..shell import ShellInterface, LiveShell, BlankShell
+
+from ..shell import ShellInterface
 from .exception import MagazineEmptyException
 
 @define(frozen=True)
@@ -31,24 +31,24 @@ class MagazineBase:
             bool: True if the magazine is empty, False otherwise.
         """
         return not self._tube
-    
+
     
     @final
-    def _load_round(self,lives:int, blanks:int) -> "MagazineBase":
+    def _load_round(self, shells: Iterable[ShellInterface]) -> "MagazineBase":
         """
-        Loads a new round of shells into the magazine, shuffling them randomly.
+        Loads a list of shell objects into the magazine.
 
         Args:
-            lives (int): The number of live shells to add.
-            blanks (int): The number of blank shells to add.
+            shells (List[ShellInterface]): A list of shell objects to add to the magazine.
 
         Returns:
-            MagazineBase: A new MagazineBase instance with the loaded shells.
+            MagazineBase: A new MagazineBase instance with the added shells.
+        
+        Raises:
+            MagazineFullException: If the magazine is or becomes full during the operation.
         """
-        new_tube = self._tube.copy()
-        shells = [LiveShell() for _ in range(lives)] + [BlankShell() for _ in range(blanks)]
-        shuffle(shells)
 
+        new_tube = self._tube.copy()
         new_tube.extend(shells)
 
         return evolve(self, tube=new_tube)

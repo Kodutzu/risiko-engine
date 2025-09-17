@@ -3,5 +3,6 @@ from .turn import TurnManager
 
 __all__ = [
     "PlayerManager", 
-    "TurnManager"
+    "TurnManager",
+
     ]

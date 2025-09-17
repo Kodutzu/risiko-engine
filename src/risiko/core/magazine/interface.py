@@ -1,4 +1,4 @@
-from typing import Deque, Protocol,runtime_checkable, TYPE_CHECKING, Tuple
+from typing import Protocol,runtime_checkable, TYPE_CHECKING, Tuple, Iterable
 from ..shell import ShellInterface
 
 if TYPE_CHECKING:
@@ -25,7 +25,7 @@ class MagazineInterface(Protocol):
         """
         ...
 
-    def _load_round(self,lives:int, blanks:int) -> "MagazineBase":
+    def _load_round(self, shells: Iterable[ShellInterface])-> "MagazineBase":
         """
         Loads a new round of shells into the magazine.
 

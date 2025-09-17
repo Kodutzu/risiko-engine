@@ -14,7 +14,6 @@ class PlayerBase:
     id: Final[str] 
     charges: int = field(validator=ge(0))
 
-
     @final
     def _lose_charges(self, amt: int) -> "PlayerBase":
 
@@ -62,4 +61,4 @@ class PlayerBase:
         
         new_charge_value = self.charges + amt
         return evolve(self, charges=new_charge_value)
-    
+

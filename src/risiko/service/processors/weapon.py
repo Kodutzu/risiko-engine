@@ -1,8 +1,5 @@
 from attrs import evolve
 from ..risiko_state import RisikoState
-from ...core.magazine.exception import MagazineException
-from ..rules import has_mixed_bullets
-
 
 def shotgun_load_shell(game_state:RisikoState):
 
@@ -18,10 +15,6 @@ def shotgun_load_shell(game_state:RisikoState):
     Raises:
         MagazineException: If there are no mixed bullets in the magazine (based on game rules).
     """
-
-    if not has_mixed_bullets(game_state):
-        raise MagazineException("No mixed bullets in the magazine - clear and reload ")
-    
     new_shotgun = game_state.shotgun._load_chamber()
 
     return evolve(game_state, shotgun=new_shotgun)
