@@ -1,12 +1,13 @@
 from attrs import evolve
+from typing import Tuple
 
 from ..risiko_state import RisikoState
 from ...core.shell.interface import ShellInterface
 from ...core.player.exception import PlayerDeadException, PlayerInvalidTurnException
 
-from ..rules import is_player_alive, is_player_turn
+from ..helper import is_player_alive, is_player_turn
 
-def fire_shell(game_state: RisikoState, shooter_id: str):
+def fire_shell(game_state: RisikoState, shooter_id: str) -> Tuple[ShellInterface, RisikoState]:
     """
     Fires a shell from the shotgun, updating the game state.
 

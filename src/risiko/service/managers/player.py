@@ -42,8 +42,6 @@ class PlayerManager:
             Dict[str, PlayerInterface]: A dictionary where keys are player IDs and values are player objects.
 
         """
-        if not self._pool:
-            return MappingProxyType({}) # Return empty dict if pool is empty
         return MappingProxyType(self._pool)
     
     def _add_player(self, player: PlayerInterface) -> 'PlayerManager':

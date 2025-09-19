@@ -3,34 +3,24 @@ from attrs.validators import instance_of
 from typing import Deque, final, Tuple, Iterable
 from collections import deque
 
-
-from ..shell import ShellInterface
+from ..shell.interface import ShellInterface
 from .exception import MagazineEmptyException
+from .interface import MagazineInterface
 
 @define(frozen=True)
-class MagazineBase:
+class MagazineBase(MagazineInterface):
+
     """Represents the shotgun's magazine, holding a deque of shells.
     This class is immutable; all methods that modify the magazine's state
     return a new MagazineBase instance.
     """
      
-    _tube: Deque[ShellInterface] = field(factory=deque, validator=instance_of(deque))
+    _tube: Deque[ShellInterface] = field(factory=deque)
 
     @property
     @final
     def tube(self) ->  Tuple[ShellInterface, ...]:
         return tuple(self._tube)
-    
-    @property
-    @final
-    def is_empty(self) -> bool:
-        """
-        Checks if the magazine is empty.
-
-        Returns:
-            bool: True if the magazine is empty, False otherwise.
-        """
-        return not self._tube
 
     
     @final
@@ -39,7 +29,7 @@ class MagazineBase:
         Loads a list of shell objects into the magazine.
 
         Args:
-            shells (List[ShellInterface]): A list of shell objects to add to the magazine.
+            shells (List[ShellType]): A list of shell objects to add to the magazine.
 
         Returns:
             MagazineBase: A new MagazineBase instance with the added shells.
@@ -59,12 +49,12 @@ class MagazineBase:
         Ejects the first shell from the magazine.
 
         Returns:
-            Tuple[ShellInterface, MagazineBase]: A tuple containing the ejected shell and a new MagazineBase instance.
+            Tuple[ShellType, MagazineBase]: A tuple containing the ejected shell and a new MagazineBase instance.
 
         Raises:
             MagazineEmptyException: If the magazine is empty.
         """
-        if self.is_empty:
+        if not self.tube:
 
             raise MagazineEmptyException()
 
@@ -85,7 +75,7 @@ class MagazineBase:
         Raises:
             MagazineEmptyException: If the magazine is already empty.
         """
-        if self.is_empty:
+        if not self.tube:
             
             raise MagazineEmptyException("Magazine is already Empty")
 

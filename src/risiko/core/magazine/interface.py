@@ -1,8 +1,8 @@
-from typing import Protocol,runtime_checkable, TYPE_CHECKING, Tuple, Iterable
+from typing import Protocol, runtime_checkable, TYPE_CHECKING, Tuple, Iterable
 from ..shell import ShellInterface
 
 if TYPE_CHECKING:
-    from .base import MagazineBase
+    pass
 
 @runtime_checkable
 class MagazineInterface(Protocol):
@@ -12,51 +12,41 @@ class MagazineInterface(Protocol):
     """
 
     @property
-    def tube(self) ->  Tuple[ShellInterface,...]:
+    def tube(self) -> Tuple[ShellInterface, ...]:
         """
         Returns the deque of shells currently in the magazine tube.
         """
         ...
-    
-    @property
-    def is_empty(self) ->  bool:
-        """
-        Checks if the magazine is empty.
-        """
-        ...
 
-    def _load_round(self, shells: Iterable[ShellInterface])-> "MagazineBase":
+
+    def _load_round(self, shells: Iterable[ShellInterface]) -> "MagazineInterface":
         """
         Loads a new round of shells into the magazine.
 
         Args:
-            lives (int): The number of live shells to add.
-            blanks (int): The number of blank shells to add.
+            shells (Iterable[ShellType]): A collection of shell objects to add to the magazine.
 
         Returns:
-            MagazineBase: A new MagazineBase instance with the loaded shells.
+            MagazineInterface[ShellType]: A new magazine instance with the loaded shells.
         """
         ...
-    
-    def _eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
 
+    def _eject_shell(self) -> Tuple[ShellInterface, "MagazineInterface"]:
         """
         Ejects the first shell from the magazine.
 
         Returns:
-            Tuple[ShellInterface, MagazineBase]: A tuple containing the ejected shell and a new MagazineBase instance.
+            Tuple[ShellType, MagazineInterface[ShellType]]: A tuple containing the ejected shell and a new magazine instance.
         """
         ...
-    
-    def _clear(self) -> "MagazineBase":
 
+    def _clear(self) -> "MagazineInterface":
         """
         Clears all shells from the magazine.
 
         Returns:
-            MagazineBase: A new MagazineBase instance with an empty magazine.
+            MagazineInterface[ShellType]: A new magazine instance with an empty magazine.
         """
-        
         ...
 
 

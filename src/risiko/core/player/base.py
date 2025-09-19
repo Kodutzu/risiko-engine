@@ -1,20 +1,24 @@
 from attrs import define, field, evolve
 from attrs.validators import ge
-from typing import Final, final
+from typing import final, override
 
 from .exception import PlayerDeadException
+from .interface import PlayerInterface
 
 @define(frozen=True)
-class PlayerBase:
+class PlayerBase(PlayerInterface):
 
     """
     Represents a player in the game with an ID and a number of charges (lives).
     
     """
-    id: Final[str] 
+    id: str
     charges: int = field(validator=ge(0))
 
+    
+
     @final
+    @override
     def _lose_charges(self, amt: int) -> "PlayerBase":
 
         """
@@ -41,6 +45,7 @@ class PlayerBase:
         return evolve(self, charges=new_charge_value)
     
     @final
+    @override
     def _gain_charges(self, amt: int) -> "PlayerBase":
 
         """

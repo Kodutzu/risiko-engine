@@ -108,7 +108,7 @@ def is_magazine_empty(game_state: RisikoState) -> bool:
     Returns:
         bool: True if the magazine is empty, False otherwise.
     """
-    return game_state.shotgun.magazine.is_empty
+    return not game_state.shotgun.magazine.tube
 
 def is_chamber_empty(game_state: RisikoState) -> bool:
     """

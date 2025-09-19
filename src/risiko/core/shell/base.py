@@ -1,8 +1,11 @@
-from attrs import define
+from attrs import define, field
+from attrs.validators import ge
+
+from .interface import ShellInterface
 
 @define(frozen=True)
-class ShellBase:
+class ShellBase(ShellInterface):
     """Represents a generic shell with configurable properties."""
     shell_type: str 
-    damage: int = 0
+    damage: int = field(validator=ge(0))
 

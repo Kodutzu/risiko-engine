@@ -1,21 +1,15 @@
-from typing import Protocol, runtime_checkable, TYPE_CHECKING
+from typing import Protocol, runtime_checkable, TYPE_CHECKING, Final
 
-
-if TYPE_CHECKING:
-    from .base import PlayerBase
 
 @runtime_checkable
 class PlayerInterface(Protocol):
 
-    @property
-    def id(self) -> str: ...
-
-    @property
-    def charges(self) -> int:...
+    id: str
+    charges: int
 
     
-    def _lose_charges(self,amt: int) -> "PlayerBase":
+    def _lose_charges(self,amt: int) -> "PlayerInterface":
         ...
 
-    def _gain_charges(self,amt: int) -> "PlayerBase":
+    def _gain_charges(self,amt: int) -> "PlayerInterface":
         ...

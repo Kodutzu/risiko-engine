@@ -1,7 +1,6 @@
-from typing import TypedDict
+from attrs import define
 
-class ShellData(TypedDict):
+@define
+class ShellData:
     shell_type: str
     damage: int
-
-    
