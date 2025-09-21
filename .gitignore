@@ -1,12 +1,9 @@
 .pytest_cache
 __pycache__/
-Testing/
 venv
-main.py
 README.md
-tutor.md
 risiko_engine.egg-info
 pyproject.toml
-tests
 archive
 .VSCodeCounter
+tests

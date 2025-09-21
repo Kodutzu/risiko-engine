@@ -54,7 +54,6 @@ class ShotgunBase(ShotgunInterface):
         if self.chamber is None:
             raise ShotgunUnLoadedException("Attempted to unload, chamber is already empty")
         
-        # Refactored to use the interface method, removing dependency on concrete MagazineBase
         new_magazine = self.magazine.load_round([self.chamber])
         return evolve(self, chamber=None, magazine=new_magazine)
 
@@ -72,7 +71,7 @@ class ShotgunBase(ShotgunInterface):
             ShotgunUnLoadedException: If the chamber is empty.
         """
         if self.chamber is None:
-            raise ShotgunUnLoadedException()
+            raise ShotgunUnLoadedException(message="Attempted to fire, chamber is empty (Not Loaded)")
         
         fired_shell = self.chamber
 
