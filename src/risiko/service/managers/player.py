@@ -13,6 +13,18 @@ class PlayerManager:
     """
     _pool: Dict[str, PlayerInterface] = field(factory=dict, alias="pool", kw_only=True)
 
+    @property
+    def player_pool(self) -> MappingProxyType[str, PlayerInterface]:
+
+        """
+        Returns a read-only proxy of the dictionary of all players currently managed.
+
+        Returns:
+            MappingProxyType[str, PlayerInterface]: A read-only proxy of the dictionary of players.
+
+        """
+        return MappingProxyType(self._pool)
+    
     def get_player(self, player_id: str) -> PlayerInterface:
 
         """
@@ -31,17 +43,7 @@ class PlayerManager:
             return self._pool[player_id]
         except KeyError:
             raise PlayerIDNotFoundException(id=player_id, info="couldn't able to get the player")
-        
-    def get_all_player(self) -> MappingProxyType[str, PlayerInterface]:
 
-        """
-        Returns a read-only proxy of the dictionary of all players currently managed.
-
-        Returns:
-            MappingProxyType[str, PlayerInterface]: A read-only proxy of the dictionary of players.
-
-        """
-        return MappingProxyType(self._pool)
     
     def add_player(self, player: PlayerInterface) -> 'PlayerManager':
 

@@ -44,7 +44,9 @@ class RisikoEngine:
             id (str): The ID of the new player.
             charges (int): The initial charges (lives) for the new player.
         """
-        self._state = processors.add_player_to_game(self._state, id, charges)
+        from .core.player.base import PlayerBase # Import PlayerBase here
+        player_to_add = PlayerBase(id=id, charges=charges)
+        self._state = processors.add_player_to_game(self._state, player_to_add)
         
 
     def remove_player(self, id: str) -> None:

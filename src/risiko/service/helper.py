@@ -12,7 +12,7 @@ def is_game_over(game_state: RisikoState) -> bool:
         bool: True if the game is over, False otherwise.
     """
     alive_players = [
-        p for p in game_state.player.get_all_player().values() if p.charges > 0
+        p for p in game_state.player.player_pool.values() if p.charges > 0
     ]
     return len(alive_players) <= 1
 
@@ -147,4 +147,4 @@ def can_start_game(game_state: RisikoState) -> bool:
         bool: True if the game can be started, False otherwise.
     """
     # Requires at least two players to start the game
-    return len(game_state.player.get_all_player()) >= 2
+    return len(game_state.player.player_pool) >= 2

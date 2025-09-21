@@ -1,30 +1,25 @@
 from attrs import evolve
 
 from ..risiko_state import RisikoState
-from ...core.player.base import PlayerBase
+from ...core.player.interface import PlayerInterface # Import the interface
 
-def add_player_to_game(game_state: RisikoState, id: str, charges: int) -> RisikoState:
-
+def add_player_to_game(game_state: RisikoState, player: PlayerInterface) -> RisikoState:
     """
     Adds a new player to the game.
 
     Args:
         game_state (RisikoState): The current state of the game.
-        id (str): The ID of the new player.
-        charges (int): The initial charges (lives) for the new player.
+        player (PlayerInterface): The player object to add.
 
     Returns:
         RisikoState: A new game state with the player added.
     """
-
-    new_player_manager = game_state.player.add_player(player=PlayerBase(id=str(id), charges=int(charges)))
-
-    new_turn_manager = game_state.turns.add_id(id)
+    new_player_manager = game_state.player.add_player(player=player)
+    new_turn_manager = game_state.turns.add_id(player.id)
     
     return evolve(game_state, player=new_player_manager, turns=new_turn_manager)
 
 def remove_player_from_game(game_state: RisikoState, id: str) -> RisikoState:
-
     """
     Removes a player from the game.
 
