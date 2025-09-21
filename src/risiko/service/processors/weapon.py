@@ -14,9 +14,9 @@ def shotgun_load_shell(game_state:RisikoState):
         RisikoState: A new game state with the shotgun's chamber loaded.
 
     Raises:
-        MagazineException: If there are no mixed bullets in the magazine (based on game rules).
+        ShotgunLoadedException: If the chamber is already loaded.
     """
-    new_shotgun = game_state.shotgun._load_chamber()
+    new_shotgun = game_state.shotgun.load_chamber()
 
     return evolve(game_state, shotgun=new_shotgun)
 
@@ -34,7 +34,7 @@ def unload_shotgun_chamber(game_state:RisikoState):
 
     """
 
-    new_shotgun = game_state.shotgun._unload_chamber()
+    new_shotgun = game_state.shotgun.unload_chamber()
 
     return evolve(game_state, shotgun=new_shotgun)
 
@@ -48,7 +48,7 @@ def replace_chamber_shell_from_shotgun(game_state:RisikoState, shell: ShellData)
 
     Args:
         game_state (RisikoState): The current state of the game.
-        shell (Literal["live", "blank"]): The shell to replace the current shell in the chamber.
+        shell (ShellData): The shell to replace the current shell in the chamber.
 
     Returns:
         RisikoState: A new game state with the shell replaced in the chamber.

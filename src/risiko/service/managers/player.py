@@ -11,7 +11,7 @@ class PlayerManager:
     Manages the collection of players in the game. It is an immutable class.
     All methods that modify the player collection return a new PlayerManager instance.
     """
-    _pool: Dict[str, PlayerInterface] = field(factory=dict)
+    _pool: Dict[str, PlayerInterface] = field(factory=dict, alias="pool", kw_only=True)
 
     def get_player(self, player_id: str) -> PlayerInterface:
 
@@ -35,16 +35,15 @@ class PlayerManager:
     def get_all_player(self) -> MappingProxyType[str, PlayerInterface]:
 
         """
-        Returns a dictionary of all players currently managed.
+        Returns a read-only proxy of the dictionary of all players currently managed.
 
         Returns:
-
-            Dict[str, PlayerInterface]: A dictionary where keys are player IDs and values are player objects.
+            MappingProxyType[str, PlayerInterface]: A read-only proxy of the dictionary of players.
 
         """
         return MappingProxyType(self._pool)
     
-    def _add_player(self, player: PlayerInterface) -> 'PlayerManager':
+    def add_player(self, player: PlayerInterface) -> 'PlayerManager':
 
         """
 
@@ -67,7 +66,7 @@ class PlayerManager:
 
         return evolve(self, pool=new_pool)
     
-    def _update_player(self, player: PlayerInterface) -> "PlayerManager":
+    def update_player(self, player: PlayerInterface) -> "PlayerManager":
 
         """
 
@@ -91,7 +90,7 @@ class PlayerManager:
 
         return evolve(self, pool=new_pool)
 
-    def _remove_player(self, player_id: str) -> 'PlayerManager':
+    def remove_player(self, player_id: str) -> 'PlayerManager':
         
         """
         Removes a player from the manager by their ID.

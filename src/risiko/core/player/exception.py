@@ -46,7 +46,7 @@ class PlayerIDExistsException(PlayerException):
             id (str): The ID of the player that already exists.
             info (str): Additional information about the exception.
         """
-        super().__init__(f"Player with ID '{id}' already exists.")
+        super().__init__(f"Player with ID '{id}' already exists - {info}.")
 
 class PlayerInvalidTurnException(PlayerException):
     """
@@ -60,4 +60,4 @@ class PlayerInvalidTurnException(PlayerException):
             id (str): The ID of the player who attempted an action out of turn.
             info (str): Additional information about the exception.
         """
-        super().__init__(f"Player with ID '{id}' is not the current player.")
+        super().__init__(f"Player with ID '{id}' is not the current player - {info}.")

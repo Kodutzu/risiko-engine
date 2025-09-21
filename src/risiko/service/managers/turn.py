@@ -15,8 +15,8 @@ class TurnManager:
     return a new TurnManager instance.
     """
     
-    _order: Deque[str] = field(default=Factory(deque), converter=deque) 
-    direction: int = field(default=1, converter=int, validator=in_((-1, 1)))
+    _order: Deque[str] = field(default=Factory(deque), alias="order",kw_only=True) 
+    _direction: int = field(default=1, converter=int, validator=in_((-1, 1)),alias="direction", kw_only=True)
 
     @property
     def current_player_id(self) -> str:
@@ -39,12 +39,21 @@ class TurnManager:
         
     @property
     def turn_order(self) -> Tuple[str,...]:
+        """
+        Returns the current turn order as a tuple of player IDs.
+
+        Returns:
+            Tuple[str,...]: A tuple of player IDs representing the turn order.
+
+        Raises:
+            ValueError: If the turn order is empty.
+        """
         if not self._order: #if order is empty, return the order
             raise ValueError("Turn order is empty")
         
         return tuple(self._order)
     
-    def _remove_id(self, id:str) -> "TurnManager":
+    def remove_id(self, id:str) -> "TurnManager":
         """
         Removes a player from the turn order.
 
@@ -68,7 +77,7 @@ class TurnManager:
 
             raise PlayerIDNotFoundException(id=id, info="There is no player with this ID.")
 
-    def _add_id(self, id: str) -> "TurnManager":
+    def add_id(self, id: str) -> "TurnManager":
         """
         Adds a player to the end of the order.
 
@@ -91,7 +100,7 @@ class TurnManager:
 
         return evolve(self, order=new_order)
     
-    def _advance(self, turns: int = 1) -> "TurnManager":
+    def advance(self, turns: int = 1) -> "TurnManager":
         """
         Advances the order by a specified number of turns.
 
@@ -103,15 +112,15 @@ class TurnManager:
         """
         new_order = self._order.copy()
 
-        new_order.rotate(-(turns * self.direction)) 
+        new_order.rotate(-(turns * self._direction)) 
 
         return evolve(self, order=new_order)
 
-    def _reverse_order(self) -> "TurnManager":
+    def reverse_order(self) -> "TurnManager":
         """
         Reverses the direction of the order.
 
         Returns:
             TurnManager: A new TurnManager instance with the reversed direction.
         """
-        return evolve(self, direction=self.direction * -1)
+        return evolve(self, direction=self._direction * -1)

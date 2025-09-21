@@ -29,7 +29,7 @@ def fire_shell(game_state: RisikoState, shooter_id: str) -> Tuple[ShellInterface
 
         raise PlayerInvalidTurnException(id=shooter_id, info="coudln't able to fire the shell")
     
-    fired_shell,new_shotgun = game_state.shotgun._fire()
+    fired_shell,new_shotgun = game_state.shotgun.fire()
     
     return (fired_shell, evolve(game_state, shotgun=new_shotgun))
 
@@ -54,8 +54,8 @@ def hit_shell(game_state:RisikoState, target_id: str, fired_shell: ShellInterfac
     target_player = game_state.player.get_player(target_id)
 
 
-    updated_player = target_player._lose_charges(fired_shell.damage)
+    updated_player = target_player.lose_charges(fired_shell.damage)
 
-    new_player_manager = game_state.player._update_player(player=updated_player)
+    new_player_manager = game_state.player.update_player(player=updated_player)
 
     return evolve(game_state, player=new_player_manager)

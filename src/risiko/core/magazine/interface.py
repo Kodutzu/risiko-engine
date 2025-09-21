@@ -1,9 +1,6 @@
-from typing import Protocol, runtime_checkable, TYPE_CHECKING, Tuple, Iterable
+from typing import Protocol, runtime_checkable, Tuple, Iterable
 from ..shell import ShellInterface
-
-if TYPE_CHECKING:
-    pass
-
+\
 @runtime_checkable
 class MagazineInterface(Protocol):
     """
@@ -19,7 +16,7 @@ class MagazineInterface(Protocol):
         ...
 
 
-    def _load_round(self, shells: Iterable[ShellInterface]) -> "MagazineInterface":
+    def load_round(self, shells: Iterable[ShellInterface]) -> "MagazineInterface":
         """
         Loads a new round of shells into the magazine.
 
@@ -31,7 +28,7 @@ class MagazineInterface(Protocol):
         """
         ...
 
-    def _eject_shell(self) -> Tuple[ShellInterface, "MagazineInterface"]:
+    def eject_shell(self) -> Tuple[ShellInterface, "MagazineInterface"]:
         """
         Ejects the first shell from the magazine.
 
@@ -40,7 +37,7 @@ class MagazineInterface(Protocol):
         """
         ...
 
-    def _clear(self) -> "MagazineInterface":
+    def clear(self) -> "MagazineInterface":
         """
         Clears all shells from the magazine.
 

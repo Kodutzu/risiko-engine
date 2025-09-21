@@ -18,9 +18,9 @@ def player_lose_charges(game_state:RisikoState, player_id: str, charges_to_lose:
     
     player = game_state.player.get_player(player_id)
 
-    updated_player = player._lose_charges(charges_to_lose)
+    updated_player = player.lose_charges(charges_to_lose)
 
-    new_player_manager = game_state.player._update_player(player=updated_player)
+    new_player_manager = game_state.player.update_player(player=updated_player)
 
     return evolve(game_state, player=new_player_manager)
 
@@ -40,8 +40,8 @@ def player_gain_charges(game_state:RisikoState, player_id: str, charges_to_gain:
     
     player = game_state.player.get_player(player_id)
 
-    updated_player = player._gain_charges(charges_to_gain)
+    updated_player = player.gain_charges(charges_to_gain)
 
-    new_player_manager = game_state.player._update_player(player=updated_player)
+    new_player_manager = game_state.player.update_player(player=updated_player)
 
     return evolve(game_state, player=new_player_manager)

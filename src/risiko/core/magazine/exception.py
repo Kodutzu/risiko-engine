@@ -6,4 +6,8 @@ class MagazineException(CoreException):
 
 class MagazineEmptyException(MagazineException):
     """Raised when an operation is attempted on an empty magazine."""
-    pass
+
+    def __init__(self, info) -> None:
+
+        super().__init__(f"Magazine is empty - {info}")
+    

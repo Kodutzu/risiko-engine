@@ -13,30 +13,30 @@ class ShotgunInterface(Protocol):
     chamber: Optional[ShellInterface] 
 
 
-    def _load_chamber(self) -> "ShotgunInterface":
+    def load_chamber(self) -> "ShotgunInterface":
         """
         Loads a shell from the magazine into the chamber.
 
         Returns:
-            ShotgunInterface[ShellType]: A new shotgun instance with the chamber loaded.
+            ShotgunInterface: A new shotgun instance with the chamber loaded.
         """
         ...
 
-    def _unload_chamber(self) -> "ShotgunInterface":
+    def unload_chamber(self) -> "ShotgunInterface":
         """
         Unloads the shell from the chamber, typically back into the magazine.
 
         Returns:
-            ShotgunInterface[ShellType]: A new shotgun instance with the chamber unloaded.
+            ShotgunInterface: A new shotgun instance with the chamber unloaded.
         """
         ...
 
-    def _fire(self) -> Tuple[ShellInterface, "ShotgunInterface"]:
+    def fire(self) -> Tuple[ShellInterface, "ShotgunInterface"]:
         """
         Fires the shell currently in the chamber.
 
         Returns:
-            Tuple[ShellType, ShotgunInterface[ShellType]]: A tuple containing the fired shell and a new shotgun instance with an empty chamber.
+            Tuple[ShellInterface, ShotgunInterface]: A tuple containing the fired shell and a new shotgun instance with an empty chamber.
         """
         ...
 

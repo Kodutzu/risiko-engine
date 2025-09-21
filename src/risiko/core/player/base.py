@@ -12,14 +12,14 @@ class PlayerBase(PlayerInterface):
     Represents a player in the game with an ID and a number of charges (lives).
     
     """
-    id: str
-    charges: int = field(validator=ge(0))
+    id: str = field(kw_only=True)
+    charges: int = field(validator=ge(0), kw_only=True)
 
     
 
     @final
     @override
-    def _lose_charges(self, amt: int) -> "PlayerBase":
+    def lose_charges(self, amt: int) -> "PlayerBase":
 
         """
         Reduces the player's charges by the specified amount.
@@ -46,7 +46,7 @@ class PlayerBase(PlayerInterface):
     
     @final
     @override
-    def _gain_charges(self, amt: int) -> "PlayerBase":
+    def gain_charges(self, amt: int) -> "PlayerBase":
 
         """
         Increases the player's charges by the specified amount.

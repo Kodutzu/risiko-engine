@@ -1,7 +1,8 @@
 from .service import RisikoState
 from .service import processors
 from .service import helper
-from .core.shell.dto import ShellData
+from .core import ShellData
+from .engine import RisikoEngine
 
 
 __all__ = [
@@ -9,7 +10,7 @@ __all__ = [
     "RisikoState",
     "processors",
     "helper",
-    "ShellData"
-    
+    "ShellData",
+    "RisikoEngine"
 ]
 

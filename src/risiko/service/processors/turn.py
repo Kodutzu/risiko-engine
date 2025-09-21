@@ -15,7 +15,7 @@ def advance_player_turn(game_state:RisikoState, turns: int = 1):
         RisikoState: A new game state with the advanced turn order.
     """
 
-    new_turn_manager = game_state.turns._advance(turns)
+    new_turn_manager = game_state.turns.advance(turns)
 
     return evolve(game_state, turns=new_turn_manager)
 
@@ -31,5 +31,5 @@ def reverse_turn_order(game_state:RisikoState) -> RisikoState:
         RisikoState: A new game state with the reversed turn order direction.
     """
     
-    new_turn_manager = game_state.turns._reverse_order()
+    new_turn_manager = game_state.turns.reverse_order()
     return evolve(game_state, turns=new_turn_manager)

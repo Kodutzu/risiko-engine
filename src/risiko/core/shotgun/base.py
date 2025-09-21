@@ -1,10 +1,10 @@
-from typing import Optional, Tuple, final
+from typing import Optional, Tuple, final, override
 from attrs import define, field, evolve
 
 from ..shell.interface import ShellInterface
 from .interface import ShotgunInterface
 from ..magazine import MagazineInterface, MagazineBase
-from .interface import ShotgunInterface # Added import
+from .interface import ShotgunInterface 
 from .exception import ShotgunLoadedException, ShotgunUnLoadedException
 
 @define(frozen=True)
@@ -15,11 +15,12 @@ class ShotgunBase(ShotgunInterface):
     return a new ShotgunBase instance.
     """
 
-    magazine: MagazineInterface = field(factory=MagazineBase)
-    chamber: Optional[ShellInterface] = field(default=None)
+    magazine: MagazineInterface = field(factory=MagazineBase, kw_only=True)
+    chamber: Optional[ShellInterface] = field(default=None, kw_only=True)
 
     @final
-    def _load_chamber(self) -> "ShotgunBase":
+    @override
+    def load_chamber(self) -> "ShotgunBase":
         """
         Loads a shell from the magazine into the chamber.
 
@@ -33,13 +34,14 @@ class ShotgunBase(ShotgunInterface):
         if self.chamber is not None:
             raise ShotgunLoadedException("Shotgun is Already Loaded")
         
-        new_chamber, new_magazine = self.magazine._eject_shell()
+        new_chamber, new_magazine = self.magazine.eject_shell()
 
         return evolve(self, chamber=new_chamber, magazine=new_magazine)
     
 
     @final
-    def _unload_chamber(self) -> "ShotgunBase":
+    @override
+    def unload_chamber(self) -> "ShotgunBase":
         """
         Unloads the shell from the chamber back into the magazine.
 
@@ -53,12 +55,13 @@ class ShotgunBase(ShotgunInterface):
             raise ShotgunUnLoadedException("Attempted to unload, chamber is already empty")
         
         # Refactored to use the interface method, removing dependency on concrete MagazineBase
-        new_magazine = self.magazine._load_round([self.chamber])
+        new_magazine = self.magazine.load_round([self.chamber])
         return evolve(self, chamber=None, magazine=new_magazine)
 
 
     @final
-    def _fire(self) -> Tuple[ShellInterface, "ShotgunBase"]:
+    @override
+    def fire(self) -> Tuple[ShellInterface, "ShotgunBase"]:
         """
         Fires the shell currently in the chamber.
 
@@ -66,7 +69,7 @@ class ShotgunBase(ShotgunInterface):
             Tuple[ShellTypeT, ShotgunBase]: A tuple containing the fired shell and a new ShotgunBase instance with an empty chamber.
 
         Raises:
-            ShotgunNotLoadedException: If the chamber is empty.
+            ShotgunUnLoadedException: If the chamber is empty.
         """
         if self.chamber is None:
             raise ShotgunUnLoadedException()

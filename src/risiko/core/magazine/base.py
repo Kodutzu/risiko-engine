@@ -1,6 +1,5 @@
 from attrs import define, field, evolve
-from attrs.validators import instance_of
-from typing import Deque, final, Tuple, Iterable
+from typing import Deque, final, Tuple, Iterable, override
 from collections import deque
 
 from ..shell.interface import ShellInterface
@@ -15,27 +14,26 @@ class MagazineBase(MagazineInterface):
     return a new MagazineBase instance.
     """
      
-    _tube: Deque[ShellInterface] = field(factory=deque)
+    _tube: Deque[ShellInterface] = field(factory=deque, alias="tube", kw_only=True)
 
     @property
     @final
+    @override
     def tube(self) ->  Tuple[ShellInterface, ...]:
         return tuple(self._tube)
 
     
     @final
-    def _load_round(self, shells: Iterable[ShellInterface]) -> "MagazineBase":
+    @override
+    def load_round(self, shells: Iterable[ShellInterface]) -> "MagazineBase":
         """
         Loads a list of shell objects into the magazine.
 
         Args:
-            shells (List[ShellType]): A list of shell objects to add to the magazine.
+            shells (Iterable[ShellInterface]): A list of shell objects to add to the magazine.
 
         Returns:
             MagazineBase: A new MagazineBase instance with the added shells.
-        
-        Raises:
-            MagazineFullException: If the magazine is or becomes full during the operation.
         """
 
         new_tube = self._tube.copy()
@@ -44,7 +42,8 @@ class MagazineBase(MagazineInterface):
         return evolve(self, tube=new_tube)
     
     @final
-    def _eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
+    @override
+    def eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
         """
         Ejects the first shell from the magazine.
 
@@ -56,7 +55,7 @@ class MagazineBase(MagazineInterface):
         """
         if not self.tube:
 
-            raise MagazineEmptyException()
+            raise MagazineEmptyException(info="Failed to Eject Shell")
 
         new_tube = self._tube.copy()
 
@@ -65,7 +64,8 @@ class MagazineBase(MagazineInterface):
         return (shell, evolve(self, tube=new_tube))
     
     @final
-    def _clear(self) -> "MagazineBase":
+    @override
+    def clear(self) -> "MagazineBase":
         """
         Clears all shells from the magazine.
 
@@ -77,7 +77,7 @@ class MagazineBase(MagazineInterface):
         """
         if not self.tube:
             
-            raise MagazineEmptyException("Magazine is already Empty")
+            raise MagazineEmptyException(info="failed to clear magazine")
 
         new_tube = self._tube.copy()
         new_tube.clear()

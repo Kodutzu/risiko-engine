@@ -10,7 +10,7 @@ class ShotgunUnLoadedException(ShotgunException):
 
     def __init__(self, message="Shotgun is not loaded"):
         """
-        Initializes the ShotgunNotLoadedException.
+        Initializes the ShotgunUnLoadedException.
 
         Args:
             message (str, optional): The error message. Defaults to "Shotgun is not loaded".

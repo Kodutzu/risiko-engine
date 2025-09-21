@@ -34,6 +34,6 @@ __all__ = [
     "ShotgunLoadedException",
     "ShotgunUnLoadedException",
     "ShellException",
-    "ShellNotFoundException"
+    "ShellNotFoundException",
     
 ]

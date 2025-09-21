@@ -14,7 +14,7 @@ def load_magazine(game_state: RisikoState, round:  Iterable[ShellData] ) -> Risi
 
     Args:
         game_state (RisikoState): The current state of the game.
-        round (List[LoadShell]): A list describing the shells to load, including type, damage, and quantity.
+        round (Iterable[ShellData]): A list describing the shells to load, including type, damage, and quantity.
 
     Returns:
         RisikoState: A new game state with the updated shotgun magazine.
@@ -31,7 +31,7 @@ def load_magazine(game_state: RisikoState, round:  Iterable[ShellData] ) -> Risi
             ShellBase(shell_type=shell.shell_type, damage=shell.damage)
         )
 
-    new_magazine = game_state.shotgun.magazine._load_round(shells)
+    new_magazine = game_state.shotgun.magazine.load_round(shells)
 
     return evolve(game_state, shotgun=evolve(game_state.shotgun, magazine=new_magazine))
 
@@ -48,7 +48,7 @@ def eject_magazine_shell(game_state: RisikoState):
         Tuple[ShellInterface, RisikoState]: A tuple containing the ejected shell and the new game state.
     """
 
-    shell_ejected, new_magazine = game_state.shotgun.magazine._eject_shell()
+    shell_ejected, new_magazine = game_state.shotgun.magazine.eject_shell()
 
     return (shell_ejected, evolve(game_state, shotgun=evolve(game_state.shotgun, magazine = new_magazine)))
 
@@ -60,7 +60,7 @@ def insert_shell_to_magazine(game_state:RisikoState, shell: ShellData):
 
     Args:
         game_state (RisikoState): The current state of the game.
-        shell (Literal["live", "blank"]): The shell to add to the magazine.
+        shell (ShellData): The shell to add to the magazine.
 
     Returns:
         RisikoState: A new game state with the shell added to the magazine.
@@ -83,7 +83,7 @@ def remove_shell_from_magazine(game_state:RisikoState, shell: ShellData):
 
     Args:
         game_state (RisikoState): The current state of the game.
-        shell (Literal["live", "blank"]): The shell to remove from the magazine.
+        shell (ShellData): The shell to remove from the magazine.
 
     Returns:
         RisikoState: A new game state with the shell removed from the magazine.
@@ -132,7 +132,7 @@ def clear_magazine(game_state: RisikoState):
         RisikoState: A new game state with an empty magazine.
         
     """
-    new_magazine = game_state.shotgun.magazine._clear()
+    new_magazine = game_state.shotgun.magazine.clear()
 
     return evolve(game_state, shotgun=evolve(game_state.shotgun, magazine = new_magazine))
 
