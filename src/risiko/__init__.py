@@ -1,7 +1,7 @@
 from .service import RisikoState
 from .service import processors
 from .service import helper
-from .core import ShellData
+from .core import ShellData , CoreException
 
 
 __all__ = [
@@ -10,5 +10,7 @@ __all__ = [
     "processors",
     "helper",
     "ShellData",
+    "CoreException"
+
 ]
 

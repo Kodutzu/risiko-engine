@@ -2,9 +2,10 @@ from attrs import define, field, evolve
 from typing import Deque, final, Tuple, Iterable, override
 from collections import deque
 
-from ..shell.interface import ShellInterface
+from ..shell import ShellInterface
 from .exception import MagazineEmptyException
 from .interface import MagazineInterface
+
 
 @define(frozen=True)
 class MagazineBase(MagazineInterface):

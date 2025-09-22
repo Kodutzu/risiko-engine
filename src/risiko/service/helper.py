@@ -1,5 +1,4 @@
 from .risiko_state import RisikoState
-from ..core.shell.interface import ShellInterface
 
 def is_game_over(game_state: RisikoState) -> bool:
     """

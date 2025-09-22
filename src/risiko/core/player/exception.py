@@ -61,3 +61,17 @@ class PlayerInvalidTurnException(PlayerException):
             info (str): Additional information about the exception.
         """
         super().__init__(f"Player with ID '{id}' is not the current player - {info}.")
+
+class InvalidPlayerClassException(PlayerException):
+    """
+    Exception raised when an invalid player is encountered.
+    """
+    def __init__(self, info) -> None:
+        """
+        Initializes the InvalidPlayerException.
+
+        Args:
+            id (str): The ID of the invalid player.
+            info (str): Additional information about the exception.
+        """
+        super().__init__(f"invalid Player Class - {info}.")

@@ -5,7 +5,9 @@ from .exception import (
     PlayerDeadException,
     PlayerIDNotFoundException,
     PlayerIDExistsException,
-    PlayerInvalidTurnException
+    PlayerInvalidTurnException,
+    InvalidPlayerClassException
+
 )
 
 __all__ = [
@@ -15,6 +17,7 @@ __all__ = [
     "PlayerDeadException",
     "PlayerIDNotFoundException",
     "PlayerIDExistsException",
-    "PlayerInvalidTurnException"
+    "PlayerInvalidTurnException",
+    "InvalidPlayerClassException",
 
 ]

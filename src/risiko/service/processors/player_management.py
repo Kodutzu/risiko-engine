@@ -1,7 +1,7 @@
 from attrs import evolve
 
 from ..risiko_state import RisikoState
-from ...core.player.interface import PlayerInterface # Import the interface
+from ...core.player import PlayerInterface
 
 def add_player_to_game(game_state: RisikoState, player: PlayerInterface) -> RisikoState:
     """

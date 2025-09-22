@@ -8,6 +8,7 @@ def player_lose_charges(game_state:RisikoState, player_id: str, charges_to_lose:
     Makes a player lose a specified number of charges.
 
     Args:
+    
         game_state (RisikoState): The current state of the game.
         player_id (str): The ID of the player who will lose charges.
         charges_to_lose (int): The number of charges to deduct.

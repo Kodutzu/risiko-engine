@@ -100,12 +100,12 @@ class TurnManager:
 
         return evolve(self, order=new_order)
     
-    def advance(self, turns: int = 1) -> "TurnManager":
+    def advance(self, turns: int) -> "TurnManager":
         """
         Advances the order by a specified number of turns.
 
         Args:
-            turns (int, optional): The number of turns to advance. Defaults to 1.
+            turns (int, optional): The number of turns to advance.
 
         Returns:
             TurnManager: A new TurnManager instance with the advanced order.
