@@ -23,6 +23,7 @@ class PlayerManager:
             MappingProxyType[str, PlayerInterface]: A read-only proxy of the dictionary of players.
 
         """
+
         return MappingProxyType(self._pool)
     
     def get_player(self, player_id: str) -> PlayerInterface:
