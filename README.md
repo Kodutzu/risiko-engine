@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# 🎲 risiko-engine 🎲
+# risiko-engine 
 
 **A Stateless Russian Roulette Python Engine**
 
@@ -22,12 +22,11 @@
 
 - [🚀 Installation](#-installation)
 - [🎯 Quickstart](#-quickstart)
-- [🤝 Contributing](#-contributing)
 - [📜 License](#-license)
 
 ---
 
-## 🚀 Installation (Haven't published till now)
+## 🚀 Installation (Hadn't published till now)
 
 ```bash
 pip install risiko-engine
