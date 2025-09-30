@@ -1,15 +1,19 @@
 from ..exception import CoreException
 
+
 class PlayerException(CoreException):
     """
     Base class for player exceptions.
     """
+
     ...
+
 
 class PlayerDeadException(PlayerException):
     """
     Exception raised when an action is attempted on a player who is already dead (has 0 charges).
     """
+
     def __init__(self, id: str, info: str) -> None:
         """
         Initializes the PlayerDeadException.
@@ -20,10 +24,12 @@ class PlayerDeadException(PlayerException):
         """
         super().__init__(f"Player with ID '{id}' is dead - {info}")
 
+
 class PlayerIDNotFoundException(PlayerException):
     """
     Exception raised when a player with a specified ID is not found.
     """
+
     def __init__(self, id, info: str) -> None:
         """
         Initializes the PlayerIDNotFoundException.
@@ -34,10 +40,12 @@ class PlayerIDNotFoundException(PlayerException):
         """
         super().__init__(f"Player with ID '{id}' not found, {info}")
 
+
 class PlayerIDExistsException(PlayerException):
     """
     Exception raised when attempting to add a player with an ID that already exists.
     """
+
     def __init__(self, id, info) -> None:
         """
         Initializes the PlayerIDExistsException.
@@ -48,10 +56,12 @@ class PlayerIDExistsException(PlayerException):
         """
         super().__init__(f"Player with ID '{id}' already exists - {info}.")
 
+
 class PlayerInvalidTurnException(PlayerException):
     """
     Exception raised when a player attempts an action out of their turn.
     """
+
     def __init__(self, id, info) -> None:
         """
         Initializes the PlayerInvalidTurnException.
@@ -62,10 +72,12 @@ class PlayerInvalidTurnException(PlayerException):
         """
         super().__init__(f"Player with ID '{id}' is not the current player - {info}.")
 
+
 class InvalidPlayerClassException(PlayerException):
     """
     Exception raised when an invalid player is encountered.
     """
+
     def __init__(self, info) -> None:
         """
         Initializes the InvalidPlayerException.

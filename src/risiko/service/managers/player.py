@@ -1,9 +1,15 @@
-from attrs import define, field, evolve
-from typing import Dict
 from types import MappingProxyType
+from typing import Dict
 
+from attrs import define, evolve, field
+
+from ...core.player.exception import (
+    InvalidPlayerClassException,
+    PlayerIDExistsException,
+    PlayerIDNotFoundException,
+)
 from ...core.player.interface import PlayerInterface
-from ...core.player.exception import PlayerIDExistsException, PlayerIDNotFoundException, InvalidPlayerClassException
+
 
 @define(frozen=True)
 class PlayerManager:
@@ -14,13 +20,14 @@ class PlayerManager:
     modify the collection (e.g., adding or removing a player) will return a new
     instance of PlayerManager with the updated state.
     """
+
     _pool: Dict[str, PlayerInterface] = field(factory=dict, alias="pool", kw_only=True)
 
     @property
     def player_pool(self) -> MappingProxyType[str, PlayerInterface]:
         """A read-only view of the dictionary of players, mapping player ID to object."""
         return MappingProxyType(self._pool)
-    
+
     def get_player(self, player_id: str) -> PlayerInterface:
         """
         Retrieves a single player by their unique ID.
@@ -37,10 +44,11 @@ class PlayerManager:
         try:
             return self._pool[player_id]
         except KeyError:
-            raise PlayerIDNotFoundException(id=player_id, info=f"Player with ID '{player_id}' not found.")
+            raise PlayerIDNotFoundException(
+                id=player_id, info=f"Player with ID '{player_id}' not found."
+            )
 
-    
-    def add_player(self, player: PlayerInterface) -> 'PlayerManager':
+    def add_player(self, player: PlayerInterface) -> "PlayerManager":
         """
         Adds a new player to the collection.
 
@@ -55,16 +63,20 @@ class PlayerManager:
             InvalidPlayerClassException: If the provided object is not a valid player.
         """
         if not isinstance(player, PlayerInterface):
-            raise InvalidPlayerClassException(info=f"recieved {type(player)} instead of PlayerInterface")
-    
+            raise InvalidPlayerClassException(
+                info=f"recieved {type(player)} instead of PlayerInterface"
+            )
+
         if player.id in self._pool:
-            raise PlayerIDExistsException(id=player.id, info=f"Player with ID '{player.id}' already exists.")
+            raise PlayerIDExistsException(
+                id=player.id, info=f"Player with ID '{player.id}' already exists."
+            )
 
         new_pool = self._pool.copy()
-        new_pool[player.id] = player 
+        new_pool[player.id] = player
 
         return evolve(self, pool=new_pool)
-    
+
     def update_player(self, player: PlayerInterface) -> "PlayerManager":
         """
         Updates an existing player's state.
@@ -81,19 +93,23 @@ class PlayerManager:
             PlayerIDNotFoundException: If no player with the given ID is found.
             InvalidPlayerClassException: If the provided object is not a valid player.
         """
-        
+
         if not isinstance(player, PlayerInterface):
-            raise InvalidPlayerClassException(info=f"recieved {type(player)} instead of PlayerInterface")
-        
+            raise InvalidPlayerClassException(
+                info=f"recieved {type(player)} instead of PlayerInterface"
+            )
+
         if player.id not in self._pool:
-            raise PlayerIDNotFoundException(id=player.id, info=f"Player with ID '{player.id}' not found for update.")
-        
+            raise PlayerIDNotFoundException(
+                id=player.id, info=f"Player with ID '{player.id}' not found for update."
+            )
+
         new_pool = self._pool.copy()
         new_pool[player.id] = player
 
         return evolve(self, pool=new_pool)
 
-    def remove_player(self, player_id: str) -> 'PlayerManager':
+    def remove_player(self, player_id: str) -> "PlayerManager":
         """
         Removes a player from the collection by their ID.
 
@@ -107,7 +123,10 @@ class PlayerManager:
             PlayerIDNotFoundException: If no player with the given ID is found.
         """
         if player_id not in self._pool:
-            raise PlayerIDNotFoundException(id=player_id, info=f"Player with ID '{player_id}' not found for removal.")
+            raise PlayerIDNotFoundException(
+                id=player_id,
+                info=f"Player with ID '{player_id}' not found for removal.",
+            )
 
         new_pool = self._pool.copy()
         del new_pool[player_id]

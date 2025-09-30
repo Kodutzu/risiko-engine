@@ -1,13 +1,16 @@
-from attrs import evolve
 from typing import Tuple
 
-from ..risiko_state import RisikoState
-from ...core.shell.interface import ShellInterface
+from attrs import evolve
+
 from ...core.player.exception import PlayerDeadException, PlayerInvalidTurnException
-
+from ...core.shell.interface import ShellInterface
 from ..helper import is_player_alive, is_player_turn
+from ..risiko_state import RisikoState
 
-def fire_shell(game_state: RisikoState, shooter_id: str) -> Tuple[ShellInterface, RisikoState]:
+
+def fire_shell(
+    game_state: RisikoState, shooter_id: str
+) -> Tuple[ShellInterface, RisikoState]:
     """
     Fires a shell from the shotgun, updating the game state.
 
@@ -23,17 +26,19 @@ def fire_shell(game_state: RisikoState, shooter_id: str) -> Tuple[ShellInterface
         PlayerInvalidTurnException: If it's not the shooter's turn.
     """
     if not is_player_alive(game_state, player_id=shooter_id):
-         raise PlayerDeadException(id=shooter_id, info="Please Remove the dead player")
-    
-    if not  is_player_turn(game_state=game_state,player_id= shooter_id):
+        raise PlayerDeadException(id=shooter_id, info="Please Remove the dead player")
 
-        raise PlayerInvalidTurnException(id=shooter_id, info="coudln't able to fire the shell")
-    
-    fired_shell,new_shotgun = game_state.shotgun.fire()
-    
+    if not is_player_turn(game_state=game_state, player_id=shooter_id):
+        raise PlayerInvalidTurnException(
+            id=shooter_id, info="coudln't able to fire the shell"
+        )
+
+    fired_shell, new_shotgun = game_state.shotgun.fire()
+
     return (fired_shell, evolve(game_state, shotgun=new_shotgun))
 
-def hit_shell(game_state:RisikoState, target_id: str, fired_shell: ShellInterface ):
+
+def hit_shell(game_state: RisikoState, target_id: str, fired_shell: ShellInterface):
     """
     Applies the effect of a fired shell to a target player.
 
@@ -49,8 +54,8 @@ def hit_shell(game_state:RisikoState, target_id: str, fired_shell: ShellInterfac
         PlayerDeadException: If the target player is not alive.
     """
     if not is_player_alive(game_state=game_state, player_id=target_id):
-         raise PlayerDeadException(id=target_id, info="Please Remove the dead player")
-    
+        raise PlayerDeadException(id=target_id, info="Please Remove the dead player")
+
     target_player = game_state.player.get_player(player_id=target_id)
 
     updated_player = target_player.lose_charges(amt=fired_shell.damage)

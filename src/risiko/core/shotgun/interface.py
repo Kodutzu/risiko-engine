@@ -1,4 +1,5 @@
-from typing import Optional, Protocol, runtime_checkable, Tuple
+from typing import Optional, Protocol, Tuple, runtime_checkable
+
 from ..magazine.interface import MagazineInterface
 from ..shell.interface import ShellInterface
 
@@ -10,8 +11,7 @@ class ShotgunInterface(Protocol):
     """
 
     magazine: MagazineInterface
-    chamber: Optional[ShellInterface] 
-
+    chamber: Optional[ShellInterface]
 
     def load_chamber(self) -> "ShotgunInterface":
         """
@@ -39,4 +39,3 @@ class ShotgunInterface(Protocol):
             Tuple[ShellInterface, ShotgunInterface]: A tuple containing the fired shell and a new shotgun instance with an empty chamber.
         """
         ...
-

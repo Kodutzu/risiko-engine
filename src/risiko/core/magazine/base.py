@@ -1,6 +1,7 @@
-from attrs import define, field, evolve
-from typing import Deque, final, Tuple, Iterable, override
 from collections import deque
+from typing import Deque, Iterable, Tuple, final, override
+
+from attrs import define, evolve, field
 
 from ..shell import ShellInterface
 from .exception import MagazineEmptyException
@@ -9,21 +10,19 @@ from .interface import MagazineInterface
 
 @define(frozen=True)
 class MagazineBase(MagazineInterface):
-
     """Represents the shotgun's magazine, holding a deque of shells.
     This class is immutable; all methods that modify the magazine's state
     return a new MagazineBase instance.
     """
-     
+
     _tube: Deque[ShellInterface] = field(factory=deque, alias="tube", kw_only=True)
 
     @property
     @final
     @override
-    def tube(self) ->  Tuple[ShellInterface, ...]:
+    def tube(self) -> Tuple[ShellInterface, ...]:
         return tuple(self._tube)
 
-    
     @final
     @override
     def load_round(self, shells: Iterable[ShellInterface]) -> "MagazineBase":
@@ -41,7 +40,7 @@ class MagazineBase(MagazineInterface):
         new_tube.extend(shells)
 
         return evolve(self, tube=new_tube)
-    
+
     @final
     @override
     def eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
@@ -55,15 +54,14 @@ class MagazineBase(MagazineInterface):
             MagazineEmptyException: If the magazine is empty.
         """
         if not self.tube:
-
             raise MagazineEmptyException(info="Failed to Eject Shell")
 
         new_tube = self._tube.copy()
 
         shell = new_tube.popleft()
-            
+
         return (shell, evolve(self, tube=new_tube))
-    
+
     @final
     @override
     def clear(self) -> "MagazineBase":
@@ -77,16 +75,9 @@ class MagazineBase(MagazineInterface):
             MagazineEmptyException: If the magazine is already empty.
         """
         if not self.tube:
-            
             raise MagazineEmptyException(info="failed to clear magazine")
 
         new_tube = self._tube.copy()
         new_tube.clear()
 
         return evolve(self, tube=new_tube)
-
-
-     
-
-
-    

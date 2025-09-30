@@ -6,11 +6,11 @@ class PlayerInterface(Protocol):
     """
     Interface for a player, defining their attributes and core behaviors.
     Implementations should be immutable, returning new instances on state changes.
-    """ 
+    """
+
     id: str
     charges: int
 
-    
     def lose_charges(self, amt: int) -> "PlayerInterface":
         """Reduces the player's charges by a given amount.
 

@@ -2,8 +2,8 @@ from attrs import evolve
 
 from ..risiko_state import RisikoState
 
-def advance_player_turn(game_state:RisikoState, turns: int = 1):
 
+def advance_player_turn(game_state: RisikoState, turns: int = 1):
     """
     Advances the player turn by a specified number of turns.
 
@@ -19,8 +19,8 @@ def advance_player_turn(game_state:RisikoState, turns: int = 1):
 
     return evolve(game_state, turns=new_turn_manager)
 
-def reverse_turn_order(game_state:RisikoState) -> RisikoState:
 
+def reverse_turn_order(game_state: RisikoState) -> RisikoState:
     """
     Reverses the direction of the player turn order.
 
@@ -30,6 +30,6 @@ def reverse_turn_order(game_state:RisikoState) -> RisikoState:
     Returns:
         RisikoState: A new game state with the reversed turn order direction.
     """
-    
+
     new_turn_manager = game_state.turns.reverse_order()
     return evolve(game_state, turns=new_turn_manager)

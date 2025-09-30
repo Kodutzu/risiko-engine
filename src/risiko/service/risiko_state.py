@@ -1,8 +1,8 @@
 from attrs import define, field
 from attrs.validators import instance_of
 
+from ..core import ShotgunBase, ShotgunInterface
 from .managers import PlayerManager, TurnManager
-from ..core import ShotgunInterface,ShotgunBase
 
 
 @define(frozen=True)
@@ -13,6 +13,10 @@ class RisikoState:
     State modifications should be performed via Processors.
     """
 
-    shotgun: ShotgunInterface = field(factory=ShotgunBase, validator=instance_of(ShotgunInterface))
-    player: PlayerManager = field(factory=PlayerManager, validator=instance_of(PlayerManager))
+    shotgun: ShotgunInterface = field(
+        factory=ShotgunBase, validator=instance_of(ShotgunInterface)
+    )
+    player: PlayerManager = field(
+        factory=PlayerManager, validator=instance_of(PlayerManager)
+    )
     turns: TurnManager = field(factory=TurnManager, validator=instance_of(TurnManager))

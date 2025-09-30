@@ -1,26 +1,30 @@
-from typing import Deque, Tuple
 from collections import deque
-from attrs import define, field, Factory, evolve
-from attrs.validators import in_
+from typing import Deque, Tuple
 
+from attrs import Factory, define, evolve, field
+from attrs.validators import in_
 
 from ...core.player.exception import PlayerIDExistsException, PlayerIDNotFoundException
 
 
 @define(frozen=True)
 class TurnManager:
-    
     """Manages the turn order and direction of play for players in the game.
     It is an immutable class; all methods that modify the order or direction
     return a new TurnManager instance.
     """
-    
-    _order: Deque[str] = field(default=Factory(deque), alias="order",kw_only=True) 
-    _direction: int = field(default=1, converter=int, validator=in_((-1, 1)),alias="direction", kw_only=True)
+
+    _order: Deque[str] = field(default=Factory(deque), alias="order", kw_only=True)
+    _direction: int = field(
+        default=1,
+        converter=int,
+        validator=in_((-1, 1)),
+        alias="direction",
+        kw_only=True,
+    )
 
     @property
     def current_player_id(self) -> str:
-        
         """
         Returns the ID of the player whose turn it currently is.
 
@@ -32,13 +36,14 @@ class TurnManager:
         """
         try:
             return self._order[0]
-        
-        except IndexError:
 
-            raise PlayerIDNotFoundException(id="<None>", info="Player order is empty, cannot get current player.")
-        
+        except IndexError:
+            raise PlayerIDNotFoundException(
+                id="<None>", info="Player order is empty, cannot get current player."
+            )
+
     @property
-    def turn_order(self) -> Tuple[str,...]:
+    def turn_order(self) -> Tuple[str, ...]:
         """
         Returns the current turn order as a tuple of player IDs.
 
@@ -48,12 +53,12 @@ class TurnManager:
         Raises:
             ValueError: If the turn order is empty.
         """
-        if not self._order: #if order is empty, return the order
+        if not self._order:  # if order is empty, return the order
             raise ValueError("Turn order is empty")
-        
+
         return tuple(self._order)
-    
-    def remove_id(self, id:str) -> "TurnManager":
+
+    def remove_id(self, id: str) -> "TurnManager":
         """
         Removes a player from the turn order.
 
@@ -72,10 +77,11 @@ class TurnManager:
             new_order.remove(id)
 
             return evolve(self, order=new_order)
-        
-        except ValueError:
 
-            raise PlayerIDNotFoundException(id=id, info="There is no player with this ID.")
+        except ValueError:
+            raise PlayerIDNotFoundException(
+                id=id, info="There is no player with this ID."
+            )
 
     def add_id(self, id: str) -> "TurnManager":
         """
@@ -91,15 +97,14 @@ class TurnManager:
             PlayerIDExistsException: If the player ID already exists in the turn order.
         """
         if id in self._order:
-
             raise PlayerIDExistsException(id=id, info="couldn't able to add the player")
-        
+
         new_order = self._order.copy()
 
         new_order.append(id)
 
         return evolve(self, order=new_order)
-    
+
     def advance(self, turns: int) -> "TurnManager":
         """
         Advances the order by a specified number of turns.
@@ -112,7 +117,7 @@ class TurnManager:
         """
         new_order = self._order.copy()
 
-        new_order.rotate(-(turns * self._direction)) 
+        new_order.rotate(-(turns * self._direction))
 
         return evolve(self, order=new_order)
 

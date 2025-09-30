@@ -1,5 +1,6 @@
 from .risiko_state import RisikoState
 
+
 def is_game_over(game_state: RisikoState) -> bool:
     """
     Checks if the game has reached an end condition.
@@ -10,10 +11,9 @@ def is_game_over(game_state: RisikoState) -> bool:
     Returns:
         bool: True if the game is over, False otherwise.
     """
-    alive_players = [
-        p for p in game_state.player.player_pool.values() if p.charges > 0
-    ]
+    alive_players = [p for p in game_state.player.player_pool.values() if p.charges > 0]
     return len(alive_players) <= 1
+
 
 def is_player_alive(game_state: RisikoState, player_id: str) -> bool:
     """
@@ -28,6 +28,7 @@ def is_player_alive(game_state: RisikoState, player_id: str) -> bool:
     """
     return game_state.player.get_player(player_id).charges > 0
 
+
 def is_player_turn(game_state: RisikoState, player_id: str) -> bool:
     """
     Checks if it is currently the specified player's turn.
@@ -41,6 +42,7 @@ def is_player_turn(game_state: RisikoState, player_id: str) -> bool:
     """
     return game_state.turns.current_player_id == player_id
 
+
 def can_player_act(game_state: RisikoState, player_id: str) -> bool:
     """
     Checks if a specific player is allowed to take an action.
@@ -53,11 +55,11 @@ def can_player_act(game_state: RisikoState, player_id: str) -> bool:
         bool: True if the player can act, False otherwise.
     """
     is_shotgun_loaded = game_state.shotgun.chamber is not None
-    
+
     return (
-        is_player_turn(game_state, player_id) and
-        is_player_alive(game_state, player_id) and
-        is_shotgun_loaded
+        is_player_turn(game_state, player_id)
+        and is_player_alive(game_state, player_id)
+        and is_shotgun_loaded
     )
 
 
@@ -71,7 +73,10 @@ def can_load_shell(game_state: RisikoState) -> bool:
     Returns:
         bool: True if a shell can be loaded, False otherwise.
     """
-    return game_state.shotgun.chamber is None and len(game_state.shotgun.magazine.tube) > 0
+    return (
+        game_state.shotgun.chamber is None and len(game_state.shotgun.magazine.tube) > 0
+    )
+
 
 def can_fire_shotgun(game_state: RisikoState) -> bool:
     """
@@ -85,6 +90,7 @@ def can_fire_shotgun(game_state: RisikoState) -> bool:
     """
     return game_state.shotgun.chamber is not None
 
+
 def can_clear_magazine(game_state: RisikoState) -> bool:
     """
     Checks if the magazine can be cleared.
@@ -96,6 +102,7 @@ def can_clear_magazine(game_state: RisikoState) -> bool:
         bool: True if the magazine can be cleared, False otherwise.
     """
     return len(game_state.shotgun.magazine.tube) > 0
+
 
 def is_magazine_empty(game_state: RisikoState) -> bool:
     """
@@ -109,6 +116,7 @@ def is_magazine_empty(game_state: RisikoState) -> bool:
     """
     return not game_state.shotgun.magazine.tube
 
+
 def is_chamber_empty(game_state: RisikoState) -> bool:
     """
     Checks if the shotgun's chamber is empty.
@@ -120,6 +128,7 @@ def is_chamber_empty(game_state: RisikoState) -> bool:
         bool: True if the chamber is empty, False otherwise.
     """
     return game_state.shotgun.chamber is None
+
 
 def is_valid_target(game_state: RisikoState, target_player_id: str) -> bool:
     """
@@ -133,7 +142,11 @@ def is_valid_target(game_state: RisikoState, target_player_id: str) -> bool:
         bool: True if the player is a valid target, False otherwise.
     """
     # A valid target must be alive and not the current player
-    return is_player_alive(game_state, target_player_id) and game_state.turns.current_player_id != target_player_id
+    return (
+        is_player_alive(game_state, target_player_id)
+        and game_state.turns.current_player_id != target_player_id
+    )
+
 
 def can_start_game(game_state: RisikoState) -> bool:
     """

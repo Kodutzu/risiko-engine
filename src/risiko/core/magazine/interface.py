@@ -1,6 +1,8 @@
-from typing import Protocol, runtime_checkable, Tuple, Iterable
+from typing import Iterable, Protocol, Tuple, runtime_checkable
+
 from ..shell import ShellInterface
-\
+
+
 @runtime_checkable
 class MagazineInterface(Protocol):
     """
@@ -14,7 +16,6 @@ class MagazineInterface(Protocol):
         Returns the deque of shells currently in the magazine tube.
         """
         ...
-
 
     def load_round(self, shells: Iterable[ShellInterface]) -> "MagazineInterface":
         """
@@ -45,8 +46,3 @@ class MagazineInterface(Protocol):
             MagazineInterface[ShellType]: A new magazine instance with an empty magazine.
         """
         ...
-
-
-     
-
-

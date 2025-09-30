@@ -1,9 +1,6 @@
 .pytest_cache
 __pycache__/
 venv
-README.md
 risiko_engine.egg-info
-pyproject.toml
 archive
 .VSCodeCounter
-tests

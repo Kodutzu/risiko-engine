@@ -1,11 +1,12 @@
 from typing import Optional, Tuple, final, override
-from attrs import define, field, evolve
 
+from attrs import define, evolve, field
+
+from ..magazine import MagazineBase, MagazineInterface
 from ..shell.interface import ShellInterface
-from .interface import ShotgunInterface
-from ..magazine import MagazineInterface, MagazineBase
-from .interface import ShotgunInterface 
 from .exception import ShotgunLoadedException, ShotgunUnLoadedException
+from .interface import ShotgunInterface
+
 
 @define(frozen=True)
 class ShotgunBase(ShotgunInterface):
@@ -30,14 +31,13 @@ class ShotgunBase(ShotgunInterface):
         Raises:
             ShotgunLoadedException: If the chamber is already loaded.
         """
-        
+
         if self.chamber is not None:
             raise ShotgunLoadedException("Shotgun is Already Loaded")
-        
+
         new_chamber, new_magazine = self.magazine.eject_shell()
 
         return evolve(self, chamber=new_chamber, magazine=new_magazine)
-    
 
     @final
     @override
@@ -52,11 +52,12 @@ class ShotgunBase(ShotgunInterface):
             ShotgunUnLoadedException: If the chamber is already empty.
         """
         if self.chamber is None:
-            raise ShotgunUnLoadedException("Attempted to unload, chamber is already empty")
-        
+            raise ShotgunUnLoadedException(
+                "Attempted to unload, chamber is already empty"
+            )
+
         new_magazine = self.magazine.load_round([self.chamber])
         return evolve(self, chamber=None, magazine=new_magazine)
-
 
     @final
     @override
@@ -71,9 +72,10 @@ class ShotgunBase(ShotgunInterface):
             ShotgunUnLoadedException: If the chamber is empty.
         """
         if self.chamber is None:
-            raise ShotgunUnLoadedException(message="Attempted to fire, chamber is empty (Not Loaded)")
-        
+            raise ShotgunUnLoadedException(
+                message="Attempted to fire, chamber is empty (Not Loaded)"
+            )
+
         fired_shell = self.chamber
 
         return (fired_shell, evolve(self, chamber=None))
-

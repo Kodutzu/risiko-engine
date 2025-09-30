@@ -1,11 +1,13 @@
 from ..exception import CoreException
 
+
 class ShotgunException(CoreException):
     """Base exception for the shotgun component"""
+
     pass
 
-class ShotgunUnLoadedException(ShotgunException):
 
+class ShotgunUnLoadedException(ShotgunException):
     """Raised when an operation requires a loaded shotgun, but it is not."""
 
     def __init__(self, message="Shotgun is not loaded"):
@@ -18,8 +20,8 @@ class ShotgunUnLoadedException(ShotgunException):
         self.message = message
         super().__init__(self.message)
 
-class ShotgunLoadedException(ShotgunException):
 
+class ShotgunLoadedException(ShotgunException):
     """Raised when an operation requires an unloaded shotgun, but it is not."""
 
     def __init__(self, message="Shotgun is loaded"):

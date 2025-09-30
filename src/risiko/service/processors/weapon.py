@@ -1,9 +1,10 @@
 from attrs import evolve
+
+from ...core.shell import InvalidShell, ShellInterface
 from ..risiko_state import RisikoState
-from ...core.shell import ShellData,ShellBase, InvalidShell
 
-def shotgun_load_shell(game_state:RisikoState):
 
+def shotgun_load_shell(game_state: RisikoState):
     """
     Loads a shell from the magazine into the shotgun's chamber.
 
@@ -20,8 +21,8 @@ def shotgun_load_shell(game_state:RisikoState):
 
     return evolve(game_state, shotgun=new_shotgun)
 
-def unload_shotgun_chamber(game_state:RisikoState):
 
+def unload_shotgun_chamber(game_state: RisikoState):
     """
 
     Unloads the shell from the shotgun's chamber back into the magazine.
@@ -39,23 +40,22 @@ def unload_shotgun_chamber(game_state:RisikoState):
     return evolve(game_state, shotgun=new_shotgun)
 
 
-
-
-def replace_chamber_shell_from_shotgun(game_state:RisikoState, shell: ShellData):
-
+def replace_chamber_shell_from_shotgun(game_state: RisikoState, shell: ShellInterface) -> RisikoState:
     """
     Replaces the shell in the shotgun's chamber with a new shell.
 
     Args:
         game_state (RisikoState): The current state of the game.
-        shell (ShellData): The shell to replace the current shell in the chamber.
+        shell (ShellInterface): The shell to place in the chamber.
 
     Returns:
         RisikoState: A new game state with the shell replaced in the chamber.
     """
-    
-    if not isinstance(shell.shell_type, str) or not isinstance(shell.damage, int):
-        raise InvalidShell(f"Invalid shell data format in round: {shell}")
-    
-    return evolve(game_state, shotgun=evolve(game_state.shotgun, chamber = ShellBase(shell_type=shell.shell_type, damage=shell.damage)))
 
+    if not isinstance(shell, ShellInterface):
+        raise InvalidShell(f"Invalid object provided. Expected a ShellInterface, but got {type(shell)}.")
+
+    return evolve(
+        game_state,
+        shotgun=evolve(game_state.shotgun, chamber=shell),
+    )

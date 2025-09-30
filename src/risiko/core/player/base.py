@@ -1,26 +1,25 @@
-from attrs import define, field, evolve
-from attrs.validators import ge
 from typing import final, override
+
+from attrs import define, evolve, field
+from attrs.validators import ge
 
 from .exception import PlayerDeadException
 from .interface import PlayerInterface
 
+
 @define(frozen=True)
 class PlayerBase(PlayerInterface):
-
     """
     Represents a player in the game with an ID and a number of charges (lives).
-    
+
     """
+
     id: str = field(kw_only=True)
     charges: int = field(validator=ge(0), kw_only=True)
-
-    
 
     @final
     @override
     def lose_charges(self, amt: int) -> "PlayerBase":
-
         """
         Reduces the player's charges by the specified amount.
 
@@ -36,18 +35,17 @@ class PlayerBase(PlayerInterface):
         """
 
         if self.charges <= 0:
-             raise PlayerDeadException(id=self.id, info="Player is already at 0 charges")
-        
+            raise PlayerDeadException(id=self.id, info="Player is already at 0 charges")
+
         if amt < 0:
             raise ValueError("Amount to lose must be non-negative.")
-        
+
         new_charge_value = max(0, self.charges - amt)
         return evolve(self, charges=new_charge_value)
-    
+
     @final
     @override
     def gain_charges(self, amt: int) -> "PlayerBase":
-
         """
         Increases the player's charges by the specified amount.
 
@@ -63,7 +61,6 @@ class PlayerBase(PlayerInterface):
 
         if amt < 0:
             raise ValueError("Amount to add must be non-negative.")
-        
+
         new_charge_value = self.charges + amt
         return evolve(self, charges=new_charge_value)
-

@@ -2,7 +2,6 @@ from .player import PlayerManager
 from .turn import TurnManager
 
 __all__ = [
-    "PlayerManager", 
+    "PlayerManager",
     "TurnManager",
-
-    ]
+]
