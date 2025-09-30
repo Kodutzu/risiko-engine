@@ -4,3 +4,4 @@ venv
 risiko_engine.egg-info
 archive
 .VSCodeCounter
+.ruff_cache
