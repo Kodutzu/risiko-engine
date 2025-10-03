@@ -3,7 +3,6 @@ from .magazine import (
     clear_magazine,
     eject_magazine_shell,
     insert_shell_to_magazine,
-    load_magazine,
     remove_shell_from_magazine,
     shuffle_magazine,
 )
@@ -27,7 +26,6 @@ __all__ = [
     "remove_shell_from_magazine",
     "shuffle_magazine",
     "clear_magazine",
-    "load_magazine",
     "add_player_to_game",
     "remove_player_from_game",
     "player_gain_charges",

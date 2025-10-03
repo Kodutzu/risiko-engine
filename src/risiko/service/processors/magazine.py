@@ -1,31 +1,10 @@
 from collections import deque
 from random import shuffle
-from typing import Iterable
 
 from attrs import evolve
 
 from ...core.shell import InvalidShell, ShellInterface, ShellNotFoundException
 from ..risiko_state import RisikoState
-
-
-def load_magazine(game_state: RisikoState, round: Iterable[ShellInterface]) -> RisikoState:
-    """
-    Loads a new round of shells into the shotgun magazine.
-
-    Args:
-        game_state (RisikoState): The current state of the game.
-        shells (Iterable[ShellInterface]): An iterable of shell objects to load.
-
-    Returns:
-        RisikoState: A new game state with the updated shotgun magazine.
-    """
-    if not all(isinstance(s, ShellInterface) for s in round):
-        raise InvalidShell("All items in the shells iterable must be valid ShellInterface objects.")
-
-    new_magazine = game_state.shotgun.magazine.load_round(round)
-
-    return evolve(game_state, shotgun=evolve(game_state.shotgun, magazine=new_magazine))
-
 
 def eject_magazine_shell(game_state: RisikoState):
     """
@@ -68,8 +47,8 @@ def insert_shell_to_magazine(game_state: RisikoState, shell: ShellInterface) -> 
         game_state,
         shotgun=evolve(
             game_state.shotgun,
-            magazine=evolve(game_state.shotgun.magazine, tube=new_tube),
-        ),
+            magazine=evolve(game_state.shotgun.magazine, tube=new_tube)
+        )
     )
 
 
