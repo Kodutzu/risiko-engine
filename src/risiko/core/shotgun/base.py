@@ -56,7 +56,7 @@ class ShotgunBase(ShotgunInterface):
                 "Attempted to unload, chamber is already empty"
             )
 
-        new_magazine = self.magazine.load_round([self.chamber])
+        new_magazine = self.magazine.load_shell(self.chamber)
         return evolve(self, chamber=None, magazine=new_magazine)
 
     @final
@@ -66,7 +66,7 @@ class ShotgunBase(ShotgunInterface):
         Fires the shell currently in the chamber.
 
         Returns:
-            Tuple[ShellTypeT, ShotgunBase]: A tuple containing the fired shell and a new ShotgunBase instance with an empty chamber.
+            Tuple[ShellInterface, ShotgunBase]: A tuple containing the fired shell and a new ShotgunBase instance with an empty chamber.
 
         Raises:
             ShotgunUnLoadedException: If the chamber is empty.

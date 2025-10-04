@@ -4,7 +4,7 @@ from ...core.shell import InvalidShell, ShellInterface
 from ..risiko_state import RisikoState
 
 
-def shotgun_load_shell(game_state: RisikoState):
+def shotgun_load_shell_in_chamber(game_state: RisikoState):
     """
     Loads a shell from the magazine into the shotgun's chamber.
 

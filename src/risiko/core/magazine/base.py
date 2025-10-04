@@ -1,9 +1,9 @@
 from collections import deque
-from typing import Deque, Iterable, Tuple, final, override
+from typing import Deque, Tuple, final, override
 
 from attrs import define, evolve, field
 
-from ..shell import ShellInterface
+from ..shell import ShellInterface, ShellNotFoundException
 from .exception import MagazineEmptyException
 from .interface import MagazineInterface
 
@@ -25,19 +25,19 @@ class MagazineBase(MagazineInterface):
 
     @final
     @override
-    def load_round(self, shells: Iterable[ShellInterface]) -> "MagazineBase":
+    def load_shell(self, shell: ShellInterface) -> "MagazineBase":
         """
-        Loads a list of shell objects into the magazine.
+        Load a single shell object into the magazine.
 
         Args:
-            shells (Iterable[ShellInterface]): A list of shell objects to add to the magazine.
+            shell (ShellInterface): A shell object to add to the magazine.
 
         Returns:
             MagazineBase: A new MagazineBase instance with the added shells.
         """
 
         new_tube = self._tube.copy()
-        new_tube.extend(shells)
+        new_tube.append(shell)
 
         return evolve(self, tube=new_tube)
 
@@ -48,7 +48,7 @@ class MagazineBase(MagazineInterface):
         Ejects the first shell from the magazine.
 
         Returns:
-            Tuple[ShellType, MagazineBase]: A tuple containing the ejected shell and a new MagazineBase instance.
+            Tuple[ShellInterface, MagazineBase]: A tuple containing the ejected shell and a new MagazineBase instance.
 
         Raises:
             MagazineEmptyException: If the magazine is empty.
@@ -61,6 +61,29 @@ class MagazineBase(MagazineInterface):
         shell = new_tube.popleft()
 
         return (shell, evolve(self, tube=new_tube))
+    
+    @final
+    @override
+    def unload_shell(self, shell: ShellInterface) -> MagazineInterface:
+        """
+        Unloads a single shell from the magazine.
+
+        Args:
+            shell (ShellInterface): The shell object to remove from the magazine.
+
+        Returns:
+            MagazineBase: A new MagazineBase instance with the unloaded shell.
+
+        Raises:
+            ShellNotFoundException: If the shell is not found in the magazine.
+        """
+        try:
+            new_tube = self._tube.copy()
+            new_tube.remove(shell)
+        except ValueError:
+            raise ShellNotFoundException(f"Shell not found in magazine: {shell}")
+
+        return evolve(self, tube=new_tube)
 
     @final
     @override

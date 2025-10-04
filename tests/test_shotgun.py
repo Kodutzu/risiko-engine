@@ -57,7 +57,7 @@ def test_fire_when_chamber_is_empty_raises_exception():
 
 def test_full_sequence_load_fire(live_shell):
     """Test a full sequence of loading the magazine, loading the chamber, and firing."""
-    magazine = MagazineBase().load_round([live_shell])
+    magazine = MagazineBase().load_shell(live_shell)
     shotgun = ShotgunBase(magazine=magazine)
 
     # Load chamber
@@ -73,7 +73,7 @@ def test_full_sequence_load_fire(live_shell):
 
 def test_sequence_with_unload(live_shell):
     """Test a sequence with unloading the chamber."""
-    magazine = MagazineBase().load_round([live_shell])
+    magazine = MagazineBase().load_shell(live_shell)
     shotgun = ShotgunBase(magazine=magazine)
 
     # Load chamber
@@ -89,7 +89,7 @@ def test_sequence_with_unload(live_shell):
 
 def test_repeated_load_fire_sequence(live_shell):
     """Test repeated load chamber and fire operations."""
-    magazine = MagazineBase().load_round([live_shell, live_shell, live_shell])
+    magazine = MagazineBase().load_shell(live_shell).load_shell(live_shell).load_shell(live_shell)
     shotgun = ShotgunBase(magazine=magazine)
 
     # First load and fire

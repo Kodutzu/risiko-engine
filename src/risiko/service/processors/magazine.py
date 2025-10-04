@@ -25,7 +25,7 @@ def eject_magazine_shell(game_state: RisikoState):
     )
 
 
-def insert_shell_to_magazine(game_state: RisikoState, shell: ShellInterface) -> RisikoState:
+def load_shell_to_magazine(game_state: RisikoState, shell: ShellInterface) -> RisikoState:
     """
     Adds a shell to the shotgun's magazine.
 
@@ -40,14 +40,13 @@ def insert_shell_to_magazine(game_state: RisikoState, shell: ShellInterface) -> 
     if not isinstance(shell, ShellInterface):
         raise InvalidShell(f"Invalid object provided. Expected a ShellInterface, but got {type(shell)}.")
 
-    new_tube = deque(game_state.shotgun.magazine.tube)
-    new_tube.append(shell)
+    new_magazine = game_state.shotgun.magazine.load_shell(shell)
 
     return evolve(
         game_state,
         shotgun=evolve(
             game_state.shotgun,
-            magazine=evolve(game_state.shotgun.magazine, tube=new_tube)
+            magazine=new_magazine
         )
     )
 
@@ -66,19 +65,15 @@ def remove_shell_from_magazine(game_state: RisikoState, shell: ShellInterface) -
     if not isinstance(shell, ShellInterface):
         raise InvalidShell(f"Invalid object provided. Expected a ShellInterface, but got {type(shell)}.")
 
-    try:
-        new_tube = deque(game_state.shotgun.magazine.tube)
-        new_tube.remove(shell)
-    except ValueError:
-        raise ShellNotFoundException(f"Shell not found in magazine: {shell}")
+    new_magazine = game_state.shotgun.magazine.unload_shell(shell)
 
     return evolve(
-        game_state,
+        game_state, 
         shotgun=evolve(
-            game_state.shotgun,
-            magazine=evolve(game_state.shotgun.magazine, tube=new_tube),
-        ),
-    )
+            game_state.shotgun, 
+            magazine=new_magazine
+            )
+        )
 
 
 def shuffle_magazine(game_state: RisikoState):

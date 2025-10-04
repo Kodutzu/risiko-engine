@@ -1,2 +1,2 @@
 class CoreException(Exception):
-    """Base exception for all application-specific errors."""
+    """Base exception for all core-related errors."""

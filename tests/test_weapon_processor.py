@@ -46,7 +46,7 @@ def game_state_with_loaded_chamber(initial_game_state, live_shell):
 
 # --- Test cases for shotgun_load_shell ---
 def test_shotgun_load_shell_success(game_state_with_loaded_magazine, live_shell):
-    new_state = weapon_processor.shotgun_load_shell(game_state_with_loaded_magazine)
+    new_state = weapon_processor.shotgun_load_shell_in_chamber(game_state_with_loaded_magazine)
     assert new_state.shotgun.chamber == live_shell
     assert len(new_state.shotgun.magazine.tube) == 0
 
@@ -55,12 +55,12 @@ def test_shotgun_load_shell_chamber_already_loaded_raises_exception(
     game_state_with_loaded_chamber,
 ):
     with pytest.raises(ShotgunLoadedException):
-        weapon_processor.shotgun_load_shell(game_state_with_loaded_chamber)
+        weapon_processor.shotgun_load_shell_in_chamber(game_state_with_loaded_chamber)
 
 
 def test_shotgun_load_shell_magazine_empty_raises_exception(initial_game_state):
     with pytest.raises(MagazineEmptyException):
-        weapon_processor.shotgun_load_shell(initial_game_state)
+        weapon_processor.shotgun_load_shell_in_chamber(initial_game_state)
 
 
 # --- Test cases for unload_shotgun_chamber ---

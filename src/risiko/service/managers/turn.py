@@ -53,7 +53,7 @@ class TurnManager:
         Raises:
             ValueError: If the turn order is empty.
         """
-        if not self._order:  # if order is empty, return the order
+        if not self._order:  # if order is empty
             raise ValueError("Turn order is empty")
 
         return tuple(self._order)

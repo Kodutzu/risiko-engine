@@ -26,7 +26,7 @@ def test_load_and_eject_correct_shell_type():
     buckshot = BuckshotShell(shell_type="buckshot", damage=1)
 
     # Load a shell
-    loaded_magazine = magazine.load_round([buckshot])
+    loaded_magazine = magazine.load_shell(buckshot)
     assert len(loaded_magazine.tube) > 0
     assert loaded_magazine.tube[0] == buckshot
 
@@ -66,12 +66,7 @@ def test_clear_empty_magazine_raises_exception():
         magazine.clear()
 
 
-def test_load_empty_round():
-    """Test that loading an empty round does not change the magazine."""
-    magazine = MagazineBase()
-    loaded_magazine = magazine.load_round([])
-    assert len(loaded_magazine.tube) == 0
-    assert loaded_magazine == magazine
+
 
 
 def test_load_multiple_shells_and_eject_in_order():
@@ -80,7 +75,7 @@ def test_load_multiple_shells_and_eject_in_order():
     shell1 = BuckshotShell(shell_type="buckshot", damage=1)
     shell2 = BuckshotShell(shell_type="buckshot", damage=1)
 
-    loaded_magazine = magazine.load_round([shell1, shell2])
+    loaded_magazine = magazine.load_shell(shell1).load_shell(shell2)
     assert len(loaded_magazine.tube) > 0
     assert len(loaded_magazine.tube) == 2
 
@@ -97,7 +92,7 @@ def test_tube_property_is_immutable():
     """Test that the 'tube' property is an immutable tuple."""
     magazine = MagazineBase()
     shell = BuckshotShell(shell_type="buckshot", damage=1)
-    loaded_magazine = magazine.load_round([shell])
+    loaded_magazine = magazine.load_shell(shell)
 
     with pytest.raises(TypeError):
         # Attempt to modify the tube; this should fail as tuples are immutable

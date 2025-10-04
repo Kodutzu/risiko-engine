@@ -136,7 +136,7 @@ def test_can_player_act_false_shotgun_not_loaded(initial_game_state, player1):
 # --- Test cases for can_load_shell ---
 def test_can_load_shell_true(initial_game_state, live_shell):
     # Setup: chamber empty, magazine not empty
-    magazine = MagazineBase().load_round([live_shell])
+    magazine = MagazineBase().load_shell(live_shell)
     shotgun = ShotgunBase(chamber=None, magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert helper.can_load_shell(state)
@@ -144,7 +144,7 @@ def test_can_load_shell_true(initial_game_state, live_shell):
 
 def test_can_load_shell_false_chamber_not_empty(initial_game_state, live_shell):
     # Setup: chamber not empty, magazine not empty
-    magazine = MagazineBase().load_round([live_shell])
+    magazine = MagazineBase().load_shell(live_shell)
     shotgun = ShotgunBase(chamber=live_shell, magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.can_load_shell(state)
@@ -175,7 +175,7 @@ def test_can_fire_shotgun_false(initial_game_state):
 # --- Test cases for can_clear_magazine ---
 def test_can_clear_magazine_true(initial_game_state, live_shell):
     # Setup: magazine not empty
-    magazine = MagazineBase().load_round([live_shell])
+    magazine = MagazineBase().load_shell(live_shell)
     shotgun = ShotgunBase(magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert helper.can_clear_magazine(state)
@@ -196,7 +196,7 @@ def test_is_magazine_empty_true(initial_game_state):
 
 
 def test_is_magazine_empty_false(initial_game_state, live_shell):
-    magazine = MagazineBase().load_round([live_shell])
+    magazine = MagazineBase().load_shell(live_shell)
     shotgun = ShotgunBase(magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.is_magazine_empty(state)

@@ -17,15 +17,15 @@ class MagazineInterface(Protocol):
         """
         ...
 
-    def load_round(self, shells: Iterable[ShellInterface]) -> "MagazineInterface":
+    def load_shell(self, shell: ShellInterface) -> "MagazineInterface":
         """
-        Loads a new round of shells into the magazine.
+        Loads a single shell into the magazine.
 
         Args:
-            shells (Iterable[ShellType]): A collection of shell objects to add to the magazine.
+            shell (ShellInterface): The shell object to add to the magazine.
 
         Returns:
-            MagazineInterface[ShellType]: A new magazine instance with the loaded shells.
+            MagazineInterface: A new magazine instance with the loaded shell.
         """
         ...
 
@@ -34,7 +34,19 @@ class MagazineInterface(Protocol):
         Ejects the first shell from the magazine.
 
         Returns:
-            Tuple[ShellType, MagazineInterface[ShellType]]: A tuple containing the ejected shell and a new magazine instance.
+            Tuple[ShellInterface, MagazineInterface]: A tuple containing the ejected shell and a new magazine instance.
+        """
+        ...
+
+    def unload_shell(self, shell: ShellInterface) -> "MagazineInterface":  
+        """
+        Unloads a single shell from the magazine.
+
+        Args:
+            shell (ShellInterface): The shell object to remove from the magazine.
+
+        Returns:
+            MagazineInterface: A new magazine instance with the unloaded shell.
         """
         ...
 
@@ -43,6 +55,6 @@ class MagazineInterface(Protocol):
         Clears all shells from the magazine.
 
         Returns:
-            MagazineInterface[ShellType]: A new magazine instance with an empty magazine.
+            MagazineInterface: A new magazine instance with an empty magazine.
         """
         ...
