@@ -11,30 +11,39 @@ authors = [
 description = "A Stateless Russian Roulette Python Engine"
 readme = "README.md"
 requires-python = ">=3.12"
-license = { text = "MIT" }
+license = "MIT"
+keywords = ["game", "engine", "roulette", "stateless"]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Games/Entertainment",
 ]
 dependencies = [
     "attrs"
 ]
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [project.urls]
-Homepage = "https://github.com/Kodutzu/risiko-engine"
+Repository = "https://github.com/Kodutzu/risiko-engine"
 "Bug Tracker" = "https://github.com/Kodutzu/risiko-engine/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# --- Ruff configuration ---
 [tool.ruff]
 line-length = 88
 
 [tool.ruff.lint]
 # Enable Pyflakes (F), pycodestyle (E, W), isort (I), and pyupgrade (UP) rules.
 select = ["E", "W", "F", "I", "UP"]
+fixable = ["ALL"]
 
 [tool.ruff.format]
-# Enable ruff's formatter, which is a drop-in replacement for Black.
+
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true

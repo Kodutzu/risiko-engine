@@ -26,7 +26,7 @@
 
 ---
 
-## 🚀 Installation (Hadn't published till now)
+## 🚀 Installation
 
 ```bash
 pip install risiko-engine
@@ -45,13 +45,9 @@ from risiko.core import PlayerBase, ShellBase
 # Initialize the game state
 state = RisikoState()
 
-# Define a custom player class
-class AIPlayer(PlayerBase):
-    ...
-
 # Add a player to the game
 state = processors.add_player_to_game(
-    game_state=state, player=AIPlayer(id="player1", name="Player 1", charges=3)
+    game_state=state, player=PlayerBase(id="player1", name="Player 1", charges=3)
 )
 
 # Load the magazine with shells
@@ -83,6 +79,8 @@ print(f"Fired a {fired_shell.shell_type} shell!")
 player = state.player.get_player(current_player_id)
 print(f"{player.name} has {player.charges} charges remaining.")
 ```
+
+`Note: Will be publishing it's documentation`
 
 ---
 

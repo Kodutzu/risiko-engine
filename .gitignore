@@ -1,7 +1,21 @@
-.pytest_cache
+# Python bytecode
 __pycache__/
-venv
-risiko_engine.egg-info
-archive
-.VSCodeCounter
+*.pyc
+
+# Build artifacts
+build/
+dist/
+*.egg-info
+
+# Caches
+.pytest_cache
 .ruff_cache
+.mypy_cache
+
+# Virtual Environments
+venv
+.venv
+
+# Editor-specific
+.VSCodeCounter
+
