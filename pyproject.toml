@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A Stateless Russian Roulette Python Engine"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 license = { text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -18,7 +18,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "attrs",
+    "attrs"
 ]
 
 [project.urls]
