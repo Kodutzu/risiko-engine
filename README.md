@@ -9,8 +9,7 @@
 
 <div align="center">
 
-[![PyPI version](https://badge.fury.io/py/risiko-engine.svg)](https://badge.fury.io/py/risiko-engine)
-[![Python Version](https://img.shields.io/pypi/pyversions/risiko-engine.svg)](https://pypi.org/project/risiko-engine)
+[![PyPI version](https://badge.fury.io/py/risiko-engine.svg)](https://pypi.org/project/risiko-engine/)
 [![License](https://img.shields.io/pypi/l/risiko-engine.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/Kodutzu/risiko-engine/actions/workflows/python-ci.yml/badge.svg)](https://github.com/Kodutzu/risiko-engine/actions/workflows/python-ci.yml)
 
