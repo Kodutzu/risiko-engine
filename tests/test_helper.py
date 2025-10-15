@@ -3,13 +3,13 @@ from collections import deque
 import pytest
 from attrs import evolve
 
-from risiko.core.magazine.base import MagazineBase
-from risiko.core.player.base import PlayerBase
+from risiko.core.magazine.base import RisikoMagazine as MagazineBase
+from risiko.core.player.base import RisikoPlayer
 from risiko.core.player.exception import (
     PlayerIDNotFoundException,
 )  # Assuming this exception exists
-from risiko.core.shell.base import ShellBase
-from risiko.core.shotgun.base import ShotgunBase
+from risiko.core.shell.base import RisikoShell
+from risiko.core.shotgun.base import RisikoShotgun
 from risiko.service import helper
 from risiko.service.managers.player import PlayerManager
 from risiko.service.managers.turn import TurnManager
@@ -18,27 +18,27 @@ from risiko.service.risiko_state import RisikoState
 
 @pytest.fixture
 def player1():
-    return PlayerBase(id="p1", charges=3)
+    return RisikoPlayer(id="p1", charges=3)
 
 
 @pytest.fixture
 def player2():
-    return PlayerBase(id="p2", charges=2)
+    return RisikoPlayer(id="p2", charges=2)
 
 
 @pytest.fixture
 def player3():
-    return PlayerBase(id="p3", charges=0)  # Dead player
+    return RisikoPlayer(id="p3", charges=0)  # Dead player
 
 
 @pytest.fixture
 def live_shell():
-    return ShellBase(shell_type="live", damage=1)
+    return RisikoShell(shell_type="live", damage=1)
 
 
 @pytest.fixture
 def blank_shell():
-    return ShellBase(shell_type="blank", damage=0)
+    return RisikoShell(shell_type="blank", damage=0)
 
 
 @pytest.fixture
@@ -103,14 +103,14 @@ def test_is_player_turn_false(initial_game_state, player2):
 # --- Test cases for can_player_act ---
 def test_can_player_act_true(initial_game_state, player1, live_shell):
     # Setup: player1's turn, player1 alive, shotgun loaded
-    loaded_shotgun = ShotgunBase(chamber=live_shell)
+    loaded_shotgun = RisikoShotgun(chamber=live_shell)
     state = evolve(initial_game_state, shotgun=loaded_shotgun)
     assert helper.can_player_act(state, player1.id)
 
 
 def test_can_player_act_false_not_turn(initial_game_state, player2, live_shell):
     # Setup: player2 not turn, player2 alive, shotgun loaded
-    loaded_shotgun = ShotgunBase(chamber=live_shell)
+    loaded_shotgun = RisikoShotgun(chamber=live_shell)
     state = evolve(initial_game_state, shotgun=loaded_shotgun)
     assert not helper.can_player_act(state, player2.id)
 
@@ -119,7 +119,7 @@ def test_can_player_act_false_not_alive(initial_game_state, player1, live_shell)
     # Setup: player1's turn, player1 dead, shotgun loaded
     dead_player1 = evolve(player1, charges=0)
     dead_player_manager = initial_game_state.player.update_player(dead_player1)
-    loaded_shotgun = ShotgunBase(chamber=live_shell)
+    loaded_shotgun = RisikoShotgun(chamber=live_shell)
     state = evolve(
         initial_game_state, player=dead_player_manager, shotgun=loaded_shotgun
     )
@@ -128,7 +128,7 @@ def test_can_player_act_false_not_alive(initial_game_state, player1, live_shell)
 
 def test_can_player_act_false_shotgun_not_loaded(initial_game_state, player1):
     # Setup: player1's turn, player1 alive, shotgun not loaded
-    unloaded_shotgun = ShotgunBase(chamber=None)
+    unloaded_shotgun = RisikoShotgun(chamber=None)
     state = evolve(initial_game_state, shotgun=unloaded_shotgun)
     assert not helper.can_player_act(state, player1.id)
 
@@ -137,7 +137,7 @@ def test_can_player_act_false_shotgun_not_loaded(initial_game_state, player1):
 def test_can_load_shell_true(initial_game_state, live_shell):
     # Setup: chamber empty, magazine not empty
     magazine = MagazineBase().load_shell(live_shell)
-    shotgun = ShotgunBase(chamber=None, magazine=magazine)
+    shotgun = RisikoShotgun(chamber=None, magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert helper.can_load_shell(state)
 
@@ -145,14 +145,14 @@ def test_can_load_shell_true(initial_game_state, live_shell):
 def test_can_load_shell_false_chamber_not_empty(initial_game_state, live_shell):
     # Setup: chamber not empty, magazine not empty
     magazine = MagazineBase().load_shell(live_shell)
-    shotgun = ShotgunBase(chamber=live_shell, magazine=magazine)
+    shotgun = RisikoShotgun(chamber=live_shell, magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.can_load_shell(state)
 
 
 def test_can_load_shell_false_magazine_empty(initial_game_state):
     # Setup: chamber empty, magazine empty
-    shotgun = ShotgunBase(chamber=None, magazine=MagazineBase())
+    shotgun = RisikoShotgun(chamber=None, magazine=MagazineBase())
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.can_load_shell(state)
 
@@ -160,14 +160,14 @@ def test_can_load_shell_false_magazine_empty(initial_game_state):
 # --- Test cases for can_fire_shotgun ---
 def test_can_fire_shotgun_true(initial_game_state, live_shell):
     # Setup: chamber not empty
-    shotgun = ShotgunBase(chamber=live_shell)
+    shotgun = RisikoShotgun(chamber=live_shell)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert helper.can_fire_shotgun(state)
 
 
 def test_can_fire_shotgun_false(initial_game_state):
     # Setup: chamber empty
-    shotgun = ShotgunBase(chamber=None)
+    shotgun = RisikoShotgun(chamber=None)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.can_fire_shotgun(state)
 
@@ -176,41 +176,41 @@ def test_can_fire_shotgun_false(initial_game_state):
 def test_can_clear_magazine_true(initial_game_state, live_shell):
     # Setup: magazine not empty
     magazine = MagazineBase().load_shell(live_shell)
-    shotgun = ShotgunBase(magazine=magazine)
+    shotgun = RisikoShotgun(magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert helper.can_clear_magazine(state)
 
 
 def test_can_clear_magazine_false(initial_game_state):
     # Setup: magazine empty
-    shotgun = ShotgunBase(magazine=MagazineBase())
+    shotgun = RisikoShotgun(magazine=MagazineBase())
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.can_clear_magazine(state)
 
 
 # --- Test cases for is_magazine_empty ---
 def test_is_magazine_empty_true(initial_game_state):
-    shotgun = ShotgunBase(magazine=MagazineBase())
+    shotgun = RisikoShotgun(magazine=MagazineBase())
     state = evolve(initial_game_state, shotgun=shotgun)
     assert helper.is_magazine_empty(state)
 
 
 def test_is_magazine_empty_false(initial_game_state, live_shell):
     magazine = MagazineBase().load_shell(live_shell)
-    shotgun = ShotgunBase(magazine=magazine)
+    shotgun = RisikoShotgun(magazine=magazine)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.is_magazine_empty(state)
 
 
 # --- Test cases for is_chamber_empty ---
 def test_is_chamber_empty_true(initial_game_state):
-    shotgun = ShotgunBase(chamber=None)
+    shotgun = RisikoShotgun(chamber=None)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert helper.is_chamber_empty(state)
 
 
 def test_is_chamber_empty_false(initial_game_state, live_shell):
-    shotgun = ShotgunBase(chamber=live_shell)
+    shotgun = RisikoShotgun(chamber=live_shell)
     state = evolve(initial_game_state, shotgun=shotgun)
     assert not helper.is_chamber_empty(state)
 

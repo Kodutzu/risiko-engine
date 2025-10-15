@@ -1,4 +1,4 @@
-from .base import PlayerBase
+from .base import RisikoPlayer
 from .exception import (
     InvalidPlayerClassException,
     PlayerDeadException,
@@ -10,7 +10,7 @@ from .exception import (
 from .interface import PlayerInterface
 
 __all__ = [
-    "PlayerBase",
+    "RisikoPlayer",
     "PlayerInterface",
     "PlayerException",
     "PlayerDeadException",

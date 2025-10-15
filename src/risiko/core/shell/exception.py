@@ -1,7 +1,7 @@
-from ..exception import CoreException
+from ..exception import RisikoException
 
 
-class ShellException(CoreException):
+class ShellException(RisikoException):
     """
     Base exception for the shell component
     """

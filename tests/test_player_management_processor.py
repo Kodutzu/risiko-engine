@@ -2,7 +2,7 @@ from collections import deque
 
 import pytest
 
-from risiko.core.player.base import PlayerBase
+from risiko.core.player.base import RisikoPlayer as PlayerBase
 from risiko.core.player.exception import (
     PlayerIDExistsException,
     PlayerIDNotFoundException,

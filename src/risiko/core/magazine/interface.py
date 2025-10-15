@@ -1,4 +1,6 @@
-from typing import Iterable, Protocol, Tuple, runtime_checkable
+from __future__ import annotations
+
+from typing import Protocol, runtime_checkable
 
 from ..shell import ShellInterface
 
@@ -11,13 +13,13 @@ class MagazineInterface(Protocol):
     """
 
     @property
-    def tube(self) -> Tuple[ShellInterface, ...]:
+    def tube(self) -> tuple[ShellInterface, ...]:
         """
         Returns the deque of shells currently in the magazine tube.
         """
         ...
 
-    def load_shell(self, shell: ShellInterface) -> "MagazineInterface":
+    def load_shell(self, shell: ShellInterface) -> MagazineInterface:
         """
         Loads a single shell into the magazine.
 
@@ -29,16 +31,17 @@ class MagazineInterface(Protocol):
         """
         ...
 
-    def eject_shell(self) -> Tuple[ShellInterface, "MagazineInterface"]:
+    def eject_shell(self) -> tuple[ShellInterface, MagazineInterface]:
         """
         Ejects the first shell from the magazine.
 
         Returns:
-            Tuple[ShellInterface, MagazineInterface]: A tuple containing the ejected shell and a new magazine instance.
+            Tuple[ShellInterface, MagazineInterface]:
+                A tuple containing the ejected shell and a new magazine instance.
         """
         ...
 
-    def unload_shell(self, shell: ShellInterface) -> "MagazineInterface":  
+    def unload_shell(self, shell: ShellInterface) -> MagazineInterface:
         """
         Unloads a single shell from the magazine.
 
@@ -50,7 +53,7 @@ class MagazineInterface(Protocol):
         """
         ...
 
-    def clear(self) -> "MagazineInterface":
+    def clear(self) -> MagazineInterface:
         """
         Clears all shells from the magazine.
 

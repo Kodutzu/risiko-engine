@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from attrs import evolve
 
 from ...core.player.exception import PlayerDeadException, PlayerInvalidTurnException
@@ -10,7 +8,7 @@ from ..risiko_state import RisikoState
 
 def fire_shell(
     game_state: RisikoState, shooter_id: str
-) -> Tuple[ShellInterface, RisikoState]:
+) -> tuple[ShellInterface, RisikoState]:
     """
     Fires a shell from the shotgun, updating the game state.
 
@@ -19,7 +17,8 @@ def fire_shell(
         shooter_id (str): The ID of the player attempting to fire.
 
     Returns:
-        Tuple[ShellInterface, RisikoState]: A tuple containing the fired shell and the new game state.
+        Tuple[ShellInterface, RisikoState]: A tuple containing the fired
+            shell and the new game state.
 
     Raises:
         PlayerDeadException: If the shooter is not alive.
@@ -38,7 +37,9 @@ def fire_shell(
     return (fired_shell, evolve(game_state, shotgun=new_shotgun))
 
 
-def hit_shell(game_state: RisikoState, target_id: str, fired_shell: ShellInterface):
+def hit_shell(
+    game_state: RisikoState, target_id: str, fired_shell: ShellInterface
+) -> RisikoState:
     """
     Applies the effect of a fired shell to a target player.
 

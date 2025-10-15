@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from collections import deque
-from typing import Deque, Tuple, final, override
+from typing import final, override
 
 from attrs import define, evolve, field
 
@@ -9,23 +11,23 @@ from .interface import MagazineInterface
 
 
 @define(frozen=True)
-class MagazineBase(MagazineInterface):
+class RisikoMagazine(MagazineInterface):
     """Represents the shotgun's magazine, holding a deque of shells.
     This class is immutable; all methods that modify the magazine's state
     return a new MagazineBase instance.
     """
 
-    _tube: Deque[ShellInterface] = field(factory=deque, alias="tube", kw_only=True)
+    _tube: deque[ShellInterface] = field(factory=deque, alias="tube", kw_only=True)
 
     @property
     @final
     @override
-    def tube(self) -> Tuple[ShellInterface, ...]:
+    def tube(self) -> tuple[ShellInterface, ...]:
         return tuple(self._tube)
 
     @final
     @override
-    def load_shell(self, shell: ShellInterface) -> "MagazineBase":
+    def load_shell(self, shell: ShellInterface) -> RisikoMagazine:
         """
         Load a single shell object into the magazine.
 
@@ -43,12 +45,13 @@ class MagazineBase(MagazineInterface):
 
     @final
     @override
-    def eject_shell(self) -> Tuple[ShellInterface, "MagazineBase"]:
+    def eject_shell(self) -> tuple[ShellInterface, RisikoMagazine]:
         """
         Ejects the first shell from the magazine.
 
         Returns:
-            Tuple[ShellInterface, MagazineBase]: A tuple containing the ejected shell and a new MagazineBase instance.
+            tuple[ShellInterface, MagazineBase]: containing the ejected shell
+                and a new RisikoMagazine instance.
 
         Raises:
             MagazineEmptyException: If the magazine is empty.
@@ -61,10 +64,10 @@ class MagazineBase(MagazineInterface):
         shell = new_tube.popleft()
 
         return (shell, evolve(self, tube=new_tube))
-    
+
     @final
     @override
-    def unload_shell(self, shell: ShellInterface) -> MagazineInterface:
+    def unload_shell(self, shell: ShellInterface) -> RisikoMagazine:
         """
         Unloads a single shell from the magazine.
 
@@ -87,7 +90,7 @@ class MagazineBase(MagazineInterface):
 
     @final
     @override
-    def clear(self) -> "MagazineBase":
+    def clear(self) -> RisikoMagazine:
         """
         Clears all shells from the magazine.
 

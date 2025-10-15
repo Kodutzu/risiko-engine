@@ -1,9 +1,9 @@
 import pytest
 
-from risiko.core.magazine.base import MagazineBase
+from risiko.core.magazine.base import RisikoMagazine as MagazineBase
 from risiko.core.magazine.exception import MagazineEmptyException
-from risiko.core.shell.base import ShellBase
-from risiko.core.shotgun.base import ShotgunBase
+from risiko.core.shell.base import RisikoShell
+from risiko.core.shotgun.base import RisikoShotgun
 from risiko.core.shotgun.exception import (
     ShotgunLoadedException,
     ShotgunUnLoadedException,
@@ -12,45 +12,45 @@ from risiko.core.shotgun.exception import (
 
 @pytest.fixture
 def live_shell():
-    return ShellBase(shell_type="live", damage=1)
+    return RisikoShell(shell_type="live", damage=1)
 
 
 @pytest.fixture
 def blank_shell():
-    return ShellBase(shell_type="blank", damage=0)
+    return RisikoShell(shell_type="blank", damage=0)
 
 
 def test_shotgun_creation():
-    """Test that a ShotgunBase can be instantiated."""
-    shotgun = ShotgunBase()
+    """Test that a RisikoShotgun can be instantiated."""
+    shotgun = RisikoShotgun()
     assert shotgun.chamber is None
     assert len(shotgun.magazine.tube) == 0
 
 
 def test_load_chamber_when_already_loaded_raises_exception(live_shell):
     """Test loading the chamber when it's already loaded raises an exception."""
-    shotgun = ShotgunBase(chamber=live_shell)
+    shotgun = RisikoShotgun(chamber=live_shell)
     with pytest.raises(ShotgunLoadedException):
         shotgun.load_chamber()
 
 
 def test_load_chamber_from_empty_magazine_raises_exception():
     """Test loading the chamber from an empty magazine raises an exception."""
-    shotgun = ShotgunBase()
+    shotgun = RisikoShotgun()
     with pytest.raises(MagazineEmptyException):
         shotgun.load_chamber()
 
 
 def test_unload_chamber_when_empty_raises_exception():
     """Test unloading the chamber when it's already empty raises an exception."""
-    shotgun = ShotgunBase()
+    shotgun = RisikoShotgun()
     with pytest.raises(ShotgunUnLoadedException):
         shotgun.unload_chamber()
 
 
 def test_fire_when_chamber_is_empty_raises_exception():
     """Test firing the shotgun when the chamber is empty raises an exception."""
-    shotgun = ShotgunBase()
+    shotgun = RisikoShotgun()
     with pytest.raises(ShotgunUnLoadedException):
         shotgun.fire()
 
@@ -58,7 +58,7 @@ def test_fire_when_chamber_is_empty_raises_exception():
 def test_full_sequence_load_fire(live_shell):
     """Test a full sequence of loading the magazine, loading the chamber, and firing."""
     magazine = MagazineBase().load_shell(live_shell)
-    shotgun = ShotgunBase(magazine=magazine)
+    shotgun = RisikoShotgun(magazine=magazine)
 
     # Load chamber
     loaded_shotgun = shotgun.load_chamber()
@@ -74,7 +74,7 @@ def test_full_sequence_load_fire(live_shell):
 def test_sequence_with_unload(live_shell):
     """Test a sequence with unloading the chamber."""
     magazine = MagazineBase().load_shell(live_shell)
-    shotgun = ShotgunBase(magazine=magazine)
+    shotgun = RisikoShotgun(magazine=magazine)
 
     # Load chamber
     loaded_shotgun = shotgun.load_chamber()
@@ -89,8 +89,13 @@ def test_sequence_with_unload(live_shell):
 
 def test_repeated_load_fire_sequence(live_shell):
     """Test repeated load chamber and fire operations."""
-    magazine = MagazineBase().load_shell(live_shell).load_shell(live_shell).load_shell(live_shell)
-    shotgun = ShotgunBase(magazine=magazine)
+    magazine = (
+        MagazineBase()
+        .load_shell(live_shell)
+        .load_shell(live_shell)
+        .load_shell(live_shell)
+    )
+    shotgun = RisikoShotgun(magazine=magazine)
 
     # First load and fire
     loaded_shotgun = shotgun.load_chamber()

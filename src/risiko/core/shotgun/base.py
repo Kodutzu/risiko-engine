@@ -1,32 +1,35 @@
-from typing import Optional, Tuple, final, override
+from __future__ import annotations
+
+from typing import final, override
 
 from attrs import define, evolve, field
 
-from ..magazine import MagazineBase, MagazineInterface
+from ..magazine import MagazineInterface, RisikoMagazine
 from ..shell.interface import ShellInterface
 from .exception import ShotgunLoadedException, ShotgunUnLoadedException
 from .interface import ShotgunInterface
 
 
 @define(frozen=True)
-class ShotgunBase(ShotgunInterface):
+class RisikoShotgun(ShotgunInterface):
     """
     Represents the shotgun in the game, including its magazine and chamber.
     This class is immutable; all methods that modify the shotgun's state
-    return a new ShotgunBase instance.
+    return a new RisikoShotgun instance.
     """
 
-    magazine: MagazineInterface = field(factory=MagazineBase, kw_only=True)
-    chamber: Optional[ShellInterface] = field(default=None, kw_only=True)
+    magazine: MagazineInterface = field(factory=RisikoMagazine, kw_only=True)
+    chamber: ShellInterface | None = field(default=None, kw_only=True)
 
     @final
     @override
-    def load_chamber(self) -> "ShotgunBase":
+    def load_chamber(self) -> RisikoShotgun:
         """
         Loads a shell from the magazine into the chamber.
 
         Returns:
-            ShotgunBase: A new ShotgunBase instance with the chamber loaded and magazine updated.
+            RisikoShotgun: A new RisikoShotgun instance with the chamber
+            loaded and magazine updated.
 
         Raises:
             ShotgunLoadedException: If the chamber is already loaded.
@@ -41,12 +44,13 @@ class ShotgunBase(ShotgunInterface):
 
     @final
     @override
-    def unload_chamber(self) -> "ShotgunBase":
+    def unload_chamber(self) -> RisikoShotgun:
         """
         Unloads the shell from the chamber back into the magazine.
 
         Returns:
-            ShotgunBase: A new ShotgunBase instance with the chamber empty and magazine updated.
+            RisikoShotgun: A new RisikoShotgun instance with the chamber empty
+            and magazine updated.
 
         Raises:
             ShotgunUnLoadedException: If the chamber is already empty.
@@ -61,12 +65,14 @@ class ShotgunBase(ShotgunInterface):
 
     @final
     @override
-    def fire(self) -> Tuple[ShellInterface, "ShotgunBase"]:
+    def fire(self) -> tuple[ShellInterface, RisikoShotgun]:
         """
         Fires the shell currently in the chamber.
 
         Returns:
-            Tuple[ShellInterface, ShotgunBase]: A tuple containing the fired shell and a new ShotgunBase instance with an empty chamber.
+            tuple[ShellInterface, RisikoShotgun]:
+            A tuple containing the fired shell and a new RisikoShotgun instance with
+            an empty chamber.
 
         Raises:
             ShotgunUnLoadedException: If the chamber is empty.

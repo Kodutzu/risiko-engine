@@ -5,7 +5,7 @@ from .interface import ShellInterface
 
 
 @define(frozen=True)
-class ShellBase(ShellInterface):
+class RisikoShell(ShellInterface):
     """
     Represents a generic shell with a specific type and damage value.
 

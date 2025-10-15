@@ -3,7 +3,9 @@ from attrs import evolve
 from ..risiko_state import RisikoState
 
 
-def advance_player_turn(game_state: RisikoState, turns: int = 1):
+def advance_player_turn(
+        game_state: RisikoState, turns: int = 1
+        ) -> RisikoState:
     """
     Advances the player turn by a specified number of turns.
 

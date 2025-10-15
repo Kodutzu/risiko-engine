@@ -1,10 +1,10 @@
-from .base import ShellBase
+from .base import RisikoShell
 from .exception import InvalidShell, ShellException, ShellNotFoundException
 from .interface import ShellInterface
 
 __all__ = [
+    "RisikoShell",
     "ShellInterface",
-    "ShellBase",
     "ShellException",
     "ShellNotFoundException",
     "InvalidShell",

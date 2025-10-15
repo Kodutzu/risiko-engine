@@ -1,7 +1,7 @@
-from ..exception import CoreException
+from ..exception import RisikoException
 
 
-class PlayerException(CoreException):
+class PlayerException(RisikoException):
     """
     Base class for player exceptions.
     """
@@ -11,7 +11,8 @@ class PlayerException(CoreException):
 
 class PlayerDeadException(PlayerException):
     """
-    Exception raised when an action is attempted on a player who is already dead (has 0 charges).
+    Exception raised when an action is attempted on a player who is
+    already dead (has 0 charges).
     """
 
     def __init__(self, id: str, info: str) -> None:

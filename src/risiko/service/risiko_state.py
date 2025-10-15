@@ -1,7 +1,8 @@
 from attrs import define, field
 from attrs.validators import instance_of
 
-from ..core import ShotgunBase, ShotgunInterface
+from ..core import RisikoShotgun
+from ..core.shotgun import ShotgunInterface
 from .managers import PlayerManager, TurnManager
 
 
@@ -14,7 +15,7 @@ class RisikoState:
     """
 
     shotgun: ShotgunInterface = field(
-        factory=ShotgunBase, validator=instance_of(ShotgunInterface)
+        factory=RisikoShotgun, validator=instance_of(ShotgunInterface)
     )
     player: PlayerManager = field(
         factory=PlayerManager, validator=instance_of(PlayerManager)

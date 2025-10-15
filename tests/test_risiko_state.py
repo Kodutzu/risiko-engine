@@ -1,6 +1,6 @@
 import pytest
 
-from risiko.core.shotgun.base import ShotgunBase
+from risiko.core.shotgun.base import RisikoShotgun as ShotgunBase
 from risiko.service.managers.player import PlayerManager
 from risiko.service.managers.turn import TurnManager
 from risiko.service.risiko_state import RisikoState

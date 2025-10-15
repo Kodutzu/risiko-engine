@@ -3,7 +3,9 @@ from attrs import evolve
 from ..risiko_state import RisikoState
 
 
-def player_lose_charges(game_state: RisikoState, player_id: str, charges: int):
+def player_lose_charges(
+        game_state: RisikoState, player_id: str, charges: int
+        ) -> RisikoState:
     """
     Makes a player lose a specified number of charges.
 
@@ -26,7 +28,9 @@ def player_lose_charges(game_state: RisikoState, player_id: str, charges: int):
     return evolve(game_state, player=new_player_manager)
 
 
-def player_gain_charges(game_state: RisikoState, player_id: str, charges: int):
+def player_gain_charges(
+        game_state: RisikoState, player_id: str, charges: int
+        ) -> RisikoState:
     """
     Makes a player gain a specified number of charges.
 

@@ -1,9 +1,9 @@
-from .base import MagazineBase
+from .base import RisikoMagazine
 from .exception import MagazineEmptyException, MagazineException
 from .interface import MagazineInterface
 
 __all__ = [
-    "MagazineBase",
+    "RisikoMagazine",
     "MagazineInterface",
     "MagazineException",
     "MagazineEmptyException",

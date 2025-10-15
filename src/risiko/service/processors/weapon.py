@@ -40,7 +40,9 @@ def unload_shotgun_chamber(game_state: RisikoState):
     return evolve(game_state, shotgun=new_shotgun)
 
 
-def replace_chamber_shell_from_shotgun(game_state: RisikoState, shell: ShellInterface) -> RisikoState:
+def replace_chamber_shell_from_shotgun(
+    game_state: RisikoState, shell: ShellInterface
+) -> RisikoState:
     """
     Replaces the shell in the shotgun's chamber with a new shell.
 
@@ -53,7 +55,10 @@ def replace_chamber_shell_from_shotgun(game_state: RisikoState, shell: ShellInte
     """
 
     if not isinstance(shell, ShellInterface):
-        raise InvalidShell(f"Invalid object provided. Expected a ShellInterface, but got {type(shell)}.")
+        raise InvalidShell(
+            f"Invalid object provided. Expected a ShellInterface, but got "
+            f"{type(shell)}."
+        )
 
     return evolve(
         game_state,

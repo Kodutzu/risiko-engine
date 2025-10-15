@@ -3,10 +3,11 @@ from random import shuffle
 
 from attrs import evolve
 
-from ...core.shell import InvalidShell, ShellInterface, ShellNotFoundException
+from ...core.shell import InvalidShell, ShellInterface
 from ..risiko_state import RisikoState
 
-def eject_magazine_shell(game_state: RisikoState):
+
+def eject_magazine_shell(game_state: RisikoState) -> tuple[ShellInterface, RisikoState]:
     """
     Ejects a shell from the shotgun's magazine.
 
@@ -14,7 +15,8 @@ def eject_magazine_shell(game_state: RisikoState):
         game_state (RisikoState): The current state of the game.
 
     Returns:
-        Tuple[ShellInterface, RisikoState]: A tuple containing the ejected shell and the new game state.
+        Tuple[ShellInterface, RisikoState]: A tuple containing the ejected
+            shell and the new game state.
     """
 
     shell_ejected, new_magazine = game_state.shotgun.magazine.eject_shell()
@@ -25,7 +27,9 @@ def eject_magazine_shell(game_state: RisikoState):
     )
 
 
-def load_shell_to_magazine(game_state: RisikoState, shell: ShellInterface) -> RisikoState:
+def load_shell_to_magazine(
+    game_state: RisikoState, shell: ShellInterface
+) -> RisikoState:
     """
     Adds a shell to the shotgun's magazine.
 
@@ -38,20 +42,19 @@ def load_shell_to_magazine(game_state: RisikoState, shell: ShellInterface) -> Ri
     """
 
     if not isinstance(shell, ShellInterface):
-        raise InvalidShell(f"Invalid object provided. Expected a ShellInterface, but got {type(shell)}.")
+        raise InvalidShell(
+            f"Invalid object provided. Expected a ShellInterface, but got "
+            f"{type(shell)}."
+        )
 
     new_magazine = game_state.shotgun.magazine.load_shell(shell)
 
-    return evolve(
-        game_state,
-        shotgun=evolve(
-            game_state.shotgun,
-            magazine=new_magazine
-        )
-    )
+    return evolve(game_state, shotgun=evolve(game_state.shotgun, magazine=new_magazine))
 
 
-def remove_shell_from_magazine(game_state: RisikoState, shell: ShellInterface) -> RisikoState:
+def remove_shell_from_magazine(
+    game_state: RisikoState, shell: ShellInterface
+) -> RisikoState:
     """
     Removes a shell from the shotgun's magazine.
 
@@ -63,20 +66,17 @@ def remove_shell_from_magazine(game_state: RisikoState, shell: ShellInterface) -
         RisikoState: A new game state with the shell removed from the magazine.
     """
     if not isinstance(shell, ShellInterface):
-        raise InvalidShell(f"Invalid object provided. Expected a ShellInterface, but got {type(shell)}.")
+        raise InvalidShell(
+            f"Invalid object provided. Expected a ShellInterface, but got "
+            f"{type(shell)}."
+        )
 
     new_magazine = game_state.shotgun.magazine.unload_shell(shell)
 
-    return evolve(
-        game_state, 
-        shotgun=evolve(
-            game_state.shotgun, 
-            magazine=new_magazine
-            )
-        )
+    return evolve(game_state, shotgun=evolve(game_state.shotgun, magazine=new_magazine))
 
 
-def shuffle_magazine(game_state: RisikoState):
+def shuffle_magazine(game_state: RisikoState) -> RisikoState:
     """
     Shuffles the shells in the shotgun's magazine.
 
@@ -99,7 +99,7 @@ def shuffle_magazine(game_state: RisikoState):
     )
 
 
-def clear_magazine(game_state: RisikoState):
+def clear_magazine(game_state: RisikoState) -> RisikoState:
     """
 
     Clears all shells from the shotgun's magazine.

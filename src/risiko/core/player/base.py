@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import final, override
 
 from attrs import define, evolve, field
@@ -8,7 +10,7 @@ from .interface import PlayerInterface
 
 
 @define(frozen=True)
-class PlayerBase(PlayerInterface):
+class RisikoPlayer(PlayerInterface):
     """
     Represents a player in the game with an ID and a number of charges (lives).
 
@@ -19,15 +21,12 @@ class PlayerBase(PlayerInterface):
 
     @final
     @override
-    def lose_charges(self, amt: int) -> "PlayerBase":
+    def lose_charges(self, amt: int) -> RisikoPlayer:
         """
         Reduces the player's charges by the specified amount.
 
-        Args:
-            amt (int): The amount of charges to lose. Must be non-negative.
-
         Returns:
-            PlayerBase: A new PlayerBase instance with updated charges.
+            RisikoPlayer: A new RisikoPlayer instance with updated charges.
 
         Raises:
             PlayerDeadException: If the player already has 0 charges.
@@ -45,7 +44,7 @@ class PlayerBase(PlayerInterface):
 
     @final
     @override
-    def gain_charges(self, amt: int) -> "PlayerBase":
+    def gain_charges(self, amt: int) -> RisikoPlayer:
         """
         Increases the player's charges by the specified amount.
 

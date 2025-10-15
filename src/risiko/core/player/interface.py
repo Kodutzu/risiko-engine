@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Protocol, runtime_checkable
 
 
@@ -11,7 +13,7 @@ class PlayerInterface(Protocol):
     id: str
     charges: int
 
-    def lose_charges(self, amt: int) -> "PlayerInterface":
+    def lose_charges(self, amt: int) -> PlayerInterface:
         """Reduces the player's charges by a given amount.
 
         Since the player is immutable, this method returns a new player instance
@@ -25,7 +27,7 @@ class PlayerInterface(Protocol):
         """
         ...
 
-    def gain_charges(self, amt: int) -> "PlayerInterface":
+    def gain_charges(self, amt: int) -> PlayerInterface:
         """Increases the player's charges by a given amount.
 
         Since the player is immutable, this method returns a new player instance

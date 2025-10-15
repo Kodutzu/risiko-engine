@@ -1,7 +1,7 @@
-from ..exception import CoreException
+from ..exception import RisikoException
 
 
-class MagazineException(CoreException):
+class MagazineException(RisikoException):
     """Base exception for magazine-related errors."""
 
     pass

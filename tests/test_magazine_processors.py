@@ -1,6 +1,7 @@
-from risiko.service.processors import load_shell_to_magazine, eject_magazine_shell
-from risiko.core.shell import ShellBase, InvalidShell
-from risiko import RisikoState
+from risiko.core.shell import InvalidShell, RisikoShell
+from risiko.core.shell.base import RisikoShell as ShellBase
+from risiko.service.processors import eject_magazine_shell, load_shell_to_magazine
+from risiko.service.risiko_state import RisikoState
 
 
 def test_insert_shell_to_magazine():
@@ -21,11 +22,12 @@ def test_insert_invalid_shell_to_magazine():
     else:
         assert False
 
+
 def test_eject_magazine_shell():
     state = RisikoState()
-    shell = ShellBase(shell_type="live", damage=1)
+    shell = RisikoShell(shell_type="live", damage=1)
     state = load_shell_to_magazine(game_state=state, shell=shell)
-    
+
     ejected_shell, new_state = eject_magazine_shell(game_state=state)
     assert ejected_shell == shell
     assert len(new_state.shotgun.magazine.tube) == 0

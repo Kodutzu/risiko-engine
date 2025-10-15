@@ -3,10 +3,10 @@ from collections import deque
 import pytest
 from attrs import evolve
 
-from risiko.core.player.base import PlayerBase
+from risiko.core.player.base import RisikoPlayer
 from risiko.core.player.exception import PlayerDeadException, PlayerInvalidTurnException
-from risiko.core.shell.base import ShellBase
-from risiko.core.shotgun.base import ShotgunBase
+from risiko.core.shell.base import RisikoShell
+from risiko.core.shotgun.base import RisikoShotgun
 from risiko.core.shotgun.exception import (
     ShotgunUnLoadedException,
 )  # For when shotgun is empty
@@ -18,27 +18,27 @@ from risiko.service.risiko_state import RisikoState
 
 @pytest.fixture
 def player1():
-    return PlayerBase(id="p1", charges=3)
+    return RisikoPlayer(id="p1", charges=3)
 
 
 @pytest.fixture
 def player2():
-    return PlayerBase(id="p2", charges=2)
+    return RisikoPlayer(id="p2", charges=2)
 
 
 @pytest.fixture
 def player3_dead():
-    return PlayerBase(id="p3", charges=0)  # Dead player
+    return RisikoPlayer(id="p3", charges=0)  # Dead player
 
 
 @pytest.fixture
 def live_shell():
-    return ShellBase(shell_type="live", damage=1)
+    return RisikoShell(shell_type="live", damage=1)
 
 
 @pytest.fixture
 def blank_shell():
-    return ShellBase(shell_type="blank", damage=0)
+    return RisikoShell(shell_type="blank", damage=0)
 
 
 @pytest.fixture
@@ -51,7 +51,7 @@ def initial_game_state(player1, player2):
 # --- Test cases for fire_shell ---
 def test_fire_shell_success(initial_game_state, player1, live_shell):
     # Setup: player1's turn, player1 alive, shotgun loaded
-    loaded_shotgun = ShotgunBase(chamber=live_shell)
+    loaded_shotgun = RisikoShotgun(chamber=live_shell)
     state_with_loaded_shotgun = evolve(initial_game_state, shotgun=loaded_shotgun)
 
     fired_shell, new_state = action.fire_shell(state_with_loaded_shotgun, player1.id)
@@ -69,7 +69,7 @@ def test_fire_shell_shooter_dead_raises_exception(
     turn_manager_dead_player_turn = TurnManager(
         order=deque([player3_dead.id, initial_game_state.turns.current_player_id])
     )
-    loaded_shotgun = ShotgunBase(chamber=live_shell)
+    loaded_shotgun = RisikoShotgun(chamber=live_shell)
     state = evolve(
         initial_game_state,
         player=player_manager_with_dead,
@@ -85,7 +85,7 @@ def test_fire_shell_not_shooters_turn_raises_exception(
     initial_game_state, player2, live_shell
 ):
     # Setup: player2 not turn, player2 alive, shotgun loaded
-    loaded_shotgun = ShotgunBase(chamber=live_shell)
+    loaded_shotgun = RisikoShotgun(chamber=live_shell)
     state = evolve(initial_game_state, shotgun=loaded_shotgun)
 
     with pytest.raises(PlayerInvalidTurnException):
@@ -94,12 +94,12 @@ def test_fire_shell_not_shooters_turn_raises_exception(
 
 def test_fire_shell_shotgun_empty_raises_exception(initial_game_state, player1):
     # Setup: player1's turn, player1 alive, shotgun empty
-    empty_shotgun = ShotgunBase(chamber=None)
+    empty_shotgun = RisikoShotgun(chamber=None)
     state = evolve(initial_game_state, shotgun=empty_shotgun)
 
     with pytest.raises(
         ShotgunUnLoadedException
-    ):  # This exception comes from ShotgunBase.fire()
+    ):  # This exception comes from RisikoShotgun.fire()
         action.fire_shell(state, player1.id)
 
 

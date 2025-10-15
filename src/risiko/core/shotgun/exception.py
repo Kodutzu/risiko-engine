@@ -1,7 +1,7 @@
-from ..exception import CoreException
+from ..exception import RisikoException
 
 
-class ShotgunException(CoreException):
+class ShotgunException(RisikoException):
     """Base exception for the shotgun component"""
 
     pass
@@ -15,7 +15,8 @@ class ShotgunUnLoadedException(ShotgunException):
         Initializes the ShotgunUnLoadedException.
 
         Args:
-            message (str, optional): The error message. Defaults to "Shotgun is not loaded".
+            message (str, optional):
+                The error message. Defaults to "Shotgun is not loaded".
         """
         self.message = message
         super().__init__(self.message)

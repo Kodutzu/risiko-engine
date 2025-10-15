@@ -1,4 +1,6 @@
-from typing import Optional, Protocol, Tuple, runtime_checkable
+from __future__ import annotations
+
+from typing import Protocol, runtime_checkable
 
 from ..magazine.interface import MagazineInterface
 from ..shell.interface import ShellInterface
@@ -11,9 +13,9 @@ class ShotgunInterface(Protocol):
     """
 
     magazine: MagazineInterface
-    chamber: Optional[ShellInterface]
+    chamber: ShellInterface | None
 
-    def load_chamber(self) -> "ShotgunInterface":
+    def load_chamber(self) -> ShotgunInterface:
         """
         Loads a shell from the magazine into the chamber.
 
@@ -22,7 +24,7 @@ class ShotgunInterface(Protocol):
         """
         ...
 
-    def unload_chamber(self) -> "ShotgunInterface":
+    def unload_chamber(self) -> ShotgunInterface:
         """
         Unloads the shell from the chamber, typically back into the magazine.
 
@@ -31,11 +33,12 @@ class ShotgunInterface(Protocol):
         """
         ...
 
-    def fire(self) -> Tuple[ShellInterface, "ShotgunInterface"]:
+    def fire(self) -> tuple[ShellInterface, ShotgunInterface]:
         """
         Fires the shell currently in the chamber.
 
         Returns:
-            Tuple[ShellInterface, ShotgunInterface]: A tuple containing the fired shell and a new shotgun instance with an empty chamber.
+            tuple[ShellInterface, ShotgunInterface]: A tuple containing the fired
+                shell and a new shotgun instance with an empty chamber.
         """
         ...

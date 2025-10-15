@@ -1,11 +1,11 @@
-from risiko.core.player.base import PlayerBase
+from risiko.core.player.base import RisikoPlayer
 from risiko.core.player.interface import PlayerInterface
 
 
 def test_player_base_conforms_to_interface():
-    """Tests that PlayerBase correctly implements PlayerInterface."""
+    """Tests that RisikoPlayer correctly implements PlayerInterface."""
     # 1. Create an instance of the concrete class
-    player = PlayerBase(id="p1", charges=5)
+    player = RisikoPlayer(id="p1", charges=5)
 
     # 2. Assert that it is an instance of the interface
     #    This works because the protocol is decorated with @runtime_checkable

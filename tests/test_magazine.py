@@ -1,16 +1,16 @@
 import pytest
 
-from risiko.core.magazine.base import MagazineBase
+from risiko.core.magazine.base import RisikoMagazine as MagazineBase
 from risiko.core.magazine.exception import MagazineEmptyException
-from risiko.core.shell.base import ShellBase
+from risiko.core.shell.base import RisikoShell
 
 
 # Define some concrete shell types for testing
-class BuckshotShell(ShellBase):
+class BuckshotShell(RisikoShell):
     pass
 
 
-class SlugShell(ShellBase):
+class SlugShell(RisikoShell):
     pass
 
 
@@ -43,10 +43,10 @@ def test_type_safety_concept():
     A static type checker like mypy would flag the commented-out line as an error.
     """
     magazine = MagazineBase()
-    slug = SlugShell(shell_type="slug", damage=2)
 
     # mypy would raise an error on the following line:
-    # error: Argument 1 to "load_round" of "MagazineBase" has incompatible type "list[SlugShell]"; expected "Iterable[BuckshotShell]"
+    # error: Argument 1 to "load_round" of "MagazineBase" has incompatible
+    # type "list[SlugShell]"; expected "Iterable[BuckshotShell]"
     # loaded_magazine = magazine.load_round([slug])
 
     assert len(magazine.tube) == 0
@@ -64,9 +64,6 @@ def test_clear_empty_magazine_raises_exception():
     magazine = MagazineBase()
     with pytest.raises(MagazineEmptyException):
         magazine.clear()
-
-
-
 
 
 def test_load_multiple_shells_and_eject_in_order():

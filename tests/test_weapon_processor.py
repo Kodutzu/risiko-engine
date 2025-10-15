@@ -3,11 +3,11 @@ from collections import deque
 import pytest
 from attrs import evolve
 
-from risiko.core.magazine.base import MagazineBase
+from risiko.core.magazine.base import RisikoMagazine as MagazineBase
 from risiko.core.magazine.exception import MagazineEmptyException
 from risiko.core.shell import InvalidShell
-from risiko.core.shell.base import ShellBase
-from risiko.core.shotgun.base import ShotgunBase
+from risiko.core.shell.base import RisikoShell as ShellBase
+from risiko.core.shotgun.base import RisikoShotgun as ShotgunBase
 from risiko.core.shotgun.exception import (
     ShotgunLoadedException,
     ShotgunUnLoadedException,
@@ -46,7 +46,9 @@ def game_state_with_loaded_chamber(initial_game_state, live_shell):
 
 # --- Test cases for shotgun_load_shell ---
 def test_shotgun_load_shell_success(game_state_with_loaded_magazine, live_shell):
-    new_state = weapon_processor.shotgun_load_shell_in_chamber(game_state_with_loaded_magazine)
+    new_state = weapon_processor.shotgun_load_shell_in_chamber(
+        game_state_with_loaded_magazine
+    )
     assert new_state.shotgun.chamber == live_shell
     assert len(new_state.shotgun.magazine.tube) == 0
 

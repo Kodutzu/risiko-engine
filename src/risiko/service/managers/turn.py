@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from collections import deque
-from typing import Deque, Tuple
 
 from attrs import Factory, define, evolve, field
 from attrs.validators import in_
@@ -14,7 +15,7 @@ class TurnManager:
     return a new TurnManager instance.
     """
 
-    _order: Deque[str] = field(default=Factory(deque), alias="order", kw_only=True)
+    _order: deque[str] = field(default=Factory(deque), alias="order", kw_only=True)
     _direction: int = field(
         default=1,
         converter=int,
@@ -43,12 +44,12 @@ class TurnManager:
             )
 
     @property
-    def turn_order(self) -> Tuple[str, ...]:
+    def turn_order(self) -> tuple[str, ...]:
         """
         Returns the current turn order as a tuple of player IDs.
 
         Returns:
-            Tuple[str,...]: A tuple of player IDs representing the turn order.
+            tuple[str,...]: A tuple of player IDs representing the turn order.
 
         Raises:
             ValueError: If the turn order is empty.
@@ -58,7 +59,7 @@ class TurnManager:
 
         return tuple(self._order)
 
-    def remove_id(self, id: str) -> "TurnManager":
+    def remove_id(self, id: str) -> TurnManager:
         """
         Removes a player from the turn order.
 
@@ -83,7 +84,7 @@ class TurnManager:
                 id=id, info="There is no player with this ID."
             )
 
-    def add_id(self, id: str) -> "TurnManager":
+    def add_id(self, id: str) -> TurnManager:
         """
         Adds a player to the end of the order.
 
@@ -105,7 +106,7 @@ class TurnManager:
 
         return evolve(self, order=new_order)
 
-    def advance(self, turns: int) -> "TurnManager":
+    def advance(self, turns: int) -> TurnManager:
         """
         Advances the order by a specified number of turns.
 
@@ -121,7 +122,7 @@ class TurnManager:
 
         return evolve(self, order=new_order)
 
-    def reverse_order(self) -> "TurnManager":
+    def reverse_order(self) -> TurnManager:
         """
         Reverses the direction of the order.
 

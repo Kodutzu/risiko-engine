@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from types import MappingProxyType
-from typing import Dict
 
 from attrs import define, evolve, field
 
@@ -21,11 +22,14 @@ class PlayerManager:
     instance of PlayerManager with the updated state.
     """
 
-    _pool: Dict[str, PlayerInterface] = field(factory=dict, alias="pool", kw_only=True)
+    _pool: dict[str, PlayerInterface] = field(factory=dict, alias="pool", kw_only=True)
 
     @property
     def player_pool(self) -> MappingProxyType[str, PlayerInterface]:
-        """A read-only view of the dictionary of players, mapping player ID to object."""
+        """
+        A read-only view of the dictionary of players,
+        mapping player ID to object.
+        """
         return MappingProxyType(self._pool)
 
     def get_player(self, player_id: str) -> PlayerInterface:
@@ -36,7 +40,7 @@ class PlayerManager:
             player_id: The unique identifier of the player to retrieve.
 
         Returns:
-            The corresponding player object.
+            PlayerInterface: The player object associated with the provided ID.
 
         Raises:
             PlayerIDNotFoundException: If no player with the given ID is found.
@@ -48,7 +52,7 @@ class PlayerManager:
                 id=player_id, info=f"Player with ID '{player_id}' not found."
             )
 
-    def add_player(self, player: PlayerInterface) -> "PlayerManager":
+    def add_player(self, player: PlayerInterface) -> PlayerManager:
         """
         Adds a new player to the collection.
 
@@ -77,7 +81,7 @@ class PlayerManager:
 
         return evolve(self, pool=new_pool)
 
-    def update_player(self, player: PlayerInterface) -> "PlayerManager":
+    def update_player(self, player: PlayerInterface) -> PlayerManager:
         """
         Updates an existing player's state.
 
@@ -109,7 +113,7 @@ class PlayerManager:
 
         return evolve(self, pool=new_pool)
 
-    def remove_player(self, player_id: str) -> "PlayerManager":
+    def remove_player(self, player_id: str) -> PlayerManager:
         """
         Removes a player from the collection by their ID.
 
