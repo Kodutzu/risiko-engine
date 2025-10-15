@@ -4,8 +4,8 @@ from ..risiko_state import RisikoState
 
 
 def player_lose_charges(
-        game_state: RisikoState, player_id: str, charges: int
-        ) -> RisikoState:
+    game_state: RisikoState, player_id: str, charges: int
+) -> RisikoState:
     """
     Makes a player lose a specified number of charges.
 
@@ -29,8 +29,8 @@ def player_lose_charges(
 
 
 def player_gain_charges(
-        game_state: RisikoState, player_id: str, charges: int
-        ) -> RisikoState:
+    game_state: RisikoState, player_id: str, charges: int
+) -> RisikoState:
     """
     Makes a player gain a specified number of charges.
 
