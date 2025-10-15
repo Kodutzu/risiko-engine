@@ -47,7 +47,7 @@ state = RisikoState()
 
 # Add a player to the game
 state = processors.add_player_to_game(
-    game_state=state, player=PlayerBase(id="player1", name="Player 1", charges=3)
+    game_state=state, player=PlayerBase(id="player1",  charges=3)
 )
 
 # Load the magazine with shells
